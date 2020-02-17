@@ -4,6 +4,23 @@
     "password": "postgres",
     "database": "db_ecommerce",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "operatorsAliases": 0
+  },
+  "testing": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "db_ecommerce_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": 0
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": 0
   }
 }

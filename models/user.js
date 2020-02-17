@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   class User extends sequelize.Sequelize.Model {
-    static associate (models) {
+    static associate(models) {
 
     }
   }
@@ -47,7 +47,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     }
-  }, {});
+  }, {
+    sequelize,
+    hooks: {
+      beforeCreate: user => {
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(user.password, salt)
+        user.password = hash
+      }
+    }
+  });
 
   return User;
 };
