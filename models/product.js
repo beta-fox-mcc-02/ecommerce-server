@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isValid(value) {
+        isValid(value, next) {
           if (!value) {
             next('Name is Required');
           } else {
@@ -24,16 +24,27 @@ module.exports = (sequelize, DataTypes) => {
     price: {
       type: DataTypes.INTEGER,
       validate: {
-        isPositive(value) {
+        isPositive(value, next) {
           if (value < 0) {
-            next(`Price Shouldn't Negative Number`);
+            next(`Price can't be Negative Number`);
           } else {
             next();
           }
         }
       }
     },
-    stock: DataTypes.INTEGER
+    stock: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isInStock(value, next) {
+          if (value <= 0) {
+            next(`You should have the item in stock!`);
+          } else {
+            next();
+          }
+        }
+      }
+    }
   }, { sequelize });
   return Product;
 };
