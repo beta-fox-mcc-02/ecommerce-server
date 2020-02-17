@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     stock: {
       type : DataTypes.INTEGER,
       validate : {
-        // min : {
-        //   args : 0,
-        //   msg : 'can not input negative number'
-        // }
+        min : {
+          args : 0,
+          msg : 'can not input negative number'
+        }
       }
     }
   }, {

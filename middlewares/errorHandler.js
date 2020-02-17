@@ -1,7 +1,7 @@
 module.exports = (err, req, res, next) => {
     const error = err
     // console.log(error)
-    if(err.name === 'SequelizeValidationError'){
+    if(error.name === 'SequelizeValidationError'){
         const messages = []
         for(let i = 0; i < error.errors.length; i++){
             messages.push(error.errors[i].message)
@@ -10,7 +10,7 @@ module.exports = (err, req, res, next) => {
             err : messages
         })
     }
-    else if(err.name === 'SequelizeDatabaseError'){
+    else if(error.name === 'SequelizeDatabaseError'){
         res.status(500).json({
             err : 'Internal Server Error'
         })
