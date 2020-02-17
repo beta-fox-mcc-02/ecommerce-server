@@ -16,13 +16,13 @@ describe('Product add test', () => {
         .catch(done)
     })
     afterAll((done) => {
-        queryInterface.bulkDelete('Admins', {})
+        queryInterface.bulkDelete('Products', {})
           .then(response => {
             done()
           }).catch(err => done(err))
     })
     test('it should return new product', (done) => {
-        request(app).post('/list/add')
+        request(app).post('/products/add')
             .send({
                 name : 'baju',
                 image_url : '',
@@ -40,7 +40,7 @@ describe('Product add test', () => {
             })
     })
     test('it should return error validation "name cannot empty"', (done) => {
-        request(app).post('/list/add')
+        request(app).post('/products/add')
             .send({
                 name : '',
                 image_url : '',
@@ -55,7 +55,7 @@ describe('Product add test', () => {
             })
     })
     test('it should return error validation "price must greater than 0"', (done) => {
-        request(app).post('/list/add')
+        request(app).post('/products/add')
             .send({
                 name : '',
                 image_url : '',
@@ -70,7 +70,7 @@ describe('Product add test', () => {
             })
     })
     test('it should return error validation "stock must greater than 0"', (done) => {
-        request(app).post('/list/add')
+        request(app).post('/products/add')
             .send({
                 name : '',
                 image_url : '',
