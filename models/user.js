@@ -1,10 +1,12 @@
 'use strict';
+const bcrypt = require('../helpers/bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model;
 
   class User extends Model {}
 
-  Model.init({
+  User.init({
     username: {
       type: DataTypes.STRING,
       validate: {
@@ -30,13 +32,14 @@ module.exports = (sequelize, DataTypes) => {
           args: [['admin', 'client']],
           msg: 'Roles can only be admin or client'
         }
-      },
-      notEmpty: {args: true, msg: 'Roles cannot be emtpy'}
+      }
     }
   }, {
     sequelize,
     hooks: {
-
+      beforeCreate: (users, option) => {
+        users.password = bcrypt.hashSync(users.password);
+      }
     }
   })
   

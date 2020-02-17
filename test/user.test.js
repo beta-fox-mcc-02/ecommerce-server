@@ -6,6 +6,13 @@ const {queryInterface} = sequelize;
 
 
 describe('User Register Test', () =>{
+    afterAll((done) => {
+        queryInterface.bulkDelete('Users', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+      })
+
     test('It should return new user object and status 201', (done) => {
         request(app)
             .post('/register')
@@ -30,15 +37,16 @@ describe('User Register Test', () =>{
         request(app)
             .post('/register')
             .send({
-                username: 'user',
+                username: 'user1',
                 email: 'user@gmail.com',
                 password: '12345',
                 roles: 'admin'
             })
             .end((err, response) => {
                 expect(err).toBe(null);
-                expect(response.name).toBe('SequelizeUniqueConstraintError');
-                expect(response.message).toBe('Bad request');
+                expect(response.body).toHaveProperty('name', 'SequelizeUniqueConstraintError');
+                expect(response.body).toHaveProperty('message', 'Bad request');                
+                expect(response.body).toHaveProperty('errors', expect.any(Array));
                 expect(response.status).toBe(400);
                 done();
             })
@@ -49,14 +57,15 @@ describe('User Register Test', () =>{
             .post('/register')
             .send({
                 username: 'user',
-                email: 'user@gmail.com',
+                email: 'user1@gmail.com',
                 password: '12345',
                 roles: 'admin'
             })
             .end((err, response) => {
                 expect(err).toBe(null);
-                expect(err.name).toBe('SequelizeUniqueConstraintError');
-                expect(response.message).toBe('Bad request');
+                expect(response.body).toHaveProperty('name', 'SequelizeUniqueConstraintError');
+                expect(response.body).toHaveProperty('message', 'Bad request');                
+                expect(response.body).toHaveProperty('errors', expect.any(Array));
                 expect(response.status).toBe(400);
                 done();
             })
@@ -67,18 +76,114 @@ describe('User Register Test', () =>{
             .post('/register')
             .send({
                 username: 'user',
-                email: 'user@gmail.com',
+                email: 'user@gmail',
                 password: '12345',
                 roles: 'admin'
             })
             .end((err, response) => {
                 expect(err).toBe(null);
-                expect(err.name).toBe('SequelizeValidationError');
-                expect(response.message).toBe('Bad request');
+                expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
+                expect(response.body).toHaveProperty('message', 'Bad request');                
+                expect(response.body).toHaveProperty('errors', expect.any(Array));
                 expect(response.status).toBe(400);
                 done();
             })
     });
+
+    test('It should return roles format validation error', (done) => {
+        request(app)
+            .post('/register')
+            .send({
+                username: 'user2',
+                email: 'user2@gmail',
+                password: '12345',
+                roles: 'admin'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null);
+                expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
+                expect(response.body).toHaveProperty('message', 'Bad request');  
+                expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.status).toBe(400);
+                done();
+            })
+    });
+
+    test('It should return notEmpty validation error', (done) => {
+        request(app)
+            .post('/register')
+            .send({
+                username: '',
+                email: 'user@gmail.com',
+                password: '',
+                roles: 'admin'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null);
+                expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
+                expect(response.body).toHaveProperty('message', 'Bad request');  
+                expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.status).toBe(400);
+                done();
+            })
+    });
+});
+
+describe('User Login Test', () =>{
+    beforeAll((done) => {
+        User.create({
+            username: 'admin',
+            email: 'admin@gmail.com',
+            password: '12345',
+            roles: 'admin'
+        })
+            .then(_=> {
+                done();
+            })
+            .catch(err => {
+                done(err);
+            })
+    })
+
+    // afterAll((done) => {
+    //     queryInterface.bulkDelete('Users', {})
+    //       .then(response => {
+    //         done()
+    //       }).catch(err => done(err))
+    //   })
+
+    test('It should return new user object and status 200', (done) => {
+        request(app)
+            .post('/login')
+            .send({
+                email: 'admin@gmail.com',
+                password: '12345'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null);
+                expect(response.body).toHaveProperty('access_token', expect.any(String));
+                expect(response.status).toBe(200);
+                done();
+            })
+    });
+
+    test('It should return username or password validation error', (done) => {
+        request(app)
+            .post('/login')
+            .send({
+                email: 'admin@gmail.com',
+                password: '12345678'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null);
+                expect(response.body).toHaveProperty('name', 'Not found');
+                expect(response.body).toHaveProperty('message', 'Not found');                
+                expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.status).toBe(404);
+                done();
+            })
+    });
 })
+
 
 
