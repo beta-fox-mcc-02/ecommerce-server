@@ -116,6 +116,7 @@ describe('Admin login test', () => {
                 password : 'admin123'
             })
             .end((err, response) => {
+                expect(err).toBe(null)
                 expect(response.body).toHaveProperty('token')
                 expect(response.body).toBe(200)
                 done()
@@ -128,6 +129,7 @@ describe('Admin login test', () => {
                 password : 'admin123'
             })
             .end((err, response) => {
+                expect(err).toBe(null)
                 expect(response.body.err).toContain('email / password is wrong')
                 expect(response.status).toBe(400)
                 done()
@@ -140,6 +142,7 @@ describe('Admin login test', () => {
                 password : 'admin124'
             })
             .end((err, response) => {
+                expect(err).toBe(null)
                 expect(response.body.err).toContain('email / password is wrong')
                 expect(response.status).toBe(400)
                 done()

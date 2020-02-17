@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.STRING,
       validate : {
         args : true,
-        msg : 'empty is not allowed'
+        msg : 'name cannot empty'
       }
     },
     image_url: DataTypes.STRING,
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       validate : {
         min : {
           args : 0,
-          msg : 'can not input negative number'
+          msg : 'price must greater than 0'
         }
       }
     },
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       validate : {
         min : {
           args : 0,
-          msg : 'can not input negative number'
+          msg : 'stock must greater than 0'
         }
       }
     }
