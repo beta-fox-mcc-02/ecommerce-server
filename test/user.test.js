@@ -4,7 +4,6 @@ const { User, sequelize } = require('../models')
 const { queryInterface } = sequelize
 
 describe('User Routes', ()=>{
-
   beforeEach((done)=>{
     User.create({
       email:'bau@mail.com',
@@ -171,7 +170,61 @@ describe('User Routes', ()=>{
             })
         })
       })
-      
+    })
+  })
+
+  describe('Login Test', ()=>{
+    describe('login success', ()=>{
+      test('it should return access token and status 201', (done)=>{
+        request(app)
+          .post('/login')
+          .send({
+            email : 'bau@mail.com',
+            password : '123456'
+          })
+          .end((err, response)=>{
+            console.log(response.body);
+            
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('access_token', expect.any(String))
+            expect(response.status).toBe(200)
+            done()
+          })
+      })
+    })
+
+    describe('login fail', ()=>{
+      test('it should return msg bad request with error invalid email/password', (done)=>{
+        request(app)
+          .post('/login')
+          .send({
+            email : 'bauasa@mail.com',
+            password : '123456'
+          })
+          .end((err, response)=>{
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('error', "invalid email/password")
+            expect(response.body).toHaveProperty('msg', "Bad Request")
+            expect(response.status).toBe(400)
+            done()
+          })
+      })
+
+      test.only('it should return msg bad request with error invalid email/password', (done)=>{
+        request(app)
+          .post('/login')
+          .send({
+            email : 'bauasa@mail.com',
+            password : '123sa456'
+          })
+          .end((err, response)=>{
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('error', "invalid email/password")
+            expect(response.body).toHaveProperty('msg', "Bad Request")
+            expect(response.status).toBe(400)
+            done()
+          })
+      })
     })
   })
 })

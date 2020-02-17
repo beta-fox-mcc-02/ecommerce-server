@@ -14,6 +14,10 @@ module.exports = (err, req, res, next)=>{
     status = 400
     errObj.msg = 'Bad Request'
     errObj.error = 'Email already registered' 
+  } else {
+    status = err.status
+    errObj.msg = 'Bad Request'
+    errObj.error = err.msg
   }
 
   res.status(status).json(errObj)
