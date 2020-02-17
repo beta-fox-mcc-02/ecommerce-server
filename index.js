@@ -10,16 +10,32 @@ app.use(express.urlencoded({ extended: false }))
 app.use(routes)
 
 app.use((err, req, res, next) => {
-    console.log(err)
-    const { start, httpStatus, message, previousError, stack } = err
-    console.log(stack)
+    let statusCode = 500
+    let msg = 'Internal Server Error'
 
-    res.status(httpStatus || 406).json({
-        status: false,
-        code: httpStatus || 406,
-        message,
-        data: previousError
-    })
+    if (err.name === 'SequelizeValidationError') {
+        const errors = []
+        err.errors.forEach(error => {
+            errors.push(error.message)
+        })
+        msg = {
+            msg: 'Bad Request',
+            errors
+        }
+        statusCode = 400
+    }
+
+    res.status(statusCode).json(msg)
+
+    // const { start, httpStatus, message, previousError, stack } = err
+    // console.log(stack)
+
+    // res.status(httpStatus || 406).json({
+    //     status: false,
+    //     code: httpStatus || 406,
+    //     message,
+    //     data: previousError
+    // })
 })
 
 module.exports = app
