@@ -11,7 +11,7 @@ app.use(routes)
 
 app.use((err, req, res, next) => {
     let statusCode = 500
-    let msg = 'Internal Server Error'
+    let msg = { msg: 'Internal Server Error' }
 
     if (err.name === 'SequelizeValidationError') {
         const errors = []
@@ -21,6 +21,11 @@ app.use((err, req, res, next) => {
         msg = {
             msg: 'Bad Request',
             errors
+        }
+        statusCode = 400
+    } else if (err.name === 'wrongauth') {
+        msg = {
+            msg: 'email / password not correct'
         }
         statusCode = 400
     }

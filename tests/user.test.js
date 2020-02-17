@@ -2,9 +2,9 @@ const request = require('supertest')
 const app = require('../index')
 
 describe('User Endpoints', () => {
-    it('should create a new user', async done => {
-        const res = await request(app)
-            .post('/users')
+    it('should create a new user', done => {
+        request(app)
+            .post('/users/register')
             .send({
                 email: 'susantoh41@gmail.com',
                 first_name: 'Heri',
@@ -22,7 +22,7 @@ describe('User Endpoints', () => {
     })
     it('should return error because user already exists', done => {
         request(app)
-            .post('/users')
+            .post('/users/register')
             .send({
                 email: 'susantoh41@gmail.com',
                 first_name: 'Heri',
@@ -39,5 +39,37 @@ describe('User Endpoints', () => {
                 done(err)
             })
     })
-    
+    it('should return a token', done => {
+        request(app)
+            .post('/users/login')
+            .send({
+                email: 'susantoh41@gmail.com',
+                password: 'Password123'
+            })
+            .then(res => {
+                expect(res.statusCode).toEqual(200)
+                expect(res.body).toHaveProperty('token')
+                done()
+            })
+            .catch(err => {
+                done(err)
+            })
+    })
+
+    it('should return error because email / password not correct', done => {
+        request(app)
+            .post('/users/login')
+            .send({
+                email: 'susantoh@gmail.com',
+                password: 'Password123'
+            })
+            .then(res => {
+                expect(res.statusCode).toEqual(400)
+                expect(res.body).toHaveProperty('msg')
+                done()
+            })
+            .catch(err => {
+                done(err)
+            })
+    })
 })
