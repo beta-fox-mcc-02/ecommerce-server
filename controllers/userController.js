@@ -1,8 +1,9 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 class UserController {
-   static create (req, res, next) {
+   static create(req, res, next) {
       let newUser = {
          name: req.body.name,
          email: req.body.email,
@@ -14,7 +15,33 @@ class UserController {
             res.status(201).json(data)
          })
          .catch(err => {
-            res.status(500).json({msg: `jancok`})
+            next(err)
+         })
+   }
+
+   static login(req, res, next) {
+      User.findOne({
+         where: {
+            email: req.body.email
+         }
+      })
+         .then(data => {
+            if (!data) {
+               throw ({ code: 404, message: `Email / password wrong` })
+            }
+            else {
+               let verified = bcrypt.compareSync(req.body.password, data.password);
+               if (!verified) {
+                  throw ({ code: 404, message: `Email / password wrong` })
+               }
+               else {
+                  let token = jwt.sign({ id: data.id }, process.env.SECRET)
+                  res.status(200).json({token})
+               }
+            }
+         })
+         .catch(err => {
+            next(err)
          })
    }
 }

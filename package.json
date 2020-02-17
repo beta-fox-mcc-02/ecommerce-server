@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=testing jest --detectOpenHandles",
-    "dev": "NODE_ENV=development nodemon app.js",
+    "dev": "NODE_ENV=development nodemon bin/http.js",
     "start": "node app.js"
   },
   "repository": {

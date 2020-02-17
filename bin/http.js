@@ -1,6 +1,8 @@
+require('dotenv').config()
 const app = require('../app')
 const http = require('http')
+const server = http.createServer(app)
 
-server.listen(3000, () => {
-  console.log('konek ke 3000')
+server.listen(process.env.PORT, () => {
+  console.log(`connected with love and gawl to port ${process.env.PORT}`)
 })
