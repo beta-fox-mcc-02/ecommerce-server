@@ -1,4 +1,5 @@
 'use strict';
+const { BcryptHelper } = require('../helpers')
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -12,9 +13,17 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Users', [{
-      name: 'Admin',
-    }])
+    return queryInterface.bulkInsert('Users', [
+      {
+        first_name: 'Admin',
+        username: 'adminCMS',
+        password: BcryptHelper.hashingPassword('rootabc12345'),
+        email: 'admin@diesel.com',
+        role_id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ])
   },
 
   down: (queryInterface, Sequelize) => {
@@ -25,5 +34,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
+    return queryInterface.bulkDelete('Users', null, {})
   }
 };

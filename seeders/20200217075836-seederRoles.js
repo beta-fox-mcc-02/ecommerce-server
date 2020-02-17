@@ -12,6 +12,18 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+    return queryInterface.bulkInsert('Roles', [
+      {
+        name: 'Admin',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Customer',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ])
   },
 
   down: (queryInterface, Sequelize) => {
@@ -22,5 +34,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
+    return queryInterface.bulkDelete('Roles', null, {})
   }
 };
