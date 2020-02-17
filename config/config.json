@@ -10,7 +10,7 @@
   "testing": {
     "username": "postgres",
     "password": "postgres",
-    "database": "db_ecommerce_test",
+    "database": "db_ecommerce",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": 0

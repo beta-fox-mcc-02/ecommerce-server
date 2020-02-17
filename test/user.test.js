@@ -1,6 +1,5 @@
 const request = require('supertest')
 const app = require('../app')
-const Sequelize = require('sequelize')
 const { User, sequelize } = require('../models')
 const { queryInterface } = sequelize
 
@@ -112,7 +111,7 @@ describe('User Routes', () => {
          request(app)
             .post('/users/login')
             .send({
-               email: `dumm@dummy.com`,
+               email: `du@dummy.com`,
                password: `12345`
             })
             .end((err, res) => {
