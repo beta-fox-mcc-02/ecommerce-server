@@ -1,0 +1,36 @@
+{
+    "name": "ecommerce-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon index.js",
+        "migrate": "sequelize db:migrate",
+        "seed": "sequelize db:seed:all",
+        "migrate:reset": "sequelize db:migrate:undo:all && npm run migrate && npm run seed",
+        "test": "NODE_ENV=test jest --testTimeout=10000",
+        "pretest": "NODE_ENV=test npm run migrate:reset",
+        "create-db-dev": "NODE_ENV=development sequelize db:create",
+        "create-db-test": "NODE_ENV=test sequelize db:create"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/babyalexa/ecommerce-server.git"
+    },
+    "keywords": [],
+    "author": "Heri Susanto",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/babyalexa/ecommerce-server/issues"
+    },
+    "homepage": "https://github.com/babyalexa/ecommerce-server#readme",
+    "devDependencies": {
+        "jest": "^25.1.0",
+        "supertest": "^4.0.2"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "pg": "^7.18.1",
+        "sequelize": "^5.21.4"
+    }
+}
