@@ -11,7 +11,7 @@ module.exports = (err, req, res, next) => {
 
   if (err.name === 'JsonWebTokenError') {
     err.status = 401;
-    err.message = 'You must register first';
+    err.message = 'You Must Register First';
   }
 
   res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });

@@ -1,17 +1,17 @@
 const request = require('supertest');
 const app = require('../app');
-const { sequelize } = require('../models');
+const { sequelize, User } = require('../models');
 
 describe('User Routes', () => {
   beforeEach(done => {
-    const data = [{
+    const data = {
       email: 'mail@mail.com',
       password: '12345',
       role: 'admin',
       createdAt: new Date(),
       updatedAt: new Date()
-    }]
-    sequelize.queryInterface.bulkInsert('Users', data, {})
+    };
+    User.create(data)
       .then(res => done())
       .catch(err => done(err))
   })
@@ -188,11 +188,61 @@ describe('User Routes', () => {
             })
         })
       })
-
     })
   })
 
   // user login
+  describe('User Login', () => {
+    // success
+    describe('Success User Login', () => {
+      test('Success Login', done => {
+        request(app)
+          .post('/login')
+          .send({
+            email: 'mail@mail.com',
+            password: '12345'
+          })
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty('access_token', expect.any(String));
+            done();
+          })
+      })
+    })
+    // fail
+    describe('Fail User Login', () => {
+      // wrong password
+      test('Wrong Email', done => {
+        request(app)
+          .post('/login')
+          .send({
+            email: 'mailx@mail.com',
+            password: '12345'
+          })
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe('Invalid Email/Password');
+            done();
+          })
+      })
+      // wrong email
+      test('Wrong Password', done => {
+        request(app)
+          .post('/login')
+          .send({
+            email: 'mail@mail.com',
+            password: '123456'
+          })
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe('Invalid Email/Password');
+            done();
+          })
+      })
+    })
+  })
 
-  // user google sign in
 })
