@@ -1,7 +1,25 @@
 require('dotenv').config()
+const express = require('express')
+const routes = require('./routes')
 
-const app = require('./bin')
+const app = express()
 
-const PORT = process.env.PORT || 3000
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))
+app.use(routes)
+
+app.use((err, req, res, next) => {
+    console.log(err)
+    const { start, httpStatus, message, previousError, stack } = err
+    console.log(stack)
+
+    res.status(httpStatus || 406).json({
+        status: false,
+        code: httpStatus || 406,
+        message,
+        data: previousError
+    })
+})
+
+module.exports = app

@@ -1,0 +1,6 @@
+Error Type:
+
+1. Sequelize
+2. Custom Error
+   => err.name = 'EmailExists'
+   => err.name = 
