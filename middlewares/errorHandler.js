@@ -1,5 +1,4 @@
 module.exports = (err, req, res, next) => {
-  // console.log(err, ' ERRRRRRRRRR')
   if(err.name === 'SequelizeValidationError') {
     let errors = []
     err.errors.forEach(error => {
@@ -19,8 +18,13 @@ module.exports = (err, req, res, next) => {
     res.status(err.status).json({
       msg: err.msg,
     })
+  } else if (err.name === 'AuthenticationError') {
+    res.status(err.status).json({
+      msg: err.msg
+    })
   }
   else {
+    console.log(err.name)
     res.status(500).json(err)
   }
 }

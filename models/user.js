@@ -50,6 +50,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password length min 5'
         }
       }
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN
     }
   },{
     sequelize,

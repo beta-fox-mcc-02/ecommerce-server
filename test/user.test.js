@@ -1,6 +1,5 @@
 const request = require('supertest')
 const app = require('../app')
-const Sequelize = require('sequelize')
 const { User, sequelize } = require('../models')
 const { queryInterface } = sequelize
 
@@ -25,7 +24,8 @@ describe('User Routes', () => {
           .send({
             username: 'Admin',
             email: 'admin@admin.com',
-            password: '123456'
+            password: '123456',
+            isAdmin: true
           })
           .end((err, res) => {
             expect(err).toBe(null)
@@ -165,7 +165,7 @@ describe('User Routes', () => {
   // User Login
   describe('User Login', () => {    
     describe('Login Success test', () => {
-      test('it should be success, return jwt token and have status 201', (done) => {
+      test('it should be success, return jwt token and have status 200', (done) => {
         request(app)
           .post('/login')
           .send({

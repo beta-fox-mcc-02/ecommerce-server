@@ -1,13 +1,14 @@
 const { User } = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt =  require('jsonwebtoken')
-const SECRET = process.env.SECRET
+const SECRET = process.env.SECRET || 'indomie'
 class UserController {
   static register (req, res, next) {
     let data = {
       username: req.body.username,
       email:  req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      isAdmin: req.body.isAdmin || false
     }
     User
       .create(data)
@@ -15,7 +16,8 @@ class UserController {
         let data = {
           id: user.id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          admin: user.admin
         }
         res.status(201).json({
           msg: 'User register success',
@@ -41,7 +43,7 @@ class UserController {
               username: user.username,
               email: user.email
             }
-            const token = jwt.sign(payload, 'indomie')
+            const token = jwt.sign(payload, SECRET)
             res.status(200).json({
               msg: 'Login Success',
               token
