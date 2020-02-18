@@ -1,4 +1,4 @@
-const { User, Product, Cart, Category, ProductCategory } = require('../models')
+const { User, Product, Cart, Category } = require('../models')
 
 class ProductController {
 

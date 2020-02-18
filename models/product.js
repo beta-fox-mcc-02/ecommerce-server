@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model {
     static associate(models) {
       Product.belongsToMany(models.User, {through: models.Cart})
-      Product.belongsToMany(models.Category, {through: models.ProductCategory})
+      // Product.belongsToMany(models.Category, {through: models.ProductCategory})
+      Product.belongsTo(models.Category)
     }
   }
   Product.init({
