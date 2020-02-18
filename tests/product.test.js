@@ -27,9 +27,6 @@ describe(`This is product CRUD test`, () => {
 
     afterAll((done) => {
         queryInterface.bulkDelete('Products', {})
-        .then(() => {
-            return queryInterface.bulkDelete('Admins', {})
-        })
         .then(() => done())
         .catch((err) => done(err))
     })

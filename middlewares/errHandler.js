@@ -3,7 +3,6 @@ module.exports = (err, req, res, next) => {
     let status = 500
     let error = { message: `internal server error` }
     if(err.name === 'SequelizeValidationError') {
-        // console.log(err)
         status = 400
         error.message = err.name
         error.details = []

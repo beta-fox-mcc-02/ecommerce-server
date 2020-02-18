@@ -10,7 +10,7 @@ describe('API route test', () => {
         .then(response => done())
         .catch((err) => done(err))
     })
-    
+
     test('success register', (done) => {
         request(app)
         .post('/admin/register')
@@ -71,6 +71,7 @@ describe('API route test', () => {
             done()
         })
     })
+
     test('login password invalid', (done) => {
         request(app)
         .post('/admin/login')
