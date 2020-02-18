@@ -129,6 +129,7 @@ describe('Admin login test', () => {
                 password : 'admin123'
             })
             .end((err, response) => {
+                console.log(response.body)
                 expect(err).toBe(null)
                 expect(response.body.err).toContain('email / password is wrong')
                 expect(response.status).toBe(400)
