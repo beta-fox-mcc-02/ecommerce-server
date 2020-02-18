@@ -17,12 +17,13 @@ class UserController {
                     id: result.id,
                     email: result.email,
                     first_name: result.first_name,
-                    last_name: result.last_name
+                    last_name: result.last_name,
+                    RoleId: result.RoleId
                 }
 
                 const token = createToken(payload)
 
-                res.status(201).json({ token })
+                res.status(201).json({ token, user: payload })
             })
             .catch(next)
     }
@@ -39,10 +40,11 @@ class UserController {
                             id: result.id,
                             email: result.email,
                             first_name: result.first_name,
-                            last_name: result.last_name
+                            last_name: result.last_name,
+                            RoleId: result.RoleId
                         }
                         const token = createToken(payload)
-                        res.status(200).json({ token })
+                        res.status(200).json({ token, user: payload })
                     } else {
                         next({ name: 'wrongauth' })
                     }

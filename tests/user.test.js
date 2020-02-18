@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../index')
 
 describe('User Endpoints', () => {
-    it('should create a new user', done => {
+    it('should create a new user and return token & user data', done => {
         request(app)
             .post('/users/register')
             .send({
@@ -14,6 +14,7 @@ describe('User Endpoints', () => {
             .then(res => {
                 expect(res.statusCode).toEqual(201)
                 expect(res.body).toHaveProperty('token')
+                expect(res.body).toHaveProperty('user')
                 done()
             })
             .catch(err => {
@@ -39,7 +40,7 @@ describe('User Endpoints', () => {
                 done(err)
             })
     })
-    it('should return a token', done => {
+    it('should return a token and user data', done => {
         request(app)
             .post('/users/login')
             .send({
@@ -49,6 +50,7 @@ describe('User Endpoints', () => {
             .then(res => {
                 expect(res.statusCode).toEqual(200)
                 expect(res.body).toHaveProperty('token')
+                expect(res.body).toHaveProperty('user')
                 done()
             })
             .catch(err => {
