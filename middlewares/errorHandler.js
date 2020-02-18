@@ -22,6 +22,10 @@ module.exports = (err, req, res, next) => {
     res.status(err.status).json({
       msg: err.msg
     })
+  } else if (err.name === 'AuthorizationError') {
+    res.status(err.status).json({
+      msg: err.msg
+    })
   }
   else {
     console.log(err.name)

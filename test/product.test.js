@@ -6,23 +6,47 @@ const jwt = require('jsonwebtoken')
 const SECRET = process.env.SECRET || 'indomie'
 
 describe('Product Routes Test', () => {
-  let token
+  let adminToken
+  let userToken
+  let productId
   beforeAll((done) => {
-    let data = {
+    // create admin
+    let admin = {
       username: 'Admin',
       email: 'admin@admin.com',
       password: 'admin123',
       isAdmin: true
     }
     User
-      .create(data)
+      .create(admin)
       .then(user => {
         let payload = {
           id: user.id,
           username: user.username,
           email: user.email 
         }
-       token = jwt.sign(payload, SECRET)
+       adminToken = jwt.sign(payload, SECRET)
+       done()
+      })
+      .catch(err => {
+        done(err)
+      })
+    // create user
+    let user = {
+      username: 'User',
+      email: 'user@mail.com',
+      password: 'user123',
+      isAdmin: false
+    }
+    User
+      .create(user)
+      .then(user => {
+        let payload = {
+          id: user.id,
+          username: user.username,
+          email: user.email 
+        }
+       userToken = jwt.sign(payload, SECRET)
        done()
       })
       .catch(err => {
@@ -37,12 +61,20 @@ describe('Product Routes Test', () => {
         done()
       })
       .catch(err => done(err))
+
+    queryInterface
+      .bulkDelete('Products', {})
+      .then(response => {
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
   })
 
   describe('Create Product Test', () => {
     describe('Create Product Success Test', () => {
       test('it should be success and return new product data and have status 201', (done) => {
-        console.log(token, '=====')
         request(app)
           .post('/products')
           .send({
@@ -51,7 +83,7 @@ describe('Product Routes Test', () => {
             price: 20000,
             stock: 11
           })
-          .set('token', token)
+          .set('token', adminToken)
           .end((err, res) => {
             expect(err).toBe(null)
             expect(res.status).toBe(201)
@@ -60,6 +92,7 @@ describe('Product Routes Test', () => {
             expect(res.body.data).toHaveProperty('price', expect.any(Number))
             expect(res.body.data).toHaveProperty('stock', expect.any(Number))
             expect(res.body).toHaveProperty('msg', 'Create Product Success')
+            productId = res.body.data.id
             done()
           })
       })
@@ -71,7 +104,7 @@ describe('Product Routes Test', () => {
         .post('/products')
         .send({
         })
-        .set('token', token)
+        .set('token', adminToken)
         .end((err, res) => {
           expect(err).toBe(null)
           expect(res.status).toBe(400)
@@ -95,7 +128,7 @@ describe('Product Routes Test', () => {
           price: 0,
           stock: 0
         })
-        .set('token', token)
+        .set('token', adminToken)
         .end((err, res) => {
           expect(err).toBe(null)
           expect(res.status).toBe(400)
@@ -127,6 +160,23 @@ describe('Product Routes Test', () => {
         })
       })
 
+      test('it should be failed and have status 401 if token is not admin', (done) => {
+        request(app)
+        .post('/products')
+        .send({
+          name: 'Jam Tangan',
+          imageUrl: 'https://freshsparks.com/wp/wp-content/uploads/2014/10/project_image_icon_TIS.jpg',
+          price: 10000,
+          stock: 11
+        })
+        .set('token', userToken)
+        .end((err, res) => {
+          expect(err).toBe(null)
+          expect(res.status).toBe(401)
+          expect(res.body).toHaveProperty('msg', 'Not Authorized')
+          done()
+        })
+      })
     })
   })
 
@@ -138,6 +188,101 @@ describe('Product Routes Test', () => {
           .end((err, res) => {
             expect(err).toBe(null)
             expect(res.body).toHaveProperty('data', expect.any(Array))
+            done()
+          })
+      })
+    })
+  })
+
+  describe('Update Product Test', () => {
+    describe('Update product success', () => {
+      test('it should be success, and have status 200', (done) => {
+        request(app)
+          .put(`/products/${productId}`)
+          .send({
+            name: 'Jam Murah'
+          })
+          .set('token', adminToken)
+          .end((err, res) => {
+            expect(err).toBe(null)
+            expect(res.body).toHaveProperty('msg', 'Update product success')
+            expect(res.body).toHaveProperty('result', expect.any(Array))
+            expect(res.body.result[0]).toBe(1)
+            expect(res.body).toHaveProperty('msg', 'Update product success')
+            done()
+          })
+      })
+    })
+
+    describe('Update product failed', () => {
+      test('it should be failed and return status 401 if have no token', (done) => {
+        request(app)
+          .put(`/products/${productId}`)
+          .send({
+            name: 'Harusnya gagal'
+          })
+          .end((err, res) => {
+            expect(err).toBe(null)
+            expect(res.status).toBe(401)
+            expect(res.body).toHaveProperty('msg', 'You Must Login First')
+            done()
+          })
+      })
+
+      test('it should be failed and return status 401 if token is not admin', (done) => {
+        request(app)
+          .put(`/products/${productId}`)
+          .send({
+            name: 'Harusnya gagal'
+          })
+          .set('token', userToken)
+          .end((err, res) => {
+            expect(err).toBe(null)
+            expect(res.status).toBe(401)
+            expect(res.body).toHaveProperty('msg', 'Not Authorized')
+            done()
+          })
+      })
+    })
+  })
+  
+  describe('Delete Product Test' , () => {
+    describe('Delete product success', () => {
+      test('it should be success, return status 200', (done) => {
+        request(app)
+          .delete(`/products/${productId}`)
+          .set('token', adminToken)
+          .end((err, res) => {
+            expect(err).toBe(null)
+            expect(res.status).toBe(200)
+            expect(res.body).toHaveProperty('msg', 'Delete product success')
+            expect(res.body).toHaveProperty('result', expect.any(Number))
+            expect(res.body.result).toBe(1)
+            done()
+          })
+      })
+    })
+    
+    describe('Delete product failed', () => {
+      test('it should be failed, return status 401 if have no token', (done) => {
+        request(app)
+          .delete(`/products/${productId}`)
+          .end((err, res) => {
+            expect(err).toBe(null)
+            expect(res.status).toBe(401)
+            expect(res.body).toHaveProperty('msg', 'You Must Login First')
+            done()
+          })
+      })
+
+      test('it should be failed, return status 401 if token is not admin', (done) => {
+        request(app)
+          .delete(`/products/${productId}`)
+          .set('token', userToken)
+          .end((err, res) => {
+            expect(err).toBe(null)
+            expect(res.status).toBe(401)
+            expect(res.body).toHaveProperty('msg', 'Not Authorized')
             done()
           })
       })
