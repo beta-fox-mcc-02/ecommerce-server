@@ -1,16 +1,17 @@
 const {Admin, Product} = require('../models')
 
-class Controller{
+class ProductController{
     static add(req, res, next){
-        newProduct = {
+        const newProduct = {
             name : req.body.name,
             image_url : req.body.image_url,
             price : req.body.price,
             stock : req.body.stock
         }
+        console.log(req.body)
         Product.create(newProduct)
             .then(product => {
-                res.status(201).json({product})
+                res.status(201).json(product)
             })
             .catch(next)
     }
@@ -60,4 +61,4 @@ class Controller{
     }
 }
 
-module.exports = Controller
+module.exports = ProductController

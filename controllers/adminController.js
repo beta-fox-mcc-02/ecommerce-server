@@ -2,7 +2,7 @@ const {Admin, Product} = require('../models')
 const {createToken} = require('../helpers/jwt')
 const {compareLogin} = require('../helpers/bcrypt')
 
-class Controller{
+class AdminController{
     static register(req, res, next){
         const newAdmin = {
             email : req.body.email,
@@ -10,7 +10,12 @@ class Controller{
         }
         Admin.create(newAdmin)
             .then(admin => {
-                res.status(201).json(admin)
+                const pick = {
+                    id : admin.id,
+                    email : admin.email
+                }
+                let token =  createToken(pick)
+                res.status(201).json({token})
             })
             .catch(next)
     }
@@ -25,25 +30,37 @@ class Controller{
                 }
             })
             .then(admin => {
-                let compare = compareLogin(adminLogin.password, admin.password)
-                if(compare){
-                    const pick = {
-                        id : admin.id,
-                        email : admin.email
+                // console.log(admin)
+                if(admin){
+                    let compare = compareLogin(adminLogin.password, admin.password)
+                    if(compare){
+                        const pick = {
+                            id : admin.id,
+                            email : admin.email
+                        }
+                        let token =  createToken(pick)
+                        res.status(200).json({token})
                     }
-                    let token =  createToken(pick)
-                    res.status(200).json({token})
+                    else {
+                        const err = {
+                            name: "loginError"
+
+                        }
+                        next(err)
+                    }
                 }
-                else {
+                else{
                     const err = {
-                        name: "SequelizeValidationError",
-                        errors : [{ message : 'email / password is wrong'}]
+                        name: "loginError"
                     }
                     next(err)
                 }
             })
-            .catch(next)
+            .catch(err => {
+                console.log(err)
+                next()
+            })
     }
 }
 
-module.exports = Controller
+module.exports = AdminController

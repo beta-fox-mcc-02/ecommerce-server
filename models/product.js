@@ -5,8 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type : DataTypes.STRING,
       validate : {
-        args : true,
-        msg : 'name cannot empty'
+        notEmpty : {
+          args : true,
+          msg : 'name cannot empty'
+        }
       }
     },
     image_url: DataTypes.STRING,
@@ -14,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.FLOAT,
       validate : {
         min : {
-          args : 0,
+          args : 1,
           msg : 'price must greater than 0'
         }
       }
@@ -23,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.INTEGER,
       validate : {
         min : {
-          args : 0,
+          args : 1,
           msg : 'stock must greater than 0'
         }
       }
@@ -32,8 +34,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     hooks : {
       beforeCreate : (product, options) => {
-        if(!image_url){
-          image_url = 'https://cdn.dribbble.com/users/2022451/screenshots/5557745/empty_bag.gif'
+        if(product.image_url === ''){
+          product.image_url = 'https://cdn.dribbble.com/users/2022451/screenshots/5557745/empty_bag.gif'
         }
       }
     }

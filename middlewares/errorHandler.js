@@ -10,7 +10,22 @@ module.exports = (err, req, res, next) => {
             err : messages
         })
     }
+    else if(error.name === 'loginError'){
+        res.status(400).json({
+            err : 'email / password is wrong'
+        })
+    }
+    else if(error.name === 'dataNotFound'){
+        res.status(404).json({
+            err : 'Cannot find Data'
+        })
+    }
     else if(error.name === 'SequelizeDatabaseError'){
+        res.status(500).json({
+            err : 'Internal Server Error'
+        })
+    }
+    else{
         res.status(500).json({
             err : 'Internal Server Error'
         })

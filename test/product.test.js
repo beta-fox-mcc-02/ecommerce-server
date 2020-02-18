@@ -3,6 +3,8 @@ const app = require('../app')
 const Sequelize = require('sequelize')
 const {Admin, Product, sequelize } = require('../models')
 const { queryInterface } = sequelize
+const {createToken} = require('../helpers/jwt')
+var testToken = ''
 
 describe('Product add test', () => {
     beforeAll((done) => {
@@ -11,6 +13,7 @@ describe('Product add test', () => {
             password : 'admin123'
         })
         .then(res => {
+            testToken = createToken(res.dataValues)
             done()
         })
         .catch(done)
@@ -20,9 +23,14 @@ describe('Product add test', () => {
           .then(response => {
             done()
           }).catch(err => done(err))
+        queryInterface.bulkDelete('Admins', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
     })
     test('it should return new product', (done) => {
-        request(app).post('/products/add')
+        request(app).post('/products/list')
+            .set('token', testToken)
             .send({
                 name : 'baju',
                 image_url : '',
@@ -35,12 +43,13 @@ describe('Product add test', () => {
                 expect(response.body).toHaveProperty('image_url')
                 expect(response.body).toHaveProperty('price')
                 expect(response.body).toHaveProperty('stock')
-                expect(response.status).toBe(200)
+                expect(response.status).toBe(201)
                 done()
             })
     })
     test('it should return error validation "name cannot empty"', (done) => {
-        request(app).post('/products/add')
+        request(app).post('/products/list')
+            .set('token', testToken)
             .send({
                 name : '',
                 image_url : '',
@@ -55,11 +64,12 @@ describe('Product add test', () => {
             })
     })
     test('it should return error validation "price must greater than 0"', (done) => {
-        request(app).post('/products/add')
+        request(app).post('/products/list')
+            .set('token', testToken)
             .send({
                 name : '',
                 image_url : '',
-                price : 1000,
+                price : 0,
                 stock : 1
             })
             .end((err, response) => {
@@ -70,12 +80,13 @@ describe('Product add test', () => {
             })
     })
     test('it should return error validation "stock must greater than 0"', (done) => {
-        request(app).post('/products/add')
+        request(app).post('/products/list')
+            .set('token', testToken)
             .send({
                 name : '',
                 image_url : '',
                 price : 1000,
-                stock : 1
+                stock : 0
             })
             .end((err, response) => {
                 expect(err).toBe(null)
