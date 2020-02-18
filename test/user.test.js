@@ -1,5 +1,6 @@
 const app = require('../app')
 const request = require('supertest')
+const { User, sequelize: { queryInterface } } = require('../models')
 
 describe('User Routes', () => {
 
@@ -22,7 +23,7 @@ describe('User Routes', () => {
             expect(response.body).toHaveProperty('id', expect.any(Number))
             expect(response.body).toHaveProperty('username', 'budiagung')
             expect(response.body).toHaveProperty('email', 'budiagung@gmail.com')
-            expect(response.body).toHaveProperty('messsage', 'USER_CREATED')
+            expect(response.body).toHaveProperty('message', 'USER_CREATED')
             expect(response.status).toBe(201)
             done()
           })
@@ -35,7 +36,7 @@ describe('User Routes', () => {
           first_name: '',
           username: 'budiagung',
           password: '',
-          phone_number: '081289073980',
+          phone_number: '0812',
           email: 'budiagung@gmail.com',
           role_id: 2
         }
@@ -70,6 +71,7 @@ describe('User Routes', () => {
             expect(response.body).toHaveProperty('name', 'BAD REQUEST')
             expect(response.body).toHaveProperty('message', 'UNIQUE_VALIDATION')
             expect(response.body).toHaveProperty('errors', expect.any(Array))
+            expect(response.body.errors[0]).toBe('email must be unique')
             expect(response.body.errors.length).toBeGreaterThan(0)
             expect(response.status).toBe(400)
             done()
@@ -93,6 +95,7 @@ describe('User Routes', () => {
             expect(response.body).toHaveProperty('name', 'BAD REQUEST')
             expect(response.body).toHaveProperty('message', 'UNIQUE_VALIDATION')
             expect(response.body).toHaveProperty('errors', expect.any(Array))
+            expect(response.body.errors[0]).toBe('username must be unique')
             expect(response.body.errors.length).toBeGreaterThan(0)
             expect(response.status).toBe(400)
             done()
@@ -102,13 +105,40 @@ describe('User Routes', () => {
 
   })
 
-  describe('User Login Test', () => {
-    describe('User Login Success', () => {
+  describe('Admin Login Test', () => {
+
+    beforeAll((done) => {
+      const input = {
+        first_name: 'Admin',
+        username: 'adminCMS',
+        password: 'rootabc12345',
+        email: 'admin@diesel.com',
+        role_id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      User.create(input)
+      .then(user => {
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
+    })
+
+     afterAll((done) => {
+      queryInterface.bulkDelete('Users', {})
+        .then(response => {
+          done()
+        }).catch(err => done(err))
+    })
+
+    describe('Admin Login Success', () => {
       test('it should return access token, message and status 200 ', (done) => {
         request(app)
-          .post('/users/login')
+          .post('/admin/login')
           .send({
-            email: 'admin@admin.com',
+            email: 'admin@diesel.com',
             password: 'rootabc12345'
           })
           .end((err, response) => {
@@ -121,57 +151,20 @@ describe('User Routes', () => {
       })
     })
 
-    describe('User Login Failed', () => {
+    describe('Admin Login Failed', () => {
       test('it should return login failed error and status 400', (done) => {
         const input = {
           email: 'admin@admin.com',
           password: 'rootabc'
         }
         request(app)
-          .post('/users/login')
+          .post('/admin/login')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('name', 'BAD REQUEST')
             expect(response.body).toHaveProperty('message', 'LOGIN_FAILED')
             expect(response.body).toHaveProperty('error', 'Email / password is incorrect')
-            expect(response.status).toBe(400)
-            done()
-          })
-      })
-
-      test('it should return required error and status 400', (done) => {
-        const input = {
-          email: '',
-          password: ''
-        }
-        request(app)
-          .post('/users/login')
-          .send(input)
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('name', 'BAD REQUEST')
-            expect(response.body).toHaveProperty('message', 'LOGIN_FAILED')
-            expect(response.body).toHaveProperty('errors', expect.any(Array))
-            expect(response.body.errors.length).toBeGreaterThan(0)
-            expect(response.status).toBe(400)
-            done()
-          })
-      })
-
-      test('it should return invalid format email and status 400', (done) => {
-        const input = {
-          email: 'admin@',
-          password: 'rootabc12345'
-        }
-        request(app)
-          .post('/users/login')
-          .send(input)
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('name', 'BAD REQUEST')
-            expect(response.body).toHaveProperty('message', 'INVALID_EMAIL')
-            expect(response.body).toHaveProperty('error', 'Invalid email format')
             expect(response.status).toBe(400)
             done()
           })

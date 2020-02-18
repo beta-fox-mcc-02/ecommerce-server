@@ -1,6 +1,7 @@
 'use strict';
+const { BcryptHelper } = require('../helpers')
 module.exports = (sequelize, DataTypes) => {
-  const Model = Sequelize.sequelize.Model
+  const Model = sequelize.Sequelize.Model
   class User extends Model {
     static associate(models) {
       User.belongsTo(models.Role, { foreignKey: 'role_id' })
@@ -38,10 +39,6 @@ module.exports = (sequelize, DataTypes) => {
         len: {
           args: [6],
           msg: 'Username has minimal 6 characters'
-        },
-        isAlphanumeric: {
-          args: true,
-          msg: 'Username only accepts alphabeth and numbers'
         }
       }
     },
@@ -61,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
           args: [8],
           msg: 'Password has minimum 8 characters'
         },
-        isAlphanumerice: {
+        isAlphanumeric: {
           args: true,
           msg: 'Password only contains alphabeth and numbers'
         }
@@ -72,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isValidPhoneNumber(value) {
           if (value) {
-            const pattern = '/\+?([ -]?\d+)+|\(\d+\)([ -]\d+)/g'
+            const pattern = /\+?([ -]?\d+)+|\(\d+\)([ -]\d+)/g
             if (!pattern.test(value)) {
               throw new Error('Invalid phone number')
             }
@@ -120,7 +117,11 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     hooks: {
       beforeCreate(user, options) {
-
+        const last_name = user.last_name
+        if (!last_name) {
+          user.last_name = user.first_name
+        }
+        user.password = BcryptHelper.hashingPassword(user.password)
       },
     }
   })
