@@ -87,7 +87,6 @@ describe('User Routes', () => {
               role: 'admin'
             })
             .end((err, res) => {
-              console.log(res);
               expect(err).toBeNull();
               expect(res.status).toBe(400);
               expect(res.body).toHaveProperty('message');

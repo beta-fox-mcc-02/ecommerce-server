@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
 
   class User extends sequelize.Sequelize.Model {
     static associate(models) {
-      User.hasMany(models.Product)
     }
   }
 
