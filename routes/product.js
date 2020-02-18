@@ -7,6 +7,8 @@ router.use(authentication);
 router.get('/', ProductController.findAll);
 router.get('/:id', ProductController.findOne);
 router.post('/', authorization, ProductController.create);
+router.put('/:id', authorization, ProductController.update);
+router.delete('/:id', authorization, ProductController.destroy);
 
 
 module.exports = router;

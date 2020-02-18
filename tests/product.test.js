@@ -395,13 +395,117 @@ describe('Product Routes', () => {
           .end((err, res) => {
             expect(err).toBeNull();
             expect(res.body).toHaveProperty('message', 'Not Found');
-            expect(res.status).toBe(400);
+            expect(res.status).toBe(404);
             done();
           })
       })
     })
   })
   // Update Product Validation
+  describe('Update Product', () => {
+    // Success
+    describe('Success Update Product', () => {
+      test('Success update with admin token', done => {
+        request(app)
+          .put(`/products/${idProduct1}`)
+          .set('access_token', AdminToken)
+          .send({
+            name: 'Kaos Kaki',
+            image_url: 'https://lithub.com/wp-content/uploads/2019/07/used-books-store-2.jpg',
+            price: 100,
+            stock: 5,
+          })
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.body).toHaveProperty('message', 'Success Update Data');
+            expect(res.status).toBe(201);
+            done();
+          })
+      })
+    })
+    // Failure
+    describe('Fail Update Product', () => {
+      // Not Authorized Customer
+      test('Not authorized customer', done => {
+        request(app)
+          .put(`/products/${idProduct1}`)
+          .set('access_token', CustomerToken)
+          .send({
+            name: 'Kaos Kaki',
+            image_url: 'https://lithub.com/wp-content/uploads/2019/07/used-books-store-2.jpg',
+            price: 1002,
+            stock: 52,
+          })
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.body).toHaveProperty('message', 'You Are Not Authorized');
+            expect(res.status).toBe(401)
+            done();
+          })
+      })
+      // Wrong Id
+      test('Wrong id product', done => {
+        request(app)
+          .put(`/products/${-10}`)
+          .set('access_token', AdminToken)
+          .send({
+            name: 'Kaos Kaki',
+            image_url: 'https://lithub.com/wp-content/uploads/2019/07/used-books-store-2.jpg',
+            price: 1002,
+            stock: 52,
+          })
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.body).toHaveProperty('message', 'Not Found');
+            expect(res.status).toBe(404);
+            done();
+          })
+      })
+    })
+  })
   // Delete Product Validation
+  describe('Delete Product', () => {
+    // Success
+    describe('Success Delete Product', () => [
+      test('Admin can delete product', done => {
+        request(app)
+          .delete(`/products/${idProduct1}`)
+          .set('access_token', AdminToken)
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.body).toHaveProperty('message', 'Success Delete Data');
+            expect(res.status).toBe(200);
+            done();
+          })
+      })
+    ])
+    // Fail
+    describe('Fail Delete Product', () => {
+      // Not Authorized Customer Token
+      test('Not authorized customer', done => {
+        request(app)
+          .delete(`/products/${idProduct1}`)
+          .set('access_token', CustomerToken)
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.body).toHaveProperty('message', 'You Are Not Authorized');
+            expect(res.status).toBe(401);
+            done();
+          })
+      })
+      // Wrong Product Id
+      test('Wrong product id', done => {
+        request(app)
+          .delete(`/products/${7}`)
+          .set('access_token', AdminToken)
+          .end((err, res) => {
+            expect(err).toBeNull();
+            expect(res.body).toHaveProperty('message', 'Not Found');
+            expect(res.status).toBe(404);
+            done();
+          })
+      })
+    })
+  })
 
 })
