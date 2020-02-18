@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     generateToken: (payload) => {
-        console.log(process.env.PRIVATE_KEY)
         return jwt.sign(payload, process.env.PRIVATE_KEY);
     },
 

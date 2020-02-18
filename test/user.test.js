@@ -47,6 +47,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeUniqueConstraintError');
                 expect(response.body).toHaveProperty('message', 'Bad request');                
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(400);
                 done();
             })
@@ -66,6 +67,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeUniqueConstraintError');
                 expect(response.body).toHaveProperty('message', 'Bad request');                
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(400);
                 done();
             })
@@ -85,6 +87,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
                 expect(response.body).toHaveProperty('message', 'Bad request');                
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(400);
                 done();
             })
@@ -104,6 +107,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
                 expect(response.body).toHaveProperty('message', 'Bad request');  
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(400);
                 done();
             })
@@ -123,6 +127,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
                 expect(response.body).toHaveProperty('message', 'Bad request');  
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(400);
                 done();
             })
@@ -145,12 +150,12 @@ describe('User Login Test', () =>{
             })
     })
 
-    // afterAll((done) => {
-    //     queryInterface.bulkDelete('Users', {})
-    //       .then(response => {
-    //         done()
-    //       }).catch(err => done(err))
-    //   })
+    afterAll((done) => {
+        queryInterface.bulkDelete('Users', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+      })
 
     test('It should return new user object and status 200', (done) => {
         request(app)
@@ -177,8 +182,9 @@ describe('User Login Test', () =>{
             .end((err, response) => {
                 expect(err).toBe(null);
                 expect(response.body).toHaveProperty('name', 'Not found');
-                expect(response.body).toHaveProperty('message', 'Not found');                
+                expect(response.body).toHaveProperty('message', 'Email or password is invalid');                
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+                expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(404);
                 done();
             })

@@ -31,9 +31,9 @@ class Controller {
                     if(passwordCheck) {
                         const payload = {
                             id: data.id,
-                            email: req.body.email
+                            email: data.email,
+                            roles: data.roles
                         }
-
                         const token = jwt.generateToken(payload);
                         res.status(200).json({access_token: token});
                     } else {
