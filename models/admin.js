@@ -1,5 +1,6 @@
 'use strict';
 const BcryptPassword = require('../helpers/encryptpassword.js')
+const { Op } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
   class Admin extends sequelize.Sequelize.Model{}
@@ -10,6 +11,19 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: {
           args: true,
           msg: `input email/password error`
+        },
+        isExist(value, next) {
+          Admin.findOne({
+            where: {
+              email: {
+                [Op.iLike]: value
+              }
+            }
+          })
+          .then((data) => {
+            if(data) next({ message: `email exist`})
+            else next()
+          })
         }
       }
     },

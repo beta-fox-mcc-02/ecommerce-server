@@ -23,6 +23,42 @@ class ProductController{
         })
         .catch(err => next(err))
     }
+
+    static update(req, res, next) {
+        Product.update({
+            name: req.body.name,
+            imageUrl: req.body.imageUrl,
+            price: req.body.price,
+            stock: req.body.stock
+        }, {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((data) => {
+            if(data) {
+                res.status(200).json({ 
+                    products: data,
+                    message: `success update product at id ${req.params.id}`
+                })
+            }
+            else next({ message: `product may has been already deleted` })
+        })
+        .catch(err => next(err))
+    }
+
+    static delete(req, res, next) {
+        Product.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((data) => {
+            if(data) res.status(200).json({ message: `success deleted product at id ${req.params.id}` })
+            else next({ message: `product may has been already deleted` })
+        })
+        .catch(err => next(err))
+    }
 }
 
 module.exports = ProductController

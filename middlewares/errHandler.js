@@ -1,7 +1,9 @@
 module.exports = (err, req, res, next) => {
+    // console.log(err)
     let status = 500
     let error = { message: `internal server error` }
     if(err.name === 'SequelizeValidationError') {
+        // console.log(err)
         status = 400
         error.message = err.name
         error.details = []
@@ -13,9 +15,12 @@ module.exports = (err, req, res, next) => {
     }
     else if(err.message) {
         error.message = err.message
-        if(err.message == 'user not found') status = 404
-        else if(err.message == 'input invalid') status = 400
-        else if(err.message == 'invalid input syntax for type integer: "0.2"') status = 400
+        switch(err.message){
+            case `user not found`: status = 404; break
+            case `input invalid`: status = 400; break
+            case `invalid input syntax for type integer: "0.2"`: status = 400; break
+            case `product may has been already deleted`: status = 404; break
+        }
     }
     res.status(status).json(error)
 }

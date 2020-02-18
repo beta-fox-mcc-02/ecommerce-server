@@ -32,7 +32,7 @@ class AdminController{
                         email: data.email
                     }
                     let token = jwt.sign(payload, 'ucul')
-                    console.log(token, `-------------------------------------------------------------`)
+                    // console.log(token, `-------------------------------------------------------------`)
                     res.status(200).json({ token })
                 }
                 else next({ message: `input invalid` })
