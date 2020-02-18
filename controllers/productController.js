@@ -1,4 +1,4 @@
-const { Product } = require('../models')
+const { Product, Category } = require('../models')
 
 class ProductController {
   static addProduct (req, res, next) {
@@ -23,8 +23,11 @@ class ProductController {
 
   static getProduct (req, res, next) {
     Product
-      .findAll()
+      .findAll({
+        include: Category
+      })
       .then(data => {
+        console.log(data, '===========')
         res.status(200).json({data})
       })
       .catch(next)

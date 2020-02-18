@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Product extends Model{
     static associate (models) {
       Product.belongsToMany(models.User, { through: models.Cart})
+      Product.belongsTo(models.Category)
     }
   }
 
@@ -62,6 +63,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Stock minimal is 10'
         }
       }
+    },
+    CategoryId: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize
