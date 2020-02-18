@@ -12,15 +12,24 @@ describe(`This is product CRUD test`, () => {
             email: 'mail@mail.com',
             password: '12345',
         })
-        .then(() => done())
+        .then((data) => done())
         .catch((err) => done(err))
     })
 
     beforeEach((done) => {
-        Product.findOne({
-            where: {
-                name: `Bag`
-            }
+        Product.create({
+            name: 'Bag',
+            imageUrl: 'bit.ly/image.jpg',
+            price: 10000,
+            stock: 10,
+            category: `Fashions`
+        })
+        .then((data) => {
+            return Product.findOne({
+                where: {
+                    name: data.name
+                }
+            })
         })
         .then((data) => {
             if (!data) done()
@@ -52,7 +61,8 @@ describe(`This is product CRUD test`, () => {
             name: 'Bag',
             imageUrl: 'bit.ly/image.jpg',
             price: 10000,
-            stock: 10
+            stock: 10,
+            category: `Electronics`
         })
         .end((err, response) => {
             expect(err).toBe(null)
@@ -79,7 +89,8 @@ describe(`This is product CRUD test`, () => {
             name: 'Bag',
             imageUrl: 'bit.ly/image.jpg',
             price: 100,
-            stock: 5
+            stock: 5,
+            category: 'Fashions'
         })
         .end((err, response) => {
             expect(err).toBe(null)
@@ -108,9 +119,11 @@ describe(`This is product CRUD test`, () => {
             name: '',
             imageUrl: '',
             price: -1000,
-            stock: -2
+            stock: -2,
+            category: 'Fashions'
         })
         .end((err, response) => {
+            console.log(response.body)
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
             expect(response.status).toBe(400)
@@ -119,7 +132,7 @@ describe(`This is product CRUD test`, () => {
     })
     test(`product not found or has been deleted`, (done) => {
         request(app)
-        .delete(`/product/delete/${id_params}`)
+        .delete(`/product/delete/200`)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')

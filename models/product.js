@@ -1,4 +1,5 @@
 'use strict';
+const { beforeCreate, afterFind } = require('../helpers/hookshelpers.js')
 
 module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model{}
@@ -40,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
-    sequelize
+    sequelize,
+    hooks: { beforeCreate, afterFind }
   })
   Product.associate = function(models) {
     Product.belongsTo(models.Category)
