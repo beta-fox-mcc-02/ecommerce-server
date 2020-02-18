@@ -2,20 +2,20 @@ const app = require('../app')
 const request = require('supertest')
 const { sequelize: { queryInterface } } = require('../models')
 
-describe('User Routes', () => {
+describe('Admin Routes', () => {
 
-  describe('User Register Test', () => {
+  describe('Admin Register Test', () => {
 
-    describe('User Register Success', () => {
+    describe('Admin Register Success', () => {
       test('it should return new object includes email, username, and id and status 201  ', (done) => {
         request(app)
-          .post('/users/register')
+          .post('/admin/register')
           .send({
             first_name: 'Budi',
             username: 'budiagung',
             password: 'agung2010',
             email: 'budiagung@gmail.com',
-            role_id: 2
+            role_id: 1
           })
           .end((err, response) => {
             expect(err).toBe(null)
@@ -29,7 +29,7 @@ describe('User Routes', () => {
       })
     })
 
-    describe('User Register Failed', () => {
+    describe('Admin Register Failed', () => {
       test('it should return input error and status 400', (done) => {
         const input = {
           first_name: '',
@@ -37,10 +37,10 @@ describe('User Routes', () => {
           password: '',
           phone_number: '0812',
           email: 'budiagung@gmail.com',
-          role_id: 2
+          role_id: 1
         }
         request(app)
-          .post('/users/register')
+          .post('/admin/register')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -60,10 +60,10 @@ describe('User Routes', () => {
           password: '12345qwerty',
           phone_number: '081289073980',
           email: 'budiagung@gmail.com',
-          role_id: 2
+          role_id: 1
         }
         request(app)
-          .post('/users/register')
+          .post('/admin/register')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -87,7 +87,7 @@ describe('User Routes', () => {
           role_id: 2
         }
         request(app)
-          .post('/users/register')
+          .post('/admin/register')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -104,8 +104,7 @@ describe('User Routes', () => {
 
   })
 
-  describe('User Login Test', () => {
-
+  describe('Admin Login Test', () => {
     afterAll((done) => {
       queryInterface.bulkDelete('Users', {})
         .then(response => {
@@ -113,10 +112,10 @@ describe('User Routes', () => {
         }).catch(err => done(err))
     })
 
-    describe('User Login Success', () => {
+    describe('Admin Login Success', () => {
       test('it should return access token, message and status 200 ', (done) => {
         request(app)
-          .post('/users/login')
+          .post('/admin/login')
           .send({
             email: 'budiagung@gmail.com',
             password: 'agung2010'
@@ -131,14 +130,14 @@ describe('User Routes', () => {
       })
     })
 
-    describe('User Login Failed', () => {
+    describe('Admin Login Failed', () => {
       test('it should return login failed error and status 400', (done) => {
         const input = {
-          email: 'budiagung@gmail.com',
+          email: 'admin@admin.com',
           password: 'rootabc'
         }
         request(app)
-          .post('/users/login')
+          .post('/admin/login')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)

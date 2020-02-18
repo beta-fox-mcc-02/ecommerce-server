@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=development jest",
+    "test": "NODE_ENV=development jest --runInBand",
     "dev": "NODE_ENV=development nodemon bin/http.js"
   },
   "repository": {

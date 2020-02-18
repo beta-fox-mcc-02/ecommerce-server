@@ -8,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
     }
     res.status(400).json({
       name: 'BAD REQUEST',
-      message: 'FAILED_CREATED_USER',
+      message: 'INPUT_ERROR',
       errors
     })
   } else if (err.name === 'SequelizeUniqueConstraintError') {
@@ -18,8 +18,8 @@ const errorHandler = (err, req, res, next) => {
       errors.push(e.message)
     }
     res.status(status).json({
-      name:'BAD REQUEST',
-      message:'UNIQUE_VALIDATION',
+      name: 'BAD REQUEST',
+      message: 'UNIQUE_VALIDATION',
       errors
     })
   } else if (err.name === 'LOGIN_FAILED') {
@@ -28,6 +28,24 @@ const errorHandler = (err, req, res, next) => {
       name: 'BAD REQUEST',
       message: err.name,
       error: err.error
+    })
+  } else if (err.name === 'UNAUTHORIZED') {
+    status = err.status,
+      res.status(status).json({
+        name: err.name,
+        error: err.error
+      })
+  } else if (err.name === 'NOT_FOUND') {
+    status = err.status
+    res.status(status).json({
+      name: err.name,
+      error: err.message
+    })
+  } else if (err.name === 'JsonWebTokenError') {
+    status = 401
+    res.status(status).json({
+      name: 'UNAUTHORIZED',
+      message: 'Please login first'
     })
   }
 }
