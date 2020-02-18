@@ -3,10 +3,8 @@ const request = require('supertest')
 const Sequelize = require('sequelize')
 const { Admin, Product, sequelize } = require('../models')
 const { queryInterface } = sequelize
-const jwt = require('jsonwebtoken')
 
-let access_token = ''
-let id_params = '1' // ubah manual-----------------
+let id_params = ''
 
 describe(`This is product CRUD test`, () => {
     beforeAll((done) => {
@@ -14,19 +12,35 @@ describe(`This is product CRUD test`, () => {
             email: 'mail@mail.com',
             password: '12345',
         })
-        .then(data => {
-            let payload = {
-                id: data.id,
-                email: data.email
+        .then(() => done())
+        .catch((err) => done(err))
+    })
+
+    beforeEach((done) => {
+        Product.findOne({
+            where: {
+                name: `Bag`
             }
-            access_token = jwt.sign(payload, 'ucul')
-            done()
+        })
+        .then((data) => {
+            if (!data) done()
+            else {
+                id_params = data.id
+                done()
+            }
         })
         .catch((err) => done(err))
     })
 
     afterAll((done) => {
         queryInterface.bulkDelete('Products', {})
+        .then(() => {
+            return Admin.destroy({
+                where: {
+                    email: `mail@mail.com`
+                }
+            })
+        })
         .then(() => done())
         .catch((err) => done(err))
     })
@@ -34,7 +48,6 @@ describe(`This is product CRUD test`, () => {
     test(`product create expectation`, (done) => {
         request(app)
         .post('/product/create')
-        .set('token', access_token)
         .send({
             name: 'Bag',
             imageUrl: 'bit.ly/image.jpg',
@@ -52,7 +65,6 @@ describe(`This is product CRUD test`, () => {
     test(`product show all expectation`, (done) => {
         request(app)
         .get('/product/findall')
-        .set('token', access_token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('products')
@@ -63,7 +75,6 @@ describe(`This is product CRUD test`, () => {
     test(`product update success expectation`, (done) => {
         request(app)
         .put(`/product/update/${id_params}`)
-        .set('token', access_token)
         .send({
             name: 'Bag',
             imageUrl: 'bit.ly/image.jpg',
@@ -74,7 +85,7 @@ describe(`This is product CRUD test`, () => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty(`products`)
             expect(response.body).toHaveProperty(`message`)
-            expect(response.body.message).toBe('success update product at id 1')
+            expect(response.body.message).toBe(`success update product at id ${id_params}`)
             expect(response.status).toBe(200)
             done()
         })
@@ -82,38 +93,17 @@ describe(`This is product CRUD test`, () => {
     test(`product delete expectation`, (done) => {
         request(app)
         .delete(`/product/delete/${id_params}`)
-        .set('token', access_token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
-            expect(response.body.message).toBe('success deleted product at id 1')
+            expect(response.body.message).toBe(`success deleted product at id ${id_params}`)
             expect(response.status).toBe(200)
-            done()
-        })
-    })
-
-    test(`unidentified credentials / broken token detected`, (done) => {
-        request(app)
-        .post('/product/create')
-        .set('token', 'yJhbIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJtYWlsQG1haWwuY29tIiwiaWF0IjoxNTgxOTI4NjQzfQ.6dnI1ajyTtFxGbrkwctcDJnmQ0Xn7ttjEwk9OI5DEgU')
-        .send({
-            name: 'Bag',
-            imageUrl: 'bit.ly/image.jpg',
-            price: 10000,
-            stock: 10
-        })
-        .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('message')
-            expect(response.body.message).toBe('invalid token')
-            expect(response.status).toBe(401)
             done()
         })
     })
     test(`validation error on product`, (done) => {
         request(app)
         .post('/product/create')
-        .set('token', access_token)
         .send({
             name: '',
             imageUrl: '',
@@ -127,21 +117,9 @@ describe(`This is product CRUD test`, () => {
             done()
         })
     })
-    test(`product show all error expectation`, (done) => {
-        request(app)
-        .get('/product/findal')
-        .set('token', access_token)
-        .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).not.toHaveProperty('products')
-            expect(response.status).toBe(404)
-            done()
-        })
-    })
     test(`product not found or has been deleted`, (done) => {
         request(app)
         .delete(`/product/delete/${id_params}`)
-        .set('token', access_token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')

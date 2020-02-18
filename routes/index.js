@@ -1,9 +1,10 @@
 const router = require('express').Router()
 const adminRouter = require('./admin.js')
 const productRouter = require('./product.js')
-const { authentication } = require('../middlewares/secureUserIdentificator.js')
+const categoryRouter = require('./category.js')
 
 router.use('/admin', adminRouter)
-router.use('/product', authentication, productRouter)
+router.use('/product', productRouter)
+router.use('/category', categoryRouter)
 
 module.exports = router
