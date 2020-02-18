@@ -24,7 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     image_url: {
       type: DataTypes.STRING, 
+      allowNull: false, 
       validate: {
+        notNull : {
+          args: true,
+          msg : 'image url cannot be null'
+        },
         isUrl: {
           args: true,
           msg: 'invalid url'
@@ -33,7 +38,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: {
       type: DataTypes.FLOAT,
+      allowNull: false,
       validate: {
+        notNull : {
+          args: true,
+          msg : 'price cannot be null'
+        },
         customValidator(value){
           if (value<0){
             throw new Error('price cannot be negative')
@@ -43,7 +53,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     stock: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
+        notNull : {
+          args: true,
+          msg : 'stock cannot be null'
+        },
         customValidator(value){
           if (value<0){
             throw new Error('stock cannot be negative')

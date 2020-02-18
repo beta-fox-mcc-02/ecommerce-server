@@ -33,7 +33,7 @@ describe('User Routes', ()=>{
         request(app)
           .post('/register')
           .send({
-            email : 'andi@mail.com',
+            email : 'hardim@mail.com',
             password : '123456',
             role : 'admin'
           })
@@ -210,7 +210,7 @@ describe('User Routes', ()=>{
           })
       })
 
-      test.only('it should return msg bad request with error invalid email/password', (done)=>{
+      test('it should return msg bad request with error invalid email/password', (done)=>{
         request(app)
           .post('/login')
           .send({
