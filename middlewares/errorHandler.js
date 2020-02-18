@@ -33,7 +33,7 @@ const errorHandler = (err, req, res, next) => {
     status = err.status,
       res.status(status).json({
         name: err.name,
-        error: err.error
+        message: err.message
       })
   } else if (err.name === 'NOT_FOUND') {
     status = err.status

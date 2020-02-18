@@ -186,7 +186,7 @@ describe('Category Routes', () => {
           .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
-            expect(response.body).toHaveProperty('error', expect.any(String))
+            expect(response.body).toHaveProperty('message', expect.any(String))
             expect(response.status).toBe(401)
             done()
           })
@@ -208,82 +208,6 @@ describe('Category Routes', () => {
             done()
           })
       })
-    })
-  })
-
-  describe('Find Category', () => {
-    describe('Find Category Success', () => {
-      test('it should return a category object and status 200', (done) => {
-        request(app)
-          .get('/categories/' + category_id)
-          .set('Authorization', 'Bearer ' + token)
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('id', expect.any(Number))
-            expect(response.body).toHaveProperty('name', 'Bearing')
-            expect(response.body).toHaveProperty('path', 'bearing')
-            expect(response.status).toBe(200)
-            done()
-          })
-      })
-    })
-
-    describe('Find Category Failed', () => {
-
-      test('it should return unauthorized token validation and status 400', (done) => {
-        request(app)
-          .get('/categories/' + category_id)
-          .set('Authorization', 'Bearer ')
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('name', 'BAD REQUEST')
-            expect(response.body).toHaveProperty('message', 'LOGIN_FAILED')
-            expect(response.body).toHaveProperty('error', expect.any(String))
-            expect(response.status).toBe(400)
-            done()
-          })
-      })
-
-      test('it should return unauthorized role validation and status 401', (done) => {
-        request(app)
-          .get('/categories/' + category_id)
-          .set('Authorization', 'Bearer ' + invalid_token)
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
-            expect(response.body).toHaveProperty('error', expect.any(String))
-            expect(response.status).toBe(401)
-            done()
-          })
-      })
-
-      test('it should return token validation and status 401', (done) => {
-        request(app)
-          .get('/categories/' + category_id)
-          .set('Authorization', 'Bearer ' + token + 'a')
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
-            expect(response.body).toHaveProperty('message', expect.any(String))
-            expect(response.status).toBe(401)
-            done()
-          })
-      })
-
-      test('it should return not found and status 404', (done) => {
-        const id = 1
-        request(app)
-          .get('/categories/' + id)
-          .set('Authorization', 'Bearer ' + token)
-          .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('name', 'NOT_FOUND')
-            expect(response.body).toHaveProperty('error', expect.any(String))
-            expect(response.status).toBe(404)
-            done()
-          })
-      })
-
     })
   })
 
@@ -310,7 +234,7 @@ describe('Category Routes', () => {
     })
 
     describe('Update Category Failed', () => {
-      test('it should return validation token and status 400', (done) => {
+      test('it should return token existing or not and status 400', (done) => {
         request(app)
           .put('/categories/' + category_id)
           .send({
@@ -339,25 +263,25 @@ describe('Category Routes', () => {
           .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
-            expect(response.body).toHaveProperty('error', expect.any(String))
+            expect(response.body).toHaveProperty('message', expect.any(String))
             expect(response.status).toBe(401)
             done()
           })
       })
-    })
-  })
 
-  describe('Find Categories', () => {
-    describe('Find Categories Success', () => {
-      test('it should return array of category object and status 200', (done) => {
-        const expected = [{ id: category_id, name: 'Seal', path: 'seal' }]
+      test('it should return token validation and status 401', (done) => {
         request(app)
-          .get('/categories')
-          .set('Authorization', 'Bearer ' + token)
+          .put('/categories/' + category_id)
+          .send({
+            name: 'Seal',
+            path: 'seal',
+          })
+          .set('Authorization', 'Bearer ' + token + 'a')
           .end((err, response) => {
             expect(err).toBe(null)
-            expect(response.body).toEqual(expect.arrayContaining(expected))
-            expect(response.status).toBe(200)
+            expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
+            expect(response.body).toHaveProperty('message', expect.any(String))
+            expect(response.status).toBe(401)
             done()
           })
       })
@@ -378,5 +302,49 @@ describe('Category Routes', () => {
           })
       })
     })
+
+    describe('Delete Category Failed', () => {
+      test('it should return token existing or not and status 400', (done) => {
+        request(app)
+          .delete('/categories/' + category_id)
+          .set('Authorization', 'Bearer ')
+          .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('name', 'BAD REQUEST')
+            expect(response.body).toHaveProperty('message', 'LOGIN_FAILED')
+            expect(response.body).toHaveProperty('error', expect.any(String))
+            expect(response.status).toBe(400)
+            done()
+          })
+      })
+
+      test('it should return role validation and status 401', (done) => {
+        request(app)
+          .delete('/categories/' + category_id)
+          .set('Authorization', 'Bearer ' + invalid_token)
+          .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
+            expect(response.body).toHaveProperty('message', expect.any(String))
+            expect(response.status).toBe(401)
+            done()
+          })
+      })
+
+
+      test('it should return token validation and status 401', (done) => {
+        request(app)
+          .delete('/categories/' + category_id)
+          .set('Authorization', 'Bearer ' + token + 'a')
+          .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
+            expect(response.body).toHaveProperty('message', expect.any(String))
+            expect(response.status).toBe(401)
+            done()
+          })
+      })
+    })
+
   })
 })

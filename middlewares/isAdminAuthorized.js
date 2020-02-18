@@ -16,14 +16,14 @@ const isAdminAuthorized = (req, res, next) => {
           next({
             status: 401,
             name: 'UNAUTHORIZED',
-            error: 'You are not authorized'
+            message: 'You are not authorized'
           })
         }
       } else {
         next({
           status: 401,
           name: 'UNAUTHORIZED',
-          error: 'Please register first'
+          message: 'Please register first'
         })
       }
     })
