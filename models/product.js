@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           args: true,
           msg: 'required product name'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'required product name'
         }
       }
     },
@@ -36,22 +40,24 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'required price tag'
         },
-        min: {
-          args: 0,
-          msg: 'Minimum price is 0'
+        isPositive(value) {
+          if(value < 0) {
+            throw new Error('Minimum price is 0')
+          }
         }
       }
     },
     stock: {
       type: DataTypes.INTEGER,
       validate: {
-        min: {
-          args: 0,
-          msg: 'Minimun stock input is 0'
-        },
         isInt: {
           args: true, 
           msg: 'No decimal stock'
+        },
+        isPositive(value) {
+          if(value < 0) {
+            throw new Error('Minimum stock is 0')
+          }
         }
       }
     }

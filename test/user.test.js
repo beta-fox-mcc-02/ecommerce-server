@@ -1,6 +1,5 @@
 const app = require('../app')
 const request = require('supertest')
-const Sequelize = require('sequelize')
 const {sequelize, User} = require('../models')
 const {queryInterface} = sequelize
 
@@ -12,12 +11,12 @@ describe('User Router Test', () => {
             password: '123456789',
             role: 'user'
         })
-        .then(result => {
-            done()
-        })
-        .catch(err => {
-            done(err)
-        })
+            .then(result => {
+                done()
+            })
+            .catch(err => {
+                done(err)
+            })
     })
     afterAll((done) => {
         queryInterface.bulkDelete('Users', {})
@@ -84,8 +83,8 @@ describe('User Router Test', () => {
                 request(app)
                 .post('/register/user')
                 .send({
-                    name: 'dadday',
-                    email: 'dadday@day.com',
+                    name: 'dimdim',
+                    email: 'dimas@day.com',
                     password: '123456789'
                 })
                 .end((err, response) => {
@@ -131,11 +130,10 @@ describe('User Router Test', () => {
                 request(app)
                     .post('/login')
                     .send({
-                        email: 'dadday@day.com',
-                        password: '123456789'
+                        email: 'dimas@day.com',
+                        password: 'dimas123'
                     })
                     .end((err, response) => {
-                        console.log(response.body)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('msg', "login success")
                         expect(response.body).toHaveProperty('data.name', expect.any(String))

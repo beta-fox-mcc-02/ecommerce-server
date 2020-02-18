@@ -3,7 +3,7 @@ const {Product, CategoryProduct} = require('../models')
 class ProductController {
     static newProduct(req, res, next) {
         Product.create({
-            name: req.body.email,
+            name: req.body.name,
             description: req.body.description,
             image_url: req.body.image_url,
             price: req.body.price,
@@ -13,7 +13,7 @@ class ProductController {
                 res.status(201).json({
                     msg: 'product created successfully',
                     data: {
-                        name: product.email,
+                        name: product.name,
                         description: product.description,
                         image_url: product.image_url,
                         price: product.price,
@@ -44,7 +44,8 @@ class ProductController {
     static removeTags(req, res, next) {
         CategoryProduct.destroy({
             where: {
-                CategoryId: req.params.categoryId
+                CategoryId: req.params.categoryId,
+                ProductId: req.params.productId
             }
         })
             .then(result => {
@@ -59,7 +60,7 @@ class ProductController {
 
     static allProduct(req, res, next) {
         Product.findAll({
-            include: ['Category']
+            // include: ['Category']
         })
             .then(products => {
                 res.status(200).json({
@@ -68,7 +69,10 @@ class ProductController {
                 })
             })
             .catch(err => {
-                next(err)
+                next({
+                    name: 'NotFound',
+                    msg: 'product not found'
+                })
             })
     }
 
@@ -77,15 +81,26 @@ class ProductController {
             where: {
                 id: req.params.productId
             }
+            // include: ['Category']
         })
             .then(product => {
-                res.status(200).json({
-                    msg: 'get the product',
-                    data: product
-                })
+                if(product) {
+                    res.status(200).json({
+                        msg: 'get the product',
+                        data: product
+                    })
+                } else {
+                    next({
+                        name: 'NotFound',
+                        msg: 'product not found'
+                    })
+                }
             })
             .catch(err => {
-                next(err)
+                next({
+                    name: 'NotFound',
+                    msg: 'product not found'
+                })
             })
     }
 
@@ -102,9 +117,22 @@ class ProductController {
             }
         })
             .then(product => {
+                return Product.findOne({
+                    where: {
+                        id: req.params.productId
+                    }
+                }) 
+            })
+            .then(product => {
                 res.status(200).json({
-                    msg: 'update product success',
-                    data: product
+                    msg: 'product updated successfully',
+                    data: {
+                        name: product.name,
+                        description: product.description,
+                        image_url: product.image_url,
+                        price: product.price,
+                        stock: product.stock
+                    }
                 })
             })
             .catch(err => {
@@ -119,19 +147,29 @@ class ProductController {
             }
         })
             .then(result => {
-                return CategoryProduct.destroy({
-                    where: {
-                        ProductId: req.params.productId
-                    }
-                })
+                if(typeof result == 'number') {
+                    return CategoryProduct.destroy({
+                        where: {
+                            ProductId: req.params.productId
+                        }
+                    })
+                } else if(typeof result == 'object') {
+                    next({
+                        name: 'NotFound',
+                        msg: 'product not found'
+                    })
+                }
             })
             .then(result => {
                 res.status(200).json({
-                    msg: 'delete product success'
+                    msg: 'product deleted successfully'
                 })
             })
             .catch(err => {
-                next(err)
+                next({
+                    name: 'NotFound',
+                    msg: 'product not found'
+                })
             })
     }
 }

@@ -7,6 +7,14 @@ module.exports = (err, req, res, next) => {
         res.status(400).json({
             msg: err.msg
         })
+    } else if(err.name == 'AuthenticationError' || err.name == 'AuthorizationError') {
+        res.status(401).json({
+            msg: err.msg
+        })
+    } else if(err.name = 'NotFound') {
+        res.status(404).json({
+            msg: err.msg
+        })
     } else {
         res.status(500).json(err)
     }
