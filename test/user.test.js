@@ -13,7 +13,7 @@ describe('User Routes', () => {
             email: "dadang@mail.com",
             password: "inipassword",
         })
-            .then(uer => {
+            .then(user => {
                 done()
             })
             .catch(err => {
@@ -27,7 +27,7 @@ describe('User Routes', () => {
                 done()
             })
             .catch(err => {
-                done()
+                done(err)
             })
     })
 

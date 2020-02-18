@@ -4,9 +4,9 @@ const { generatetoken } = require('../helpers/jwt')
 
 class UserController {
     static register (req, res, next) {
-        const {first_name, last_name, address, email, password} = req.body
+        const {first_name, last_name, address, email, password, role} = req.body
         User.create({
-            first_name, last_name, address, email, password
+            first_name, last_name, address, email, password, role: role || false
         })
             .then(user => {
                 res.status(201).json({
@@ -22,7 +22,6 @@ class UserController {
 
     static login (req, res, next) {
         const { email, password } = req.body
-        console.log(req.body, '====================')
         User.findOne({
             where: {
                 email
