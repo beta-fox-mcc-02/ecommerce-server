@@ -260,7 +260,7 @@ describe('People Routes', () => {
                     expect(err).toBe(null)
                     expect(response.body).toHaveProperty('type', expect.any(String));
                     expect(response.status).toBe(404);
-                    expect(response.body.error).toBe('Data not found');
+                    expect(response.body.error).toBe('Product not found');
                     done()
                 })
         })
@@ -280,6 +280,60 @@ describe('People Routes', () => {
                     expect(response.body).toHaveProperty('type', expect.any(String));
                     expect(response.status).toBe(401);
                     expect(response.body.error).toBe(`Unauthorized`);
+                    done()
+                })
+        })
+    })
+
+    describe('Product Delete', () => {
+        test('Return numbers of deleted product and status 200', (done) => {
+            request(app)
+                .delete(`/products/${productID}`)
+                .set('token', tokenAdmin)
+                .end((err, response) => {
+                    expect(err).toBe(null)
+                    expect(response.body).toHaveProperty('data', expect.any(Number))
+                    expect(response.body).toHaveProperty('message', expect.any(String))
+                    expect(response.status).toBe(200)
+                    done()
+                })
+        })
+
+        test('Return error when unauthorized and status 401', (done) => {
+            request(app)
+                .delete(`/products/${productID}`)
+                .set('token', tokenUser)
+                .end((err, response) => {
+                    expect(err).toBe(null)
+                    expect(response.body).toHaveProperty('type', expect.any(String));
+                    expect(response.status).toBe(401);
+                    expect(response.body.error).toBe(`Unauthorized`);
+                    done()
+                })
+        })
+
+        test('Return error when product is not found or already deleted and status 404', (done) => {
+            request(app)
+                .delete(`/products/1`)
+                .set('token', tokenAdmin)
+                .end((err, response) => {
+                    expect(err).toBe(null)
+                    expect(response.body).toHaveProperty('type', expect.any(String));
+                    expect(response.status).toBe(404);
+                    expect(response.body.error).toBe(`Product not found`);
+                    done()
+                })
+        })
+    })
+
+    describe('Product Read All', () => {
+        test.only('Return array of all product objects and status 200', (done) => {
+            request(app)
+                .get(`/products`)
+                .end((err, response) => {
+                    expect(err).toBe(null)
+                    expect(response.body).toStrictEqual(expect.any(Array))
+                    expect(response.status).toBe(200)
                     done()
                 })
         })

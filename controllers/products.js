@@ -37,16 +37,48 @@ class Controller {
         })
             .then(data => {
                 if (data[0]) {
-                    res.status(200).json(data[1][0])
+                    res.status(200).json(data[1][0]);
                 } else {
                     next({
                         status: 404,
-                        message: 'Data not found'
-                    })
+                        message: 'Product not found'
+                    });
                 }
             })
             .catch(err => {
-                next(err)
+                next(err);
+            })
+    }
+    static deleteProduct(req, res, next) {
+        Product.destroy({
+            where: {
+                id: req.params.productId
+            }
+        })
+            .then(data => {
+                if (data) {
+                    res.status(200).json({
+                        data,
+                        message: 'Deleted'
+                    });
+                } else {
+                    next({
+                        status: 404,
+                        message: 'Product not found',
+                    });
+                }
+            })
+            .catch(err => {
+                next(err);
+            })
+    }
+    static getProducts(req, res, next) {
+        Product.findAll()
+            .then(products => {
+                res.status(200).json(products);
+            })
+            .catch(err => {
+                next(err);
             })
     }
 }
