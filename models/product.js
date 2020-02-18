@@ -32,14 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: `name can't be null`
+          msg: `price can't be null`
         },
         notEmpty: {
           args: true,
-          msg: `Name must be filled`
+          msg: `price must be filled`
         },
         min: {
-          args: 0,
+          args: `0`,
           msg: `price cannot be bellow 0`
         }
       }
@@ -50,17 +50,21 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: `name can't be null`
+          msg: `stock can't be null`
         },
         notEmpty: {
           args: true,
-          msg: `Name must be filled`
+          msg: `stock must be filled`
         },
         min: {
-          args: 0,
+          args: '0',
           msg: `price cannot be bellow 0`
         }
       }
+    },
+    CategoryId: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
     }
   }, {
     sequelize

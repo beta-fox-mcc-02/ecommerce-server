@@ -1,6 +1,6 @@
 const { User } = require('../models')
 
-module.exports = (err, req, res, next) => {
+module.exports = (req, res, next) => {
    User.findOne({
       where: {
          id: req.currentUserId

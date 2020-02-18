@@ -19,7 +19,7 @@ class UserController {
          })
    }
 
-   static login(req, res, next) {
+   static login(req, res, next) {      
       User.findOne({
          where: {
             email: req.body.email
@@ -40,7 +40,7 @@ class UserController {
                }
             }
          })
-         .catch(err => {
+         .catch(err => {            
             next(err)
          })
    }

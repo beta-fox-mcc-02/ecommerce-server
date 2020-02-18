@@ -111,11 +111,10 @@ describe('User Routes', () => {
          request(app)
             .post('/users/login')
             .send({
-               email: `du@dummy.com`,
+               email: `ahuh@dummy.com`,
                password: `12345`
             })
-            .end((err, res) => {
-               
+            .end((err, res) => {               
                expect(err).toBe(null)
                expect(res.status).toBe(404)
                expect(res.body).toHaveProperty('msg', expect.any(String))

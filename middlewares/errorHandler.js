@@ -9,7 +9,7 @@ module.exports = (err, req, res, next) => {
       msg = `email must be unique`
       res.status(status).json({ msg })
    }
-   else if (err.name == 'SequelizeValidationError') {
+   else if (err.name == 'SequelizeValidationError') {      
       status = 400
       errors = []
       for (let i = 0; i <= err.errors.length - 1; i++) {

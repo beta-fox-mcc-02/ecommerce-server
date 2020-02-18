@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=testing jest --detectOpenHandles",
+    "test": "NODE_ENV=testing jest --detectOpenHandles --runInBand",
     "dev": "NODE_ENV=development nodemon bin/http.js",
     "start": "node app.js"
   },
