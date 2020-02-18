@@ -8,7 +8,7 @@ class ProductController{
             price : req.body.price,
             stock : req.body.stock
         }
-        console.log(req.body)
+        // console.log(req.body)
         Product.create(newProduct)
             .then(product => {
                 res.status(201).json(product)
@@ -18,7 +18,7 @@ class ProductController{
     static productList(req, res, next){
         Product.findAll()
             .then(product => {
-                res.status(200).json({product})
+                res.status(200).json(product)
             })
             .catch(next)
     }

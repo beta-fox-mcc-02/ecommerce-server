@@ -96,3 +96,50 @@ describe('Product add test', () => {
             })
     })
 })
+describe('Product list test', () => {
+    beforeAll((done) => {
+        Admin.create({
+            email : 'kiko@mail.com',
+            password : 'admin123'
+        })
+        .then(res => {
+            testToken = createToken(res.dataValues)
+            done()
+        })
+        .catch(done)
+        Product.create({
+            name : 'baju',
+            image_url : '',
+            price : 1000,
+            stock : 1
+        })
+        .then(res => {
+            done()
+        })
+        .catch(done)
+    })
+    afterAll((done) => {
+        queryInterface.bulkDelete('Products', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+        queryInterface.bulkDelete('Admins', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+    })
+    test('it should return all product', (done) => {
+        request(app).get('/products/list')
+            .set('token', testToken)
+            .end((err, response) => {
+                // console.log(response)
+                expect(err).toBe(null)
+                expect(response.body[0]).toHaveProperty('name')
+                expect(response.body[0]).toHaveProperty('image_url')
+                expect(response.body[0]).toHaveProperty('price')
+                expect(response.body[0]).toHaveProperty('stock')
+                expect(response.status).toBe(200)
+                done()
+            })
+    })
+})
