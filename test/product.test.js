@@ -350,7 +350,6 @@ describe('Products', () => {
             test('success read all product, return all products and status', (done) => {
                 request(app)
                     .get('/products')
-                    .set('token', tokenAdmin)
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(200)

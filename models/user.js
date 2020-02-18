@@ -4,8 +4,10 @@ const { hashPassword } = require('../helpers/password')
 
 module.exports = (sequelize, DataTypes) => {
   class User extends sequelize.Sequelize.Model {
-    static associate () {
-
+    static associate (models) {
+      User.belongsToMany(models.Product, {
+        through: models.Cart
+      })
     }
   }
 
