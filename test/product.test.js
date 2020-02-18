@@ -327,7 +327,7 @@ describe('People Routes', () => {
     })
 
     describe('Product Read All', () => {
-        test.only('Return array of all product objects and status 200', (done) => {
+        test('Return array of all product objects and status 200', (done) => {
             request(app)
                 .get(`/products`)
                 .end((err, response) => {
