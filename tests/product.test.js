@@ -115,8 +115,8 @@ describe(`This is product CRUD test`, () => {
         .post('/product/create')
         .set('token', access_token)
         .send({
-            name: 'Bag',
-            imageUrl: 'bit.ly/image.jpg',
+            name: '',
+            imageUrl: '',
             price: -1000,
             stock: -2
         })

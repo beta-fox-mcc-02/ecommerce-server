@@ -3,8 +3,26 @@
 module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model{}
   Product.init({
-    name: DataTypes.STRING,
-    imageUrl: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: `name cannot be empty`
+        }
+      }
+    },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: `image url cannot be empty`
+        }
+      }
+    },
     price: {
       type: DataTypes.INTEGER,
       validate: {
