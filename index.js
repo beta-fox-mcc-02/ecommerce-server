@@ -27,20 +27,16 @@ app.use((err, req, res, next) => {
         msg = {
             msg: 'email / password not correct'
         }
-        statusCode = 400
+        statusCode = 401
+    } else if (err.name === 'productNotFound') {
+        msg = {
+            msg: 'product not found'
+        }
+        statusCode = 404
     }
 
     res.status(statusCode).json(msg)
 
-    // const { start, httpStatus, message, previousError, stack } = err
-    // console.log(stack)
-
-    // res.status(httpStatus || 406).json({
-    //     status: false,
-    //     code: httpStatus || 406,
-    //     message,
-    //     data: previousError
-    // })
 })
 
 module.exports = app

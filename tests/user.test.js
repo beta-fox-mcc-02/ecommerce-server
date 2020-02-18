@@ -64,7 +64,7 @@ describe('User Endpoints', () => {
                 password: 'Password123'
             })
             .then(res => {
-                expect(res.statusCode).toEqual(400)
+                expect(res.statusCode).toEqual(401)
                 expect(res.body).toHaveProperty('msg')
                 done()
             })

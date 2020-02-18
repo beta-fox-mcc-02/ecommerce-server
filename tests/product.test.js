@@ -1,8 +1,38 @@
 const request = require('supertest')
 const app = require('../index')
 
+let token
+beforeAll(done => {
+    request(app)
+        .post('/users/register')
+        .send({
+            email: 'susan@gmail.com',
+            first_name: 'Heri',
+            last_name: 'Susan',
+            password: 'Password123'
+        })
+        .then(res => {
+            done()
+        })
+        .catch(done)
+})
+
+beforeAll(done => {
+    request(app)
+        .post('/users/login')
+        .send({
+            email: 'susantoh41@gmail.com',
+            password: 'Password123'
+        })
+        .then(response => {
+            token = response.body.token
+            done()
+        })
+        .catch(done)
+})
+
 describe('Product Endpoints', () => {
-    it('should create a new post', done => {
+    it('should create a new product', done => {
         request(app)
             .post('/products')
             .send({
@@ -31,7 +61,7 @@ describe('Product Endpoints', () => {
             .catch(done)
     })
 
-    it('should fetch all products', async () => {
+    it('should fetch all products', done => {
         request(app)
             .get('/products')
             .then(res => {
@@ -49,14 +79,14 @@ describe('Product Endpoints', () => {
             .put(`/products/${productId}`)
             .send({
                 name: 'Surface Studio 2',
-                image_url: '',
+                image_url: 'https://www.imageurl.com/surface.jpg',
                 price: 35000000,
                 stock: 19
             })
             .then(res => {
                 expect(res.statusCode).toEqual(200)
                 expect(res.body).toHaveProperty('product')
-                expect(res.body.post).toHaveProperty(
+                expect(res.body.product).toHaveProperty(
                     'name',
                     'image_url',
                     'price',
@@ -76,6 +106,7 @@ describe('Product Endpoints', () => {
             .then(res => {
                 expect(res.statusCode).toEqual(400)
                 expect(res.body).toHaveProperty('errors')
+                done()
             })
             .catch(done)
     })
@@ -83,7 +114,7 @@ describe('Product Endpoints', () => {
     it('should delete a product', done => {
         const productId = 1
         request(app)
-            .delete(`products/${productId}`)
+            .delete(`/products/${productId}`)
             .then(res => {
                 expect(res.statusCode).toEqual(204)
                 done()
@@ -92,11 +123,12 @@ describe('Product Endpoints', () => {
     })
 
     it('should respond with status code 404 if resource is not found', done => {
-        const productId = 1
+        const productId = 2
         request(app)
             .get(`/products/${productId}`)
             .then(res => {
                 expect(res.statusCode).toEqual(404)
+                done()
             })
             .catch(done)
     })
