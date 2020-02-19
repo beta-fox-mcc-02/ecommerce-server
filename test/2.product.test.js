@@ -4,19 +4,11 @@ const Sequelize = require('sequelize')
 const { User, Product, sequelize } = require('../models')
 const { queryInterface } = sequelize
 const jwt = require('jsonwebtoken')
+const Op = sequelize.Sequelize.Op
 
-let dummyAdmin = {
-    username: 'dummy',
-    email: 'dummy@mail.com',
-    password: 'dummy123',
-    isAdmin: true
-}
 
-let unknownUser = {
-    username: 'unknown',
-    email: 'unknown@mail.com',
-    password: 'unknown123'
-}
+let access_token = `${process.env.ADMINTOKEN}`
+let wrong_token = `abcde`
 
 let productTest = {
     name: 'test',
@@ -54,32 +46,10 @@ let case4 = {
 }
 
 
-beforeAll(done => {
-    wrong_token
-    User.create(unknownUser)
-    .then(result => {
-        wrong_token = jwt.sign(unknownUser, `${process.env.SECRET}`)
-        done()
-    })
-    .catch(err => {
-        done(err)
-    })
-
-    access_token
-    User.create(dummyAdmin)
-    .then(result => {
-        access_token = jwt.sign(dummyAdmin, `${process.env.SECRET}`)
-        done()
-    })
-    .catch(err => {
-        done(err)
-    })
-})
-
 describe('Product Routes', () => {
 
     afterAll(done => {
-        queryInterface.bulkDelete('Users', null, {})
+        queryInterface.bulkDelete('Users', {where: {id: {[Op.ne]:1}}})
         .then(response => {
             done()
         })
@@ -219,7 +189,7 @@ describe('Product Routes', () => {
             .send(productTest)
             .end((err, response) => {
                 expect(err).toBe(null)
-                expect(response.body).toHaveProperty('message', 'Bad Request')
+                expect(response.body).toHaveProperty('message', 'JsonWebTokenError')
                 expect(response.body).toHaveProperty('errors', expect.any(Array))
                 expect(response.body.status).toBe(401)
                 done()
@@ -262,20 +232,20 @@ describe('Product Routes', () => {
     })
 })
 
-//seed the origin admin again
-afterAll(done => {
-    queryInterface.bulkInsert('Users', [
-        {
-          username: 'admin',
-          email: 'admin@bricktiv8.com',
-          password: '$2a$10$8mG9.92ysuO9HeHsQl/Gt.ZCqeUrbw30rd3wxbwQGzvBtgJSAsbi2',
-          isAdmin: true
-        }
-      ], {})
-      .then(response => {
-          done()
-      })
-      .catch(err => {
-          done(err)
-      })
-})
+// //seed the origin admin again
+// afterAll(done => {
+//     queryInterface.bulkInsert('Users', [
+//         {
+//           username: 'admin',
+//           email: 'admin@bricktiv8.com',
+//           password: '$2a$10$8mG9.92ysuO9HeHsQl/Gt.ZCqeUrbw30rd3wxbwQGzvBtgJSAsbi2',
+//           isAdmin: true
+//         }
+//       ], {})
+//       .then(response => {
+//           done()
+//       })
+//       .catch(err => {
+//           done(err)
+//       })
+// })

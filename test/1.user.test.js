@@ -5,6 +5,7 @@ const { User, sequelize } = require('../models')
 const { queryInterface } = sequelize
 const {checkPassword} = require('../helpers/hashPassword')
 const jwt = require('jsonwebtoken')
+const Op = sequelize.Sequelize.Op
 
 let oldUser = {
     username: 'cakra',
@@ -67,7 +68,7 @@ describe('User Routes', () => {
     })
 
     afterAll(done => {
-        queryInterface.bulkDelete('Users', {})
+        queryInterface.bulkDelete('Users', {where: {id: {[Op.ne]:1}}})
         .then(response => {
             done()
         })
@@ -222,20 +223,20 @@ describe('User Routes', () => {
     })    
 })
 
-//seed the origin admin again
-afterAll(done => {
-    queryInterface.bulkInsert('Users', [
-        {
-          username: 'admin',
-          email: 'admin@bricktiv8.com',
-          password: '$2a$10$8mG9.92ysuO9HeHsQl/Gt.ZCqeUrbw30rd3wxbwQGzvBtgJSAsbi2',
-          isAdmin: true
-        }
-      ], {})
-      .then(response => {
-          done()
-      })
-      .catch(err => {
-          done(err)
-      })
-})
+// //seed the origin admin again
+// afterAll(done => {
+//     queryInterface.bulkInsert('Users', [
+//         {
+//           username: 'admin',
+//           email: 'admin@bricktiv8.com',
+//           password: '$2a$10$8mG9.92ysuO9HeHsQl/Gt.ZCqeUrbw30rd3wxbwQGzvBtgJSAsbi2',
+//           isAdmin: true
+//         }
+//       ], {})
+//       .then(response => {
+//           done()
+//       })
+//       .catch(err => {
+//           done(err)
+//       })
+// })
