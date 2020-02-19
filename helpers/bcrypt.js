@@ -7,6 +7,7 @@ module.exports = {
         return hash
     },
     checkPassword : function(inputPassword, hash) {
+        console.log('MASUK CHECK PASSWORD')
         return bcrypt.compareSync(inputPassword, hash)
     }
 }

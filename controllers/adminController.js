@@ -28,14 +28,18 @@ class AdminControllers {
         })
             .then(admin => {
                 if (admin) {
-                    
+                    console.log('MASUK CONTROLLER =========')
                     let status = checkPassword(payload.password, admin.password)
+                    console.log(status, 'STATUS')
                     if (status) {
+                        console.log('MASUK STATUS SUCCESS')
                         let adminData = {
                             id : admin.id,
                             name : admin.name,
                             email : admin.email
                         }
+                        console.log(adminData)
+                        console.log('HALLLLOOOOOO')
                         let token = generateToken(adminData)
                         res.status(200).json({
                             access_token : token
