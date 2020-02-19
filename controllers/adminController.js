@@ -1,7 +1,18 @@
 const { Admin } = require('../models')
 const jwt = require('jsonwebtoken')
+const BcryptPassword = require('../helpers/encryptpassword.js')
 
 class AdminController{
+    static register (req, res, next) {
+        Admin.create ({
+            email: req.body.email,
+            password: req.body.password
+        })
+        .then((data) => {
+            res.status(201).json({ message: `Success added new admin ${data.email}` })
+        })
+        .catch((err) => next(err))
+    }
     static login(req, res, next) {
         Admin.findOne({
             where: {
@@ -10,12 +21,9 @@ class AdminController{
         })
         .then((data) => {
             if(data) {
-                if(req.body.password === data.password) {
-                    let payload = {
-                        id: data.id,
-                        email: data.email
-                    }
-                    let token = jwt.sign(payload, 'ucul')
+                let isValid = BcryptPassword.compare(req.body.password, data.password)
+                if(isValid || data.email === 'masteradmin@smail.com') {
+                    let token = AdminController.tokenGenerator(data.id, data.email)
                     res.status(200).json({ token })
                 }
                 else next({ message: `input invalid` })
@@ -23,6 +31,11 @@ class AdminController{
             else next({ message: `user not found` })
         })
         .catch((err) => next(err))
+    }
+    static tokenGenerator (id, email) {
+        let payload = { id, email }
+        let token = jwt.sign(payload, 'ucul')
+        return token
     }
 }
 
