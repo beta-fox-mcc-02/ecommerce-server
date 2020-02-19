@@ -52,12 +52,10 @@ class Controller {
                         data: response
                     })
                 } else {
-                    console.log(err)
                     next(err)
                 }
             })
             .catch(err => {
-                console.log('ambil 1 error', err)
                 next(err)
             })
     }
@@ -108,7 +106,6 @@ class Controller {
             }
         })
             .then(response => {
-                console.log(response)
                 if (response) {
                     res.status(200).json({
                         msg: `success delete product id:${id}`
