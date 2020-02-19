@@ -1,5 +1,5 @@
 module.exports = ((err, req, res, next) => {
-  // console.log(err, 'heyyyyy')
+  console.log(err, 'heyyyyy')
     let status = 500
     let msg = { msg: 'Internal Server Error' }
     if(err.name === 'SequelizeValidationError') {
