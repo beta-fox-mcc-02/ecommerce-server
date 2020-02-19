@@ -89,7 +89,7 @@
 
   * **Code:** 201 <br />
     **Content:** 
-    * `{ msg : "Register successful" }`
+    * `{ message : "Register successful" }`
  
 * **Error Response:**
 
@@ -102,6 +102,12 @@
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
     * `{ errors : ["Email is already used"] }`
+
+    OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    * `{ errors : ["Email cannot be empty"] }`
 
     OR
 
@@ -143,12 +149,6 @@
 * **Method:**
 
   `GET`
-
-* **Headers:**
-
-  * **Required:**
-
-    token
 
 * **Success Response:**
 
@@ -198,27 +198,11 @@
 
   `GET`
 
-* **Headers:**
-
-  **Required:**
-
-  token
-
-*  **URL Params** 
-
-      **Required:**
- 
-   `productId=[integer]`
-
-* **Data Params**
-
-  None
-
 * **Success Response:**
 
   * **Code:** 200 <br />
     **Content:** 
-    * `{ products }`
+    * `{ product }`
  
 * **Error Response:**
 
@@ -269,12 +253,6 @@
 
   token
 
-*  **URL Params** 
-
-      **Required:**
- 
-   `productId=[integer]`
-
 * **Data Params**
 
   `name=[string]`
@@ -291,13 +269,19 @@
 
   * **Code:** 201 <br />
     **Content:** 
-    * `{ msg: create products successful }`
+    * `{ message: "create products successful" }`
  
 * **Error Response:**
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** 
     * `{ err }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    * `{ errors : ["Product name cannot empty", "Product price cannot null", "Product stock cannot null"] }`
 
   OR
 
@@ -370,13 +354,25 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    * `{ msg: update products successful }`
+    * `{ message: "update products successful" }`
  
 * **Error Response:**
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** 
     * `{ err }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    * `{ errors : ["No product updated"] }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    * `{ errors : ["Product name cannot empty", "Product price cannot null", "Product stock cannot null"] }`
 
   OR
 
@@ -438,13 +434,19 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    * `{ msg: 'Delete product successful' }`
+    * `{ message: "Delete product successful" }`
  
 * **Error Response:**
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** 
     * `{ err }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    * `{ errors : ["No product deleted"] }`
 
   OR
 
@@ -485,11 +487,48 @@
 
   `GET`
 
-* **Headers:**
+* **Success Response:**
 
-  **Required:**
+  * **Code:** 200 <br />
+    **Content:** 
+    * `{ categories }`
+ 
+* **Error Response:**
 
-  token
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** 
+    * `{ err }`
+
+* **Sample Call:**
+
+  ```javascript
+    Axios({
+      url: "http://localhost:3000/categories",
+      method : "GET",
+      headers: {
+        token
+      }
+    });
+      .then(categories => {
+        ...
+      })
+      .catch(err => {
+        ...
+      })
+  ```
+
+---
+*findByPk*
+----
+  Returns one spesific categories based on its id
+
+* **URL**
+
+  /categories/:categoryId
+
+* **Method:**
+
+  `GET`
 
 * **Success Response:**
 
@@ -503,12 +542,6 @@
     **Content:** 
     * `{ err }`
 
-  OR
-
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** 
-    * `{ errors : ["Please login first"] }`
-
 * **Sample Call:**
 
   ```javascript
@@ -519,7 +552,7 @@
         token
       }
     });
-      .then(response => {
+      .then(category => {
         ...
       })
       .catch(err => {

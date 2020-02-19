@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: "Product name cannot empty"
         },
-        isEmpty: {
+        notEmpty: {
           msg: "Product name cannot empty"
         }
       }

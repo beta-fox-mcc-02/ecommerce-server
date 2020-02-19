@@ -1,15 +1,24 @@
 
 module.exports =  
   function errHandler(err, req, res, next) {
-    const errors = []
-    const status = 500
+    let errors = []
+    let status = 500
     
-    console.log(err)
-    if(err.name === "SequelizeValidationError") {
-      status = 400
-      err.errors.forEach(error => {
-        errors.push(error.messages)
-      })
-    }
-    res.status(status).json(errors)
+    console.log(err, "masuuukk siap")
+    if (err.name == "SequelizeValidationError" ||
+        err.name == "SequelizeUniqueConstraintError"
+    ) status = 400
+    else if (
+      err.name == "LoginError" || 
+      err.name == "AuthenticationError" ||
+      err.name == "AthorizationError" ||
+      err.name == "ItemCannotBeFound"
+      ) status = err.status
+    
+    err.errors.forEach(error => {
+      errors.push(error.message)
+    })
+
+    res.status(status).json({errors})
+    
   }

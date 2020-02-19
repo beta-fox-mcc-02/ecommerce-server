@@ -3,12 +3,13 @@ const secret = process.env.SECRET
 
 module.exports = {
   generateToken(payload) { //payload is an object
-    return jwt.sign(payload, secret)
+    let id = payload
+    return jwt.sign({id}, secret)
   },
 
   verifyToken(token) {
     try {
-      return decoded = jwt.verify(token)
+      return decoded = jwt.verify(token, secret)
     } catch (err) {
       return err
     }

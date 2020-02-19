@@ -16,32 +16,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isEmail: {
-          msg: "Wrong email format"
-        },
         notNull: {
           msg: "Email cannot be empty"
         },
-        isUnique(value, next) {
-          User.findAll()
-            .then(users => {
-              if(!users.length) next()
-              else {
-                let match = false
-                users.forEach(user => {
-                  if(user.email == value) match = true 
-                });
-                if(match)
-                  next({
-                    status: 400,
-                    msg: "Email is already used"
-                  }) 
-              else next()
-              }
-            })
-            .catch(next)
+        notEmpty: {
+          msg: "Email cannot be empty"
+        },
+        isEmail: {
+          msg: "Wrong email format"
         }
-      }
+      },
     },
     password: {
       type: DataTypes.STRING,

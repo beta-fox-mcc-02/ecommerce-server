@@ -14,30 +14,30 @@ class UserController {
         ] 
       }
     })
-      .then(user => {
-        if(!user) 
+    .then(user => {
+      if(!user) 
+        next({
+          name: 'LoginError',
+          status: 400,
+          errors: [{
+            message: "Wrong username / email / password"
+          }]
+        })
+      else {
+        if(!compare(password, user.password)) 
           next({
             name: 'LoginError',
             status: 400,
             errors: [{
-              messages: "Wrong username / email / password"
+              message: "Wrong username / email / password"
             }]
           })
         else {
-          if(!compare(password, user.password)) 
-            next({
-              name: 'LoginError',
-              status: 400,
-              errors: [{
-                messages: "Wrong username / email / password"
-              }]
-            })
-          else {
-            let token = generateToken(user.id)
-            res.status(200).json({ token, username: user.username })
-          }
+          let token = generateToken(user.id)
+          res.status(200).json({ token, username: user.username })
         }
-      })
+      }
+    })
     .catch(next)
   }
 
@@ -45,7 +45,7 @@ class UserController {
     let { username, email, password, role } = req.body
     User.create({ username, email, password, role })
       .then(() => {
-        res.status(201).json({ msg: "Register successful" })
+        res.status(201).json({ message: "Register successful" })
       })
       .catch(next)
   }
