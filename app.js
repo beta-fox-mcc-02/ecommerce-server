@@ -4,9 +4,9 @@ const indexRouter = require('./routes/index.js')
 const errHandler = require('./middlewares/errHandler.js')
 const cors = require('cors')
 
-app.use(cors())
 app.use(express.urlencoded({ extended:false }))
 app.use(express.json())
+app.options('*', cors())
 
 app.use(indexRouter)
 app.use(errHandler)
