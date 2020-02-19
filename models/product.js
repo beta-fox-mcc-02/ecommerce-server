@@ -14,16 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    imageUrl: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          args: true,
-          msg: `image url cannot be empty`
-        }
-      }
-    },
+    imageUrl: { type: DataTypes.STRING },
     price: {
       type: DataTypes.INTEGER,
       validate: {

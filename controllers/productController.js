@@ -1,4 +1,5 @@
 const { Product, Category } = require('../models')
+const Op = require('sequelize').Op
 
 class ProductController{
     static create(req, res, next) {
@@ -30,6 +31,31 @@ class ProductController{
             res.status(200).json({ products: data })
         })
         .catch(err => next(err))
+    }
+
+    static findOne(req, res, next) {
+        let product
+        Product.findByPk(req.params.id)
+            .then((data) => {
+                product = data
+                return Category.findAll ({
+                    where: {
+                        id: {
+                            [Op.not]: data.CategoryId
+                        }
+                    }
+                })
+            })
+            .then((data) => {
+                let categoryNames = []
+                for (let key of data) {
+                    categoryNames.push(key.name)
+                }
+                product.dataValues.changeCategory = categoryNames
+                return product
+            })
+            .then((data) => res.status(200).json({ data }))
+            .catch((err) => next(err))
     }
 
     static update(req, res, next) {

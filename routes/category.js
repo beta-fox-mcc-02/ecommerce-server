@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const CategoryController = require('../controllers/categoryController.js')
 
-router.get('/findall', CategoryController.findAll)
+router.get('/', CategoryController.findAll)
 
 module.exports = router
