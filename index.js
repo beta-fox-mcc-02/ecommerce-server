@@ -1,15 +1,18 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const routes = require('./routes')
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(cors())
 
 app.use(routes)
 
 app.use((err, req, res, next) => {
+    console.log(err)
     let statusCode = 500
     let msg = { msg: 'Internal Server Error' }
 
@@ -33,6 +36,12 @@ app.use((err, req, res, next) => {
             msg: 'product not found'
         }
         statusCode = 404
+    } else if(err.name === 'NoImageAttached') {
+        msg = {
+            msg: 'no image attached',
+            errors: 'no image attached'
+        }
+        statusCode = 400
     }
 
     res.status(statusCode).json(msg)
