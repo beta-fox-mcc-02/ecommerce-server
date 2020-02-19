@@ -6,6 +6,7 @@ const adminAuthorization = require ('../middlewares/adminAuthorization')
 
 router.post('/', authentication, adminAuthorization, productController.create)
 router.get('/', authentication, productController.getAll)
+router.get('/:productId', authentication, productController.getOne)
 router.put('/:productId', authentication, adminAuthorization, productController.update)
 router.delete('/:productId', authentication, adminAuthorization, productController.delete)
 module.exports = router

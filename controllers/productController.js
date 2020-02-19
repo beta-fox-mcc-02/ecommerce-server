@@ -80,6 +80,26 @@ class ProductController {
             next(err)
          })
    }
+
+   static getOne(req, res, next) {
+      Product.findOne({
+         where: {
+            id: req.params.id
+         },
+         include: [
+            {model: Category}
+         ]
+      })
+         .then(data => {
+            if (data.length < 1) {
+               throw ({ code: 404, message: `Product with id ${req.params.id} not found` })
+            } 
+            else {
+               res.status(200).json({data})
+            }
+         })
+         .catch(next)
+   }
 }
 
 module.exports = ProductController
