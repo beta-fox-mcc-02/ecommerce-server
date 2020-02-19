@@ -1,15 +1,23 @@
 const app = require('../app')
 const request = require('supertest')
 const { sequelize: { queryInterface } } = require('../models')
+let token
 
 describe('Admin Routes', () => {
+
+  afterAll((done) => {
+    queryInterface.bulkDelete('Users', {})
+      .then(response => {
+        done()
+      }).catch(err => done(err))
+  })
 
   describe('Admin Register Test', () => {
 
     describe('Admin Register Success', () => {
       test('it should return new object includes email, username, and id and status 201  ', (done) => {
         request(app)
-          .post('/admin/register')
+          .post('/admin')
           .send({
             first_name: 'Budi',
             username: 'budiagung',
@@ -40,7 +48,7 @@ describe('Admin Routes', () => {
           role_id: 1
         }
         request(app)
-          .post('/admin/register')
+          .post('/admin')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -63,7 +71,7 @@ describe('Admin Routes', () => {
           role_id: 1
         }
         request(app)
-          .post('/admin/register')
+          .post('/admin')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -87,7 +95,7 @@ describe('Admin Routes', () => {
           role_id: 2
         }
         request(app)
-          .post('/admin/register')
+          .post('/admin')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -105,12 +113,6 @@ describe('Admin Routes', () => {
   })
 
   describe('Admin Login Test', () => {
-    afterAll((done) => {
-      queryInterface.bulkDelete('Users', {})
-        .then(response => {
-          done()
-        }).catch(err => done(err))
-    })
 
     describe('Admin Login Success', () => {
       test('it should return access token, message and status 200 ', (done) => {
@@ -121,6 +123,7 @@ describe('Admin Routes', () => {
             password: 'agung2010'
           })
           .end((err, response) => {
+            token = response.body.token
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('token', expect.any(String))
             expect(response.body).toHaveProperty('message', 'LOGIN_SUCCESS')
@@ -148,6 +151,55 @@ describe('Admin Routes', () => {
             done()
           })
       })
+    })
+
+  })
+
+  describe('Find One Admin Test', () => {
+    describe('Find One Admin Success', () => {
+      it('should return a user object and status 200', (done) => {
+        request(app)
+        .get('/admin')
+        .set('Authorization','Bearer '+token)
+        .end((err, response) => {
+          expect(err).toBe(null)
+          expect(response.body).toHaveProperty('id', expect.any(Number))
+          expect(response.body).toHaveProperty('username', 'budiagung')
+          expect(response.body).toHaveProperty('email','budiagung@gmail.com')
+          expect(response.status).toBe(200)
+          done()
+        })
+      })
+    })
+
+    describe('Find One Admin Failed', () => {
+      it('should return error token existing or not and status 400' ,(done) => {
+        request(app)
+        .get('/admin')
+        .set('Authorization','Bearer ')
+        .end((err, response) => {
+          expect(err).toBe(null)
+          expect(response.body).toHaveProperty('name', 'BAD REQUEST')
+          expect(response.body).toHaveProperty('message', 'LOGIN_FAILED')
+          expect(response.body).toHaveProperty('error', expect.any(String))
+          expect(response.status).toBe(400)
+          done()
+        })
+      })
+
+      it('should return error token validation and status 401', (done) => {
+        request(app)
+        .get('/admin')
+        .set('Authorization','Bearer '+token +'a')
+        .end((err, response) => {
+          expect(err).toBe(null)
+          expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
+          expect(response.body).toHaveProperty('message', expect.any(String))
+          expect(response.status).toBe(401)
+          done()
+        })
+      })
+
     })
   })
 })

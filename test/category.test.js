@@ -89,7 +89,7 @@ describe('Category Routes', () => {
       }).catch(err => done(err))
   })
 
-  describe('Create Category', () => {
+  describe('Create Category Test', () => {
 
     describe('Creat Category Success', () => {
       test('it should return a object new category and status 201', (done) => {
@@ -211,7 +211,7 @@ describe('Category Routes', () => {
     })
   })
 
-  describe('Update Category', () => {
+  describe('Update Category Test', () => {
     describe('Update Category Success', () => {
       test('it should return an updated object category and status 200', (done) => {
         request(app)
@@ -288,7 +288,7 @@ describe('Category Routes', () => {
     })
   })
 
-  describe('Delete Category', () => {
+  describe('Delete Category Test', () => {
     describe('Delete Category Success', () => {
       test('it should return a message object when user delete category and status 200', (done) => {
         request(app)
@@ -331,7 +331,6 @@ describe('Category Routes', () => {
           })
       })
 
-
       test('it should return token validation and status 401', (done) => {
         request(app)
           .delete('/categories/' + category_id)
@@ -345,6 +344,5 @@ describe('Category Routes', () => {
           })
       })
     })
-
   })
 })

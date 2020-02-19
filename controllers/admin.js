@@ -76,6 +76,33 @@ class AdminController {
     })
     .catch(next)
    }
+
+   static findAdmin(req, res, next) {
+     const id = +req.decoded
+     User.findOne({
+       where: {
+         id
+       }
+     })
+     .then(user => {
+      if (user) {
+        res.status(200).json({
+          id: user.id,
+          username: user.username,
+          email: user.email
+        })
+      } else {
+        next({
+          status: 401,
+          name:'UNAUTHORIZED',
+          message:'Please register first'
+        })
+      }
+     })
+     .catch(err => {
+       next(err)
+     })
+   }
 }
 
 module.exports = AdminController

@@ -3,12 +3,12 @@ module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
   class Product extends Model {
     static associate(models) {
-
+      Product.belongsTo(models.Category, { foreignKey: 'category_id' })
     }
   }
   Product.init({
     name: {
-      type:DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     price: {
-      type:DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notNull: {
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     stock: {
-      type:DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notNull: {
@@ -62,6 +62,9 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
+    },
+    category_id: {
+      type: DataTypes.INTEGER
     }
   }, { sequelize })
   return Product;

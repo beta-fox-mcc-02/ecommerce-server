@@ -9,7 +9,7 @@ describe('User Routes', () => {
     describe('User Register Success', () => {
       test('it should return new object includes email, username, and id and status 201  ', (done) => {
         request(app)
-          .post('/users/register')
+          .post('/users')
           .send({
             first_name: 'Budi',
             username: 'budiagung',
@@ -40,7 +40,7 @@ describe('User Routes', () => {
           role_id: 2
         }
         request(app)
-          .post('/users/register')
+          .post('/users')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -63,7 +63,7 @@ describe('User Routes', () => {
           role_id: 2
         }
         request(app)
-          .post('/users/register')
+          .post('/users')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)
@@ -87,7 +87,7 @@ describe('User Routes', () => {
           role_id: 2
         }
         request(app)
-          .post('/users/register')
+          .post('/users')
           .send(input)
           .end((err, response) => {
             expect(err).toBe(null)

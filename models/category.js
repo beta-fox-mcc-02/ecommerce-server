@@ -3,12 +3,12 @@ module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
   class Category extends Model {
     static associate(models) {
-      Category.hasMany(models.Product, { foreignKey: 'id'})
+      Category.hasMany(models.Product, { foreignKey: 'id' })
     }
   }
   Category.init({
     name: {
-      type:DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     path: {
-      type:DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
