@@ -67,6 +67,31 @@ class Controller {
                 next(err);
             })
     }
+
+    static findUserById(req, res, next) {
+        Person.findOne({
+            where: {
+                id: req.params.id,
+            },
+        })
+            .then(person => {
+                if (person) {
+                    res.status(200).json({
+                        id: person.id,
+                        email: person.email,
+                        user_role: person.user_role,
+                    });
+                } else {
+                    next({
+                        message: 'User not found',
+                        status: 404
+                    })
+                }
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
 }
 
 module.exports = Controller;
