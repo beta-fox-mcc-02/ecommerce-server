@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "dev": "nodemon ./bin/http.js"
+    "dev": "nodemon ./bin/http.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
