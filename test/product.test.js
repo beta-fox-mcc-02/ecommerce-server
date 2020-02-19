@@ -156,14 +156,13 @@ describe(`Product Routes`, () => {
 
    describe(`get all product`, () => {
       // ============================================ SUCCESS =========================================
-      test(`should return data products and give status 200`, (done) => {
+      test.only(`should return data products and give status 200`, (done) => {
          request(app)
             .get('/products')
             .set({
                token
             })
             .end((err, res) => {
-
                expect(err).toBe(null)
                expect(res.status).toBe(200)
                expect(res.body).toHaveProperty('data', expect.any(Array))

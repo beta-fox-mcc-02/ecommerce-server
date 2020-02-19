@@ -21,7 +21,13 @@ class ProductController {
    }
 
    static getAll(req, res, next) {
-      Product.findAll()
+      Product.findAll({
+         include: [
+            {
+               model: Category
+            }
+         ]
+      })
          .then(data => {
             res.status(200).json({ data })
          })

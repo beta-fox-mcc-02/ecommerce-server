@@ -1,19 +1,25 @@
 'use strict';
+require('dotenv').config()
+let bcrypt = require('bcryptjs')
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
+
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
 
       Example:
       */
-        return queryInterface.bulkInsert('Users', [{
-          name: `admin`,
-          email: `admin@admin.com`,
-          password: `12345`,
-          isAdmin: true
-        }], {});
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync("12345", salt)
+
+    return queryInterface.bulkInsert('Users', [{
+      name: `admin`,
+      email: `admin@admin.com`,
+      password: hash,
+      isAdmin: true
+    }], {});
   },
 
   down: (queryInterface, Sequelize) => {
@@ -23,6 +29,6 @@ module.exports = {
 
       Example:
       */
-     return queryInterface.bulkDelete('Users', null, {});
+    return queryInterface.bulkDelete('Users', null, {});
   }
 };

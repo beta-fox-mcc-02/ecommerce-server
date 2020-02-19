@@ -19,7 +19,9 @@ class UserController {
          })
    }
 
-   static login(req, res, next) {      
+   static login(req, res, next) {  
+      console.log(req.body);
+      
       User.findOne({
          where: {
             email: req.body.email
@@ -31,6 +33,7 @@ class UserController {
             }
             else {
                let verified = bcrypt.compareSync(req.body.password, data.password);
+               
                if (!verified) {
                   throw ({ code: 404, message: `Email / password wrong` })
                }
