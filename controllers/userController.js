@@ -35,20 +35,21 @@ class UserController {
                     })
                 } else {
                     const check = checkPassword(password, user.password)
-                    if (check === false) {
-                        next({
-                            status: 400,
-                            msg: "Invalid Password"
-                        })
-                    } else {
+                    if (check) {
                         const token = generatetoken({
                             id: user.id,
                             email: user.email
                         })
                         res.status(200).json({
                             msg: "success login",
+                            role: user.role,
                             token
                         })
+                    } else {
+                        next({
+                            status: 400,
+                            msg: "Invalid Password"
+                        })  
                     }
                 }
             })

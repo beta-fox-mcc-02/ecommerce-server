@@ -1,34 +1,42 @@
-const { Product } = require('../models')
+const { Product, Category, CategoryProduct } = require('../models')
 
 class ProductController {
     static addProduct (req, res, next) {
-        const {name, image_url, price, stock} = req.body  
+        const {name, image_url, price, stock} = req.body
+        let response = {}
         Product.create({
             name, image_url, stock, price
         })
             .then(product => {
-                res.status(201).json({
+                response = {
                     name: product.name,
                     image_url: product.image_url,
                     price: product.price,
                     stock: product.stock
-                })
+                }
+                const promises = []
+                for (let i = 0; i < req.body.category.length; i++) {
+                    promises.push(CategoryProduct.create({
+                        ProductId: product.id,
+                        CategoryId: req.body.category[i]
+                    }))
+                }
+                return Promise.all(promises)
+            })
+            .then(data => {
+                res.status(201).json(response)
             })
             .catch(next)
     }
 
     static readProduct (req, res, next) {
-        Product.findAll()
+        Product.findAll({
+            include: [Category]
+        })
             .then(products => {
-                if (products.length === 0) {
-                    res.status(200).json({
-                        msg: 'Product empty'
-                    })
-                } else {
-                    res.status(200).json({
-                        msg: products
-                    })
-                }
+                res.status(200).json({
+                    msg: products
+                })
             })
             .catch(err => {
                 next(err)

@@ -353,39 +353,7 @@ describe('Products', () => {
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(200)
-                        expect(response.body).toHaveProperty('msg', expect.any(Array))
-                        done()
-                    })
-            })
-        })
-        describe('success read data, but product in database empty', () => {
-            afterEach((done) => {
-                queryInterface.bulkDelete('Users', {})
-                    .then(response => {
-                        done()
-                    })
-                    .catch(err => {
-                        done(err)
-                    })
-            })
-
-            afterEach((done) => {
-                queryInterface.bulkDelete('Products', {})
-                    .then(response => {
-                        done()
-                    })
-                    .catch(err => {
-                        done(err)
-                    })
-            })
-
-            test('success read product. but nothing product in database', (done) => {
-                request(app)
-                    .get('/products')
-                    .set('token', tokenAdmin)
-                    .end((err, response) => {
-                        expect(err).toBe(null)
-                        expect(response.body).toHaveProperty('msg', 'Product empty')
+                        expect(response.body).toHaveProperty('msg', expect.any(Object))
                         done()
                     })
             })

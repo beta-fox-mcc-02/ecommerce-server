@@ -233,6 +233,7 @@ describe('User Routes', () => {
                         expect(err).toBe(null)
                         expect(response.body).toHaveProperty('msg', 'success login')
                         expect(response.body).toHaveProperty('token', expect.any(String))
+                        expect(response.body).toHaveProperty('role')
                         expect(response.status).toBe(200)
                         done()
                     })
