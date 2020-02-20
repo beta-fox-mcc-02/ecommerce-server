@@ -6,7 +6,9 @@ const cors = require('cors')
 
 const corsOptions = {
   origin: 'https://ecommerce-cmsv1.firebaseapp.com',
-  optionsSuccessStatus: 200
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: true,
+  optionsSuccessStatus: 204
 }
 
 app.use(cors(corsOptions))
