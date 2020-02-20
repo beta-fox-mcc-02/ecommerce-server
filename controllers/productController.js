@@ -62,7 +62,7 @@ class ProductController {
          .catch(next)
    }
 
-   static delete(req, res, next) {
+   static delete(req, res, next) {            
       Product.destroy({
          where: {
             id: req.params.productId
@@ -82,9 +82,10 @@ class ProductController {
    }
 
    static getOne(req, res, next) {
+      
       Product.findOne({
          where: {
-            id: req.params.id
+            id: req.params.productId
          },
          include: [
             {model: Category}
