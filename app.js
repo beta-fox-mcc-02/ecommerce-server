@@ -4,14 +4,14 @@ const indexRouter = require('./routes/index.js')
 const errHandler = require('./middlewares/errHandler.js')
 const cors = require('cors')
 
-const corsOptions = {
-  origin: 'http://localhost:8080',
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: true,
-  optionsSuccessStatus: 204
-}
+// const corsOptions = {
+//   origin: 'http://localhost:8080',
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   preflightContinue: true,
+//   optionsSuccessStatus: 204
+// }
 
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.urlencoded({ extended:false }))
 app.use(express.json())
 
