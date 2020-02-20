@@ -71,6 +71,7 @@ describe('API route test', () => {
     test('email exist or sequelize validation error register error', (done) => {
         request(app)
         .post('/admin/register')
+        .set('token', token)
         .send({
             email: `mail@mail.com`,
             password: `qqqqq`
