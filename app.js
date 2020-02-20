@@ -10,10 +10,10 @@ const cors = require('cors')
 //   preflightContinue: true,
 //   optionsSuccessStatus: 204
 // }
-
-app.use(cors())
 app.use(express.urlencoded({ extended:false }))
 app.use(express.json())
+
+app.use(cors())
 
 app.use(indexRouter)
 app.use(errHandler)
