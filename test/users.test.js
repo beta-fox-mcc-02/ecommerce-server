@@ -3,9 +3,6 @@ const app = require('../app')
 const Sequelize = require('sequelize')
 const { User, sequelize } = require('../models')
 const {queryInterface} = sequelize
-const { JwtHelper, BcryptHelper } = require('../helpers/index')
-
-var access_token
 
 describe('Users Routes', () => {
    //HOOKS
@@ -14,7 +11,7 @@ describe('Users Routes', () => {
          name : "qwerty",
          email : "qwertyu@mail.com",
          password : 'qwertyu',
-         RoleId : 1
+         RoleId : 2
       }
       User.create(dummyUser)
          .then(user => {
@@ -43,14 +40,12 @@ describe('Users Routes', () => {
                name : 'qwerty',
                email : 'd@mail.com',
                password : 'qwerty',
-               RoleId : 1
+               RoleId : 2
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('name', expect.any(String))
-               expect(response.body).toHaveProperty('password', expect.any(String))
-               expect(response.body).toHaveProperty('email', expect.any(String))
-               expect(response.body).toHaveProperty('RoleId', expect.any(Number))
+               expect(response.body).toHaveProperty('access_token', expect.any(String))
+               expect(response.body).toHaveProperty('msg', expect.any(String))
                expect(response.status).toBe(201)
                done()
             })
@@ -63,11 +58,10 @@ describe('Users Routes', () => {
                name : "qwerty",
                email : "qwertyu@mail.com",
                password : 'qwertyu',
-               RoleId : 1
+               RoleId : 2
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err')
                expect(response.body).toHaveProperty('msg', expect.any(String))
 
                expect(response.status).toBe(400)
@@ -82,12 +76,11 @@ describe('Users Routes', () => {
                name: 'qwerty',
                email: 'abcd@mail.com',
                password: 'qw',
-               RoleId : 1
+               RoleId : 2
             })
             .end((err, response) => {
                // console.log(response)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
 
                expect(response.status).toBe(400)
@@ -106,7 +99,6 @@ describe('Users Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
 
                expect(response.status).toBe(400)
@@ -125,7 +117,6 @@ describe('Users Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
 
                expect(response.status).toBe(400)
@@ -140,11 +131,10 @@ describe('Users Routes', () => {
                name: 'qwerty',
                email: 'abcdmailcom',
                password: 'qwerty',
-               RoleId : 1
+               RoleId : 2
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
                expect(response.status).toBe(400)
                done()
@@ -154,7 +144,7 @@ describe('Users Routes', () => {
 
    // LOGIN
    describe('Users Login Test', () => { 
-      test('User login success 200', done => {
+      test.only('User login success 200', done => {
          request(app)
             .post('/users/login')
             .send({
@@ -179,7 +169,6 @@ describe('Users Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
                expect(response.status).toBe(400)
                done()
@@ -195,7 +184,6 @@ describe('Users Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
                expect(response.status).toBe(400)
                done()
@@ -211,7 +199,6 @@ describe('Users Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('err', expect.any(Object))
                expect(response.body).toHaveProperty('msg', expect.any(String))
                expect(response.status).toBe(400)
                done()

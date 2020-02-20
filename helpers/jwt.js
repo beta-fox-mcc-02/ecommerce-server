@@ -6,7 +6,7 @@ class JwtHelper {
    }
 
    static verifyToken (token) {
-      return jwt.verifyToken(token, process.env.SECRET)
+      return jwt.verify(token, process.env.SECRET)
    }
 }
 

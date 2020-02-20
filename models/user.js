@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         isAlphanumeric : {
           args : true,
-          msg : "must only contain alpha and numeric"
+          msg : "password must only contain alpha and numeric"
         },
         notNull : {
           args : true,
@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       validate : {
         isInt : {
           args : true,
-          msg : 'must only contain number'
+          msg : 'role must only contain number'
         },
         notNull : {
           args : true,
