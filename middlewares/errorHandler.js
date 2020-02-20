@@ -19,5 +19,9 @@ module.exports = ((err, req, res, next) => {
         msg: 'Invalid email / password'
       }
     }
+    else if(err.name ==='JsonWebTokenError') {
+      status = 400
+      msg.msg = 'You need to be logged in to access this page'
+    }
     res.status(status).json(msg)
   })
