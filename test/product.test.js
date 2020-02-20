@@ -66,12 +66,12 @@ describe('Products', () => {
                         stock: 10
                     })
                     .end((err, response) => {
-                        const { body } = response
+                        // console.log(response, "+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}")
                         expect(err).toBe(null)
-                        expect(body).toHaveProperty('name', expect.any(String))
-                        expect(body).toHaveProperty('image_url', expect.any(String))
-                        expect(body).toHaveProperty('price', expect.any(Number))
-                        expect(body).toHaveProperty('stock', expect.any(Number))
+                        expect(response.body).toHaveProperty('name', expect.any(String))
+                        expect(response.body).toHaveProperty('image_url', expect.any(String))
+                        expect(response.body).toHaveProperty('price', expect.any(Number))
+                        expect(response.body).toHaveProperty('stock', expect.any(Number))
                         done()
                     })
             })

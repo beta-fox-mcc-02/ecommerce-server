@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const { checkPassword } = require('../helpers/password')
-const { generatetoken } = require('../helpers/jwt')
+const { generatetoken, verifytoken } = require('../helpers/jwt')
 
 class UserController {
     static register (req, res, next) {
@@ -38,7 +38,8 @@ class UserController {
                     if (check) {
                         const token = generatetoken({
                             id: user.id,
-                            email: user.email
+                            email: user.email,
+                            role: user.role
                         })
                         res.status(200).json({
                             msg: "success login",
