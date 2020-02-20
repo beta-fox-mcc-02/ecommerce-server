@@ -80,6 +80,7 @@ class AdminController {
    static findAdmin(req, res, next) {
      const id = +req.decoded
      User.findOne({
+       include: [Role],
        where: {
          id
        }
@@ -89,7 +90,8 @@ class AdminController {
         res.status(200).json({
           id: user.id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          role: user.Role
         })
       } else {
         next({

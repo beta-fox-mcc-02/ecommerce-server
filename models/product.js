@@ -63,6 +63,34 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Description is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Description is required'
+        }
+      }
+    },
+    SKU: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'SKU is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'SKU is required'
+        }
+      }
+    },
     category_id: {
       type: DataTypes.INTEGER
     }
