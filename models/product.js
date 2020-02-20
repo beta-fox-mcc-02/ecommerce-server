@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: 'required product name'
+        },
+        updateEmptyName (value) {
+          if(!value) {
+            throw new Error('required product name')
+          }
         }
       }
     },

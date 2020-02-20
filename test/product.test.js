@@ -297,7 +297,7 @@ describe('Product CRUD Features, admin only', () => {
                             stock: 50
                         })
                         .set('access_token', access_token_admin)
-                        .end((err, res) => {
+                        .end((err, res) => {                            
                             expect(err).toBe(null)
                             expect(res.status).toBe(200)
                             expect(res.body).toHaveProperty('msg', 'product updated successfully')
@@ -347,6 +347,23 @@ describe('Product CRUD Features, admin only', () => {
                 })
             })
             describe('it should send error message and send status 400', () => {
+                test('no name input null', done => {
+                    request(app)
+                        .put(`/product/${product_id}`)
+                        .send({
+                            name: '',
+                            description: '',
+                            image_url: '',
+                            price: 200000,
+                            stock: 10
+                        })
+                        .set('access_token', access_token_admin)
+                        .end((err, res) => {
+                            expect(res.status).toBe(400)
+                            expect(res.body).toHaveProperty('msg', 'required product name')
+                            done()
+                        })
+                })
                 test('price input is below minimum requirement', done => {
                     request(app)
                         .put(`/product/${product_id}`)

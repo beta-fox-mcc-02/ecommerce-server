@@ -106,7 +106,7 @@ class ProductController {
 
     static updateProduct(req, res, next) {
         Product.update({
-            name: req.body.email,
+            name: req.body.name,
             description: req.body.description,
             image_url: req.body.image_url,
             price: req.body.price,
@@ -114,24 +114,18 @@ class ProductController {
         }, {
             where: {
                 id: req.params.productId
-            }
+            },
+            returning: true
         })
-            .then(product => {
-                return Product.findOne({
-                    where: {
-                        id: req.params.productId
-                    }
-                }) 
-            })
             .then(product => {
                 res.status(200).json({
                     msg: 'product updated successfully',
                     data: {
-                        name: product.name,
-                        description: product.description,
-                        image_url: product.image_url,
-                        price: product.price,
-                        stock: product.stock
+                        name: product[1][0].name,
+                        description: product[1][0].description,
+                        image_url: product[1][0].image_url,
+                        price: product[1][0].price,
+                        stock: product[1][0].stock
                     }
                 })
             })
