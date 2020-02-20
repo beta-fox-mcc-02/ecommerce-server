@@ -119,10 +119,6 @@ describe('Product list test', () => {
         .catch(done)
     })
     afterAll((done) => {
-        queryInterface.bulkDelete('Products', {})
-          .then(response => {
-            done()
-          }).catch(err => done(err))
         queryInterface.bulkDelete('Admins', {})
           .then(response => {
             done()
@@ -139,6 +135,19 @@ describe('Product list test', () => {
                 expect(response.body[0]).toHaveProperty('price')
                 expect(response.body[0]).toHaveProperty('stock')
                 expect(response.status).toBe(200)
+                queryInterface.bulkDelete('Products', {})
+                  .then(response => {
+                    done()
+                  }).catch(err => done(err))
+                // done()
+            })
+    })
+    test('it should return error "cannot find data"', (done) => {
+        request(app).get('/products/list')
+            .set('token', testToken)
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body).toHaveProperty('err', 'Cannot find Data')
                 done()
             })
     })

@@ -18,7 +18,15 @@ class ProductController{
     static productList(req, res, next){
         Product.findAll()
             .then(product => {
-                res.status(200).json(product)
+                if(product.length){
+                    res.status(200).json(product)
+                }
+                else{
+                    const err = {
+                        name : 'dataNotFound'
+                    }
+                    next(err)
+                }
             })
             .catch(next)
     }
@@ -26,8 +34,17 @@ class ProductController{
         const id = req.params.id
         Product.findByPk(id)
             .then(product => {
-                res.status(200).json({product})
+                if(product){
+                    res.status(200).json(product)
+                }
+                else{
+                    const err = {
+                        name : 'dataNotFound'
+                    }
+                    next(err)
+                }
             })
+            .catch(next)
     }
     static update(req, res, next){
         const id = req.params.id
