@@ -4,6 +4,7 @@ const productRouter = require('./product.js')
 const categoryRouter = require('./category.js')
 
 router.use('/admin', adminRouter)
+router.use('/admins', adminRouter)
 
 router.use('/product', productRouter)
 router.use('/products', productRouter)

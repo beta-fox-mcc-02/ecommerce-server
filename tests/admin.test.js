@@ -4,8 +4,18 @@ const Sequelize = require('sequelize')
 const { Op } = Sequelize
 const { Admin, sequelize } = require('../models')
 const { queryInterface } = sequelize
+const jwt = require('jsonwebtoken')
+let token = ''
 
 describe('API route test', () => {
+    beforeAll((done) => {
+        let master = {
+            id: 1,
+            email: 'masteradmin@smail.com'
+        }
+        token = jwt.sign(master, 'ucul')
+        done()
+    })
     afterAll((done) => {
         queryInterface.bulkDelete('Admins', {
             where: {
@@ -18,9 +28,20 @@ describe('API route test', () => {
         .catch((err) => done(err))
     })
 
+    test('get all registered admins success', (done) => {
+        request(app)
+        .get('/admins')
+        .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('admins')
+            expect(response.status).toBe(200)
+            done()
+        })
+    })
     test('success register', (done) => {
         request(app)
         .post('/admin/register')
+        .set('token', token)
         .send({
             email: `mail@mail.com`,
             password: `12345`

@@ -3,6 +3,14 @@ const jwt = require('jsonwebtoken')
 const BcryptPassword = require('../helpers/encryptpassword.js')
 
 class AdminController{
+    static getAll (req, res, next) {
+        Admin.findAll({
+            attributes: ['id', 'email']
+        })
+        .then((data) => {
+            res.status(200).json({ admins: data })
+        })
+    }
     static register (req, res, next) {
         Admin.create ({
             email: req.body.email,

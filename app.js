@@ -5,7 +5,7 @@ const errHandler = require('./middlewares/errHandler.js')
 const cors = require('cors')
 
 const corsOptions = {
-  origin: 'https://ecommerce-cmsv1.firebaseapp.com',
+  origin: 'http://localhost:8080',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: true,
   optionsSuccessStatus: 204
