@@ -11,7 +11,7 @@ const authentication = (req, res, next) => {
                 }
             })
                 .then(person => {
-                    if (person && person.user_role === 'admin') {
+                    if (person) {
                         req.decoded = decoded
                         next()
                     } else {

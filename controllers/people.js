@@ -105,6 +105,30 @@ class Controller {
                 next(err)
             })
     }
+
+    static deletePerson(req, res, next) {
+        Person.destroy({
+            where: {
+                id: req.params.id,
+            },
+        })
+            .then(deleted => {
+                if (deleted) {
+                    res.status(200).json({
+                        delete: deleted,
+                        message: 'Successfully delete'
+                    });
+                } else {
+                    next({
+                        message: 'User not found',
+                        status: 404
+                    })
+                }
+            })
+            .catch(err => {
+                next(err);
+            })
+    }
 }
 
 module.exports = Controller;
