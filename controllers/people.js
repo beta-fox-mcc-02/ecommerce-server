@@ -68,7 +68,7 @@ class Controller {
             })
     }
 
-    static findUserById(req, res, next) {
+    static findPersonById(req, res, next) {
         Person.findOne({
             where: {
                 id: req.params.id,
@@ -87,6 +87,19 @@ class Controller {
                         status: 404
                     })
                 }
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+    static findAllPerson(req, res, next) {
+        Person.findAll({
+            where: {
+                user_role: req.query.role,
+            },
+        })
+            .then(people => {
+                res.status(200).json(people)
             })
             .catch(err => {
                 next(err)

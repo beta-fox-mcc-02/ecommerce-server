@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         isIn: {
-          args: [['admin', 'user']],
+          args: [['master', 'admin', 'user']],
           msg: 'Invalid User Role Input'
         }
       }
