@@ -6,11 +6,12 @@ module.exports = (req, res, next) => {
     where: { id }
   })
     .then(user => {
+      console.log(user.role);
       if (user.role === 'admin') {
-        next()
+        next();
       } else {
-        next({ status: 401, message: 'You Are Not Authorized' })
+        next({ status: 401, message: 'You Are Not Authorized' });
       }
     })
-    .catch(next)
-}
+    .catch(next);
+};

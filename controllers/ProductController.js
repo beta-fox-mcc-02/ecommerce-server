@@ -6,17 +6,17 @@ class ProductController {
     const data = { name, image_url, price, stock };
     Product.create(data)
       .then(product => {
-        res.status(201).json({ message: 'Success Create Product' })
+        res.status(201).json({ message: 'Success Create Product' });
       })
-      .catch(next)
+      .catch(next);
   }
 
   static findAll(req, res, next) {
     Product.findAll()
       .then(products => {
-        res.status(200).json({ data: products })
+        res.status(200).json({ data: products });
       })
-      .catch(next)
+      .catch(next);
   }
 
   static findOne(req, res, next) {
@@ -28,9 +28,9 @@ class ProductController {
         if (product)
           res.status(200).json({ data: product });
         else
-          next({ status: 404, message: 'Not Found' })
+          next({ status: 404, message: 'Not Found' });
       })
-      .catch(next)
+      .catch(next);
   }
 
   static update(req, res, next) {
@@ -42,12 +42,12 @@ class ProductController {
     })
       .then(status => {
         if (status[0]) {
-          res.status(201).json({ message: 'Success Update Data' })
+          res.status(201).json({ message: 'Success Update Data' });
         } else {
           next({ status: 404, message: 'Not Found' });
         }
       })
-      .catch(next)
+      .catch(next);
   }
 
   static destroy(req, res, next) {
@@ -57,12 +57,12 @@ class ProductController {
     })
       .then(success => {
         if (success) {
-          res.status(200).json({ message: 'Success Delete Data' })
+          res.status(200).json({ message: 'Success Delete Data' });
         } else {
-          next({ status: 404, message: 'Not Found' })
+          next({ status: 404, message: 'Not Found' });
         }
       })
-      .catch(next)
+      .catch(next);
   }
 
 }

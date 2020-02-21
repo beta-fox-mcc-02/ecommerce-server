@@ -10,11 +10,11 @@ module.exports = (req, res, next) => {
       where: { id: req.currentUserId }
     })
       .then(user => {
-        if (user) next()
-        else next({ status: 401, message: 'You Must Register First' })
+        if (user) next();
+        else next({ status: 401, message: 'You Must Register First' });
       })
-      .catch(next)
+      .catch(next);
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
