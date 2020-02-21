@@ -3,6 +3,7 @@ const { User } = require('../models')
 
 module.exports = (req, res, next) => {
     try {
+        console.log('CEEEEKKKKKKKKKKK')
         const token = req.headers.token
         const decoded = verifytoken(token)
         if (token) {

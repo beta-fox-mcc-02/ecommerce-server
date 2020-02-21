@@ -64,17 +64,40 @@ class ProductController {
     }
 
     static deleteProduct (req, res, next) {
-        Product.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
+        const promises = [
+            Product.destroy({
+                where: {
+                    id: req.params.id
+                }
+            }),
+            CategoryProduct.destroy({
+                where: {
+                    ProductId: req.params.id
+                }
+            })
+        ]
+        Promise.all(promises)
             .then(product => {
                 res.status(200).json({
                     msg: "delete success"
                 })
             })
             .catch(next)
+    }
+
+    static findByPk (req, res, next) {
+        Product.findOne({where: {
+            id: req.params.id
+        }})
+            .then(user => {
+                res.status(200).json({
+                    msg: user
+                })
+            })
+            .catch(err => {
+                console.log(err)
+                next(err)
+            })
     }
 }
 
