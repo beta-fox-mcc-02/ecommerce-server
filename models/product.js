@@ -1,4 +1,5 @@
 'use strict';
+const formatCurrency = require('../helpers/formatCurrency')
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model;
   class Product extends Model {
@@ -45,6 +46,17 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     }
-  }, { sequelize });
+  }, {
+    hooks: {
+      afterFind: (products, option) => {
+        if (Array.isArray(products)) {
+          products.forEach(product => {
+            product.price = product.price ? formatCurrency(product.price) : product.price
+          })
+        }
+      }
+    },
+    sequelize
+  });
   return Product;
 };
