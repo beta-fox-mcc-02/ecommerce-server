@@ -4,6 +4,7 @@ const {compareLogin} = require('../helpers/bcrypt')
 
 class AdminController{
     static register(req, res, next){
+        console.log(req.body)
         const newAdmin = {
             email : req.body.email,
             password : req.body.password
