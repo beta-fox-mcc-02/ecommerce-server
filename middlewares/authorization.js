@@ -1,14 +1,14 @@
-const { Task } = require('../models')
+const { Product } = require('../models')
 
 module.exports = function(req, res, next) {
     const id = req.params.id
     Task.findByPk(id)
-        .then(taskData => {
-            if (!taskData) {
-                res.status(404).json('Task not found')
+        .then(productData => {
+            if (!productData) {
+                res.status(404).json('Product not found')
             }
             else {
-                if(taskData.UserId == req.currentUserId) {
+                if(productData.UserId == req.currentUserId) {
                     next()
                 }
                 else {
