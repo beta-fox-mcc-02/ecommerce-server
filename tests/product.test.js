@@ -3,8 +3,10 @@ const request = require('supertest')
 const Sequelize = require('sequelize')
 const { Admin, Product, sequelize } = require('../models')
 const { queryInterface } = sequelize
+const jwt = require('jsonwebtoken')
 
 let id_params = ''
+let token = ''
 
 describe(`This is product CRUD test`, () => {
     beforeAll((done) => {
@@ -12,7 +14,14 @@ describe(`This is product CRUD test`, () => {
             email: 'mail@mail.com',
             password: '12345',
         })
-        .then((data) => done())
+        .then((data) => {
+            let payload = {
+                id: data.id,
+                email: data.email
+            }
+            token = jwt.sign(payload, 'ucul')
+            done()
+        })
         .catch((err) => done(err))
     })
 
@@ -57,6 +66,7 @@ describe(`This is product CRUD test`, () => {
     test(`product create expectation`, (done) => {
         request(app)
         .post('/product')
+        .set('token', token)
         .send({
             name: 'Bag',
             imageUrl: 'bit.ly/image.jpg',
@@ -75,6 +85,7 @@ describe(`This is product CRUD test`, () => {
     test(`product show all expectation`, (done) => {
         request(app)
         .get('/products')
+        .set('token', token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('products')
@@ -82,19 +93,10 @@ describe(`This is product CRUD test`, () => {
             done()
         })
     })
-    test(`product find one expectation`, (done) => {
-        request(app)
-        .get(`/product/${id_params}`)
-        .end((err, response) => {
-            expect(err).toBe(null)
-            expect(response.body).toHaveProperty('data')
-            expect(response.status).toBe(200)
-            done()
-        })
-    })
     test(`product update success expectation`, (done) => {
         request(app)
         .put(`/product/${id_params}`)
+        .set('token', token)
         .send({
             name: 'Bag',
             imageUrl: 'bit.ly/image.jpg',
@@ -114,6 +116,7 @@ describe(`This is product CRUD test`, () => {
     test(`product delete expectation`, (done) => {
         request(app)
         .delete(`/product/${id_params}`)
+        .set('token', token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
@@ -125,6 +128,7 @@ describe(`This is product CRUD test`, () => {
     test(`validation error on product`, (done) => {
         request(app)
         .post('/product')
+        .set('token', token)
         .send({
             name: '',
             imageUrl: '',
@@ -136,6 +140,7 @@ describe(`This is product CRUD test`, () => {
             console.log(response.body)
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
+            expect(response.body).toHaveProperty('details')
             expect(response.status).toBe(400)
             done()
         })
@@ -143,11 +148,24 @@ describe(`This is product CRUD test`, () => {
     test(`product not found or has been deleted`, (done) => {
         request(app)
         .delete(`/product/200`)
+        .set('token', token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
             expect(response.body.message).toBe('product may has been already deleted')
             expect(response.status).toBe(404)
+            done()
+        })
+    })
+    test(`Broken token or unregistered user`, (done) => {
+        request(app)
+        .get('/products')
+        .set('token', `asdasdasfaffeadaedawdaacefawdaw`)
+        .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('message')
+            expect(response.body.message).toBe('jwt malformed')
+            expect(response.status).toBe(401)
             done()
         })
     })

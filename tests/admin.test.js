@@ -31,6 +31,7 @@ describe('API route test', () => {
     test('get all registered admins success', (done) => {
         request(app)
         .get('/admins')
+        .set('token', token)
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('admins')
@@ -112,6 +113,22 @@ describe('API route test', () => {
             expect(response.body).toHaveProperty('message')
             expect(response.body.message).toBe(`input invalid`)
             expect(response.status).toBe(400)
+            done()
+        })
+    })
+    test('Broken token or unidentified credentials', (done) => {
+        request(app)
+        .post('/admin/register')
+        .set('token', 'sadasdbasdbasdbasd')
+        .send({
+            email: `smail@mail.com`,
+            password: `qqqqq`
+        })
+        .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('message')
+            expect(response.body.message).toBe('jwt malformed')
+            expect(response.status).toBe(401)
             done()
         })
     })
