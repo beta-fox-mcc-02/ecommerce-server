@@ -5,8 +5,8 @@ class ProductController {
         let payload = {
             name : req.body.name,
             image_url : req.body.image_url,
-            price: req.body.price,
-            stock: req.body.stock
+            price: +req.body.price,
+            stock: +req.body.stock
         }
         Product.create(payload)
             .then(product => {

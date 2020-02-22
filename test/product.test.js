@@ -7,6 +7,16 @@ let token
 let idProduct
 
 describe('Product Router', () => {
+
+    beforeAll((done) => {
+        queryInterface.bulkDelete('Products', {})
+        .then(response => {
+            done()
+        })
+        .catch(err => {
+            done(err)
+        })
+    })
     
     afterEach((done) => {
         queryInterface.bulkDelete('Products', {})
