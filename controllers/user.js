@@ -66,6 +66,7 @@ class UserController{
                         let token = generateToken(getToken)
                         console.log(token)
                         res.status(200).json({
+                            RoleId : user.RoleId,
                             access_token : token
                         })
                     } else {

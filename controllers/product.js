@@ -4,6 +4,7 @@ const { Product } = require('../models')
 class ProductController {
 
     static create(req, res, next){
+        console.log(req.bod)
         let { name, image_url, price, stock, RoleId } = req.body
         let newProduct = { name, image_url, price, stock, RoleId }
 

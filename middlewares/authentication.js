@@ -12,9 +12,11 @@ module.exports = (req, res, next) => {
                 }
             })
             .then(user => {
-                req.currentUserId = decoded.id
-                req.currentRoledId = decoded.RoleId
-                next()
+                if(decoded.RoleId === 1) {
+                    req.currentUserId = decoded.id
+                    req.currentRoledId = decoded.RoleId
+                    next()
+                }
             })
     } catch(err) {
         next(err)

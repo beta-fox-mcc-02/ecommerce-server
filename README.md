@@ -152,4 +152,17 @@
 
 
 
+<!-- 
+url gambar 
+smartphone 
+https://images.samsung.com/id/smartphones/galaxy-s20/images/kv/galaxy-s20_highlights_kv_00.jpg
 
+
+laptop
+https://www.apple.com/v/macbook-air/e/images/meta/og.png
+
+
+monitor 
+https://azcd.harveynorman.com.au/media/catalog/product/l/u/lu32j590uqexxy-3.jpg
+
+ -->
