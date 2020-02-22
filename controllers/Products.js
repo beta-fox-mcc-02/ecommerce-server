@@ -3,8 +3,11 @@ const { Product } = require('../models')
 class ProductController {
    static findAll(req, res, next) {
       // console.log('masuk siniiiiiiiiiii')
-      Product.findAll()
+      Product.findAll({
+        order: [['id', 'asc']]
+      })
          .then(products => {
+            // console.log(products)
             if(products.length != 0) {
                res.status(200).json({
                   data : products,
@@ -21,7 +24,7 @@ class ProductController {
             }
          })
          .catch(err => {
-            console.log(err)
+            // console.log(err)
             next({
               error : err
             })
@@ -53,7 +56,7 @@ class ProductController {
         }
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
         next({
           error: {
             name : 'fail'
@@ -73,7 +76,7 @@ class ProductController {
          returning : true
       })
          .then(data => {
-            console.log(data, 'create success')
+            // console.log(data, 'create success')
             res.status(201).json({
                data,
                msg : 'success create product'
@@ -90,7 +93,7 @@ class ProductController {
 
    static update(req, res, next) {
       let id = +req.params.id
-      console.log(id, '==========')
+      // console.log(id, '==========')
       let { name, image_url, price, stock, genre, CategoryId } = req.body
       let input = { name, image_url, price, stock, genre, CategoryId }
       Product.findOne({ where : { id } })

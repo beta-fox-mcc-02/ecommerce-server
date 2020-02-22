@@ -25,16 +25,14 @@ class UserController {
    static login (req, res, next) {
       let { email, password } = req.body
       User.findOne({
-         where : {
-            email
-         }
+         where : { email }
       })
          .then(user => {
             if(user) {
-               console.log('then login user')
+              //  console.log('then login user')
                let valid = BcryptHelper.decryptPass(password, user.password)
                if(valid) {
-                  console.log('then valid login')
+                  // console.log('then valid login')
                   const token = JwtHelper.generateToken({ id: user.id, email, RoleId: user.RoleId})
                   // localStorage.token = token
                   res.status(200).json({
@@ -43,18 +41,14 @@ class UserController {
                   })
                } else {
                   next({
-                     error : {
-                        name : 'Bad request'
-                     },
+                     error : { name : 'Bad request' },
                      status : 400,
                      msg : 'wrong username/password'
                   })
                }
             } else {
                next({
-                  error : {
-                     name : 'Bad request'
-                  },
+                  error : { name : 'Bad request' },
                   status : 400,
                   msg : 'wrong username/password'
                })
@@ -66,6 +60,36 @@ class UserController {
                msg: 'wrong username/password'
             })
          })
+   }
+
+   static findAll (req, res, next) {
+     User.findAll({
+       order: [['id', 'asc']]
+     }) 
+       .then(users => {
+        //  console.log(users)
+         if(users.length === 0) {
+           res.status(200).json({
+             data: [{
+               id: null,
+               name: 'N/A',
+               email: 'N/A'
+             }],
+             msg: 'data not found'
+           })
+         } else {
+           res.status(200).json({
+             data: users,
+             msg: 'success get all user'
+           })
+         }
+       })
+       .catch(err => {
+         next({
+           error: err,
+           msg: 'You are not authorize'
+         })
+       })
    }
 }
 

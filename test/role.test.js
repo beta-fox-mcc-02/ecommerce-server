@@ -6,7 +6,7 @@ const {queryInterface} = sequelize
 const { JwtHelper, BcryptHelper } = require('../helpers/index')
 
 
-describe('Product Routes', () => {
+describe('Role Routes', () => {
   let access_token
   let access_token_user
   let roleId

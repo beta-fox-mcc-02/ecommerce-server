@@ -1,5 +1,5 @@
 function errorHandler (err, req, res, next) {
-   console.log(err)
+  //  console.log(err)
    // console.log(err.error)
    // console.log(err.error, err.error.name)
    if(err.error.name === 'SequelizeValidationError') {
@@ -24,11 +24,21 @@ function errorHandler (err, req, res, next) {
          msg : err.msg
       })
    } else if(err.error.name === 'SequelizeUniqueConstraintError') {
-      // console.log(err)
+      // console.log(err.error, '==================')
       let status = 400
-      res.status(status).json({
-         msg : err.msg
-      })
+      if(err.error.errors.length != 0) {
+        let errorMessage = []
+        err.error.errors.forEach(er => { 
+           errorMessage.push(er.message)
+        })
+        res.status(status).json({
+           msg : errorMessage.join(', ')
+        })
+     } else {
+        res.status(status).json({
+           msg : err.msg
+        })
+     }
    } else if (err.error.name === 'not authorize') {
       let status = 401
       res.status(status).json({

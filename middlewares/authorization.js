@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
       //admin
       next()
    } else {
-      //user-gagal
+      //user-not authorize
       next({
          error : {
             name : 'not authorize'
