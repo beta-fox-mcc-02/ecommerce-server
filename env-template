@@ -1,0 +1,6 @@
+SALT=10
+SECRET=mcdonalds
+PORT=3000
+IMGUR_CLIENT_ID=0e81df2dc44ab43
+IMGURL_UPLOAD_API_URL=https://api.imgur.com/3/upload
+IMGURL_DELETE_API_URL=https://api.imgur.com/3/image
