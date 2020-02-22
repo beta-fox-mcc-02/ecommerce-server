@@ -14,6 +14,7 @@ router.post(
 );
 router.get('/', productController.getAll)
 router.delete('/:id', productController.remove)
-router.put('/:id', authenticated, authorized, productController.update)
+router.put('/:id', authenticated, authorized,  images.multer.single("image"),
+images.sendUploadToGCS, productController.update)
 
 module.exports = router;

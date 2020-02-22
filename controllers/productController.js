@@ -3,11 +3,21 @@ const { Product } = require('../models')
 class productController{
 
   static add(req, res, next){
-    console.log(req.file.cloudStoragePublicUrl, '{}{}{}')
+    console.log('di kontroller');
+    let image
+    if(req.file == undefined){
+      console.log('masuk kondisi {}{}{}{}{}{}{}{}{}');
+      
+      image = 'https://www.voa-islam.com//photos6/syafaat2019/November%202019/Ayam%20Ilustrasi.jpg'
+    }else{
+      image = req.file.cloudStoragePublicUrl
+    }
 
+    console.log(image, 'ini storage sekarang');
+    
     Product.create({
       name: req.body.name,
-      image_url: req.file.cloudStoragePublicUrl,
+      image_url: image,
       price: req.body.price,
       stock: req.body.stock,
       CategoryId: req.body.CategoryId

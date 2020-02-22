@@ -3,11 +3,13 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 class userController {
+
   static register(req, res, next) {
     User.create({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      admin: true
     })
       .then(data => {
         var token = jwt.sign({ id: data.id }, process.env.SECRET);
@@ -18,6 +20,8 @@ class userController {
   }
 
   static login(req, res, next) {
+    console.log('sampe sini', req.body);
+    
     User.findOne({
       where: {
         email: req.body.email

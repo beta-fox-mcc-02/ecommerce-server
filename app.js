@@ -10,6 +10,9 @@ const errorHandler =require('./middlewares/errorHandler')
 const logger = require('morgan')
 app.use(logger('dev'))
 
+var cors = require('cors') 
+app.use(cors())
+
 app.use(express.json()) 
 app.use(express.urlencoded({extended: false}))
 
