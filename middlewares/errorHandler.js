@@ -28,7 +28,7 @@ module.exports = (err, req, res, next) => {
     })
   }
   else {
-    console.log(err.name)
+    console.log(err)
     res.status(500).json(err)
   }
 }

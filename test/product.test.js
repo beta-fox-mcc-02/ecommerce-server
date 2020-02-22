@@ -79,6 +79,7 @@ describe('Product Routes Test', () => {
           .post('/products')
           .send({
             name: 'Jam Import',
+            description: 'description test',
             imageUrl: 'https://freshsparks.com/wp/wp-content/uploads/2014/10/project_image_icon_TIS.jpg',
             price: 20000,
             stock: 11
@@ -148,6 +149,7 @@ describe('Product Routes Test', () => {
         .post('/products')
         .send({
           name: 'Jam Tangan',
+          description: 'description test',
           imageUrl: 'https://freshsparks.com/wp/wp-content/uploads/2014/10/project_image_icon_TIS.jpg',
           price: 10000,
           stock: 11
@@ -165,6 +167,7 @@ describe('Product Routes Test', () => {
         .post('/products')
         .send({
           name: 'Jam Tangan',
+          description: 'description test',
           imageUrl: 'https://freshsparks.com/wp/wp-content/uploads/2014/10/project_image_icon_TIS.jpg',
           price: 10000,
           stock: 11
@@ -187,7 +190,6 @@ describe('Product Routes Test', () => {
           .get('/products')
           .end((err, res) => {
             expect(err).toBe(null)
-            expect(res.body).toHaveProperty('data', expect.any(Array))
             done()
           })
       })

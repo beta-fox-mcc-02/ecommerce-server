@@ -17,7 +17,7 @@ class UserController {
           id: user.id,
           username: user.username,
           email: user.email,
-          admin: user.admin
+          isAdmin: user.isAdmin
         }
         res.status(201).json({
           msg: 'User register success',
@@ -41,12 +41,14 @@ class UserController {
             const payload = {
               id: user.id,
               username: user.username,
-              email: user.email
+              email: user.email,
+              isAdmin: user.isAdmin
             }
             const token = jwt.sign(payload, SECRET)
             res.status(200).json({
               msg: 'Login Success',
-              token
+              token,
+              isAdmin: payload.isAdmin
             })
           } else {
             next({
