@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": " jest --runInBand",
-    "dev" : "NODE_ENV=development nodemon ./bin/http.js",
-    "start": "node app.js"
+    "dev": "NODE_ENV=development nodemon ./bin/http.js",
+    "start": "node ./bin/http.js"
   },
   "repository": {
     "type": "git",
