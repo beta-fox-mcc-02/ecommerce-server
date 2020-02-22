@@ -53,6 +53,34 @@ class ProductController {
          .catch(next)
    }
 
+   // static update(req, res, next) {
+   //    let productUpdate = {
+   //       name: req.body.name,
+   //       image_url: req.body.image_url,
+   //       price: req.body.price,
+   //       stock: req.body.stock,
+   //       CategoryId: req.body.CategoryId
+   //    }
+
+   //    Product.update(
+   //       productUpdate,
+   //       {
+   //          where: {
+   //             id: req.params.productId
+   //          },
+   //          returning: true
+   //       })
+   //       .then(data => {
+   //          if (data[0] === 0) {
+   //             throw ({ code: 404, message: `Product not found` })
+   //          }
+   //          else {
+   //             res.status(200).json({ data })
+   //          }
+   //       })
+   //       .catch(next)
+   // }
+
    static update(req, res, next) {
       let productUpdate = {
          name: req.body.name,
