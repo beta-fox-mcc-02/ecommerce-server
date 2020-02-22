@@ -19,6 +19,9 @@ app.use(express.urlencoded({extended: false}))
 app.use(routes)
 app.use('/', errorHandler)
 
-// app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+// if (process.env.NODE_ENV !== 'test') {
+//   app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+// }
+
 
 module.exports = app
