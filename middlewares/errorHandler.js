@@ -3,7 +3,7 @@ module.exports = (err, req, res, next) => {
         res.status(400).json({
             msg: err.errors[0].message
         })
-    } else if(err.name == 'LoginError') {
+    } else if(err.name == 'LoginError' || err.name == 'EmptyCategory') {
         res.status(400).json({
             msg: err.msg
         })

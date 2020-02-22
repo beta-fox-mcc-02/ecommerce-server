@@ -67,7 +67,14 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
-    sequelize
+    sequelize,
+    hooks: {
+      beforeCreate: (product, options) => {
+        if(!product.image_url) {
+          product.image_url = 'https://thumbs.gfycat.com/AgileDelayedIndianjackal-small.gif'
+        }
+      }
+    }
   })
   
   return Product;

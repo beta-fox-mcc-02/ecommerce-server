@@ -1,13 +1,16 @@
 const app = require('../app')
 const request = require('supertest')
-const {sequelize, User, Product} = require('../models')
+const {sequelize, User, Product, CategoryProduct, Category} = require('../models')
 const {queryInterface} = sequelize
+const { Op } = require('sequelize')
 const {generateToken} = require('../helpers/jwt')
 
 describe('Product CRUD Features, admin only', () => {
     let access_token_admin;
     let access_token_user;
     let product_id;
+    let categories = ['men', 'converse']
+    let newProduct;
     beforeAll(done => {
         Product.create({
             name: 'Converse 123',
@@ -17,7 +20,43 @@ describe('Product CRUD Features, admin only', () => {
             stock: 100
         })
             .then(product => {
-                product_id = product.id
+                newProduct = {
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    image_url: product.image_url,
+                    price: product.price,
+                    stock: product.stock,
+                    categories: categories
+                }
+                if(categories.length) {
+                    return Category.findAll({
+                        where: {
+                            name: {
+                                [Op.in]: categories
+                            }
+                        }
+                    })
+                } else {
+                    next({
+                        name: 'EmptyCategory',
+                        message: 'category required at least 1'
+                    })
+                }
+            })
+            .then(categories => {
+                let createCategoryProducts = []
+                categories.forEach(category => {
+                    let promiseCreateCategoryProduct = CategoryProduct.create({
+                        CategoryId: category.id,
+                        ProductId: newProduct.id
+                    })
+                    createCategoryProducts.push(promiseCreateCategoryProduct)
+                })
+                return Promise.all(createCategoryProducts)
+            })
+            .then(product => {
+                product_id = newProduct.id
                 return User.create({
                     name: 'admin',
                     email: 'admin@mail.com',
@@ -76,7 +115,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: "Running shoes for all generation, affordable price, and many color choices",
                             image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
                             price: 453210,
-                            stock: 100
+                            stock: 100,
+                            categories: ['women', 'sneaker']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -100,7 +140,32 @@ describe('Product CRUD Features, admin only', () => {
                             description: "",
                             image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
                             price: 251210,
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['running']
+                        })
+                        .set('access_token', access_token_admin)
+                        .end((err, res) => {
+                            expect(err).toBe(null)
+                            expect(res.status).toBe(201)
+                            expect(res.body).toHaveProperty('msg', 'product created successfully')
+                            expect(res.body).toHaveProperty('data.name', expect.any(String))
+                            expect(res.body).toHaveProperty('data.description', expect.any(String))
+                            expect(res.body).toHaveProperty('data.image_url', expect.any(String))
+                            expect(res.body).toHaveProperty('data.price', expect.any(Number))
+                            expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                            done()
+                        })
+                })
+                test('Create new product success, even without image url input', done => {
+                    request(app)
+                        .post('/product')
+                        .send({
+                            name: 'Nike Free 203',
+                            description: "",
+                            image_url: '',
+                            price: 251210,
+                            stock: 1000,
+                            categories: ['running']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -162,7 +227,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
                             price: 251210,
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['men']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -178,7 +244,8 @@ describe('Product CRUD Features, admin only', () => {
                             name: 'Nike Air',
                             description: '',
                             image_url: '',
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['men']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -195,7 +262,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: -10,
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['men']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -212,7 +280,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: 321000,
-                            stock: 10.3
+                            stock: 10.3,
+                            categories: ['men']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -229,12 +298,31 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: 321000,
-                            stock: -9
+                            stock: -9,
+                            categories: ['men']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
                             expect(res.status).toBe(400)
                             expect(res.body).toHaveProperty('msg', 'Minimum stock is 0')
+                            done()
+                        })
+                }),
+                test('no category input', done => {
+                    request(app)
+                        .post('/product')
+                        .send({
+                            name: 'Converse',
+                            description: '',
+                            image_url: '',
+                            price: 321000,
+                            stock: 11,
+                            categories: []
+                        })
+                        .set('access_token', access_token_admin)
+                        .end((err, res) => {
+                            expect(res.status).toBe(400)
+                            expect(res.body).toHaveProperty('msg', 'category required at least 1')
                             done()
                         })
                 })
@@ -268,6 +356,7 @@ describe('Product CRUD Features, admin only', () => {
                 expect(res.body).toHaveProperty('data.image_url', expect.any(String))
                 expect(res.body).toHaveProperty('data.price', expect.any(Number))
                 expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                expect(res.body).toHaveProperty('data.Categories', expect.any(Array))
                 done()
             })
           })  
@@ -294,7 +383,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: "Running shoes for all ground status, affordable price, many color choices, and very durable",
                             image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
                             price: 500000,
-                            stock: 50
+                            stock: 50,
+                            categories: ['men', 'women', 'sneaker', 'running']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {                            
@@ -320,7 +410,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
                             price: 251210,
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['converse']
                         })
                         .end((err, res) => {
                             expect(res.status).toBe(401)
@@ -336,7 +427,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
                             price: 251210,
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['converse']
                         })
                         .set('access_token', access_token_user)
                         .end((err, res) => {
@@ -355,7 +447,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: 200000,
-                            stock: 10
+                            stock: 10,
+                            categories: ['converse']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -372,7 +465,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: -10,
-                            stock: 1000
+                            stock: 1000,
+                            categories: ['converse']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -389,7 +483,8 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: 321000,
-                            stock: 10.3
+                            stock: 10.3,
+                            categories: ['converse']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
@@ -406,12 +501,31 @@ describe('Product CRUD Features, admin only', () => {
                             description: '',
                             image_url: '',
                             price: 321000,
-                            stock: -9
+                            stock: -9,
+                            categories: ['converse']
                         })
                         .set('access_token', access_token_admin)
                         .end((err, res) => {
                             expect(res.status).toBe(400)
                             expect(res.body).toHaveProperty('msg', 'Minimum stock is 0')
+                            done()
+                        })
+                })
+                test('no category input', done => {
+                    request(app)
+                        .put(`/product/${product_id}`)
+                        .send({
+                            name: 'Converse',
+                            description: '',
+                            image_url: '',
+                            price: 321000,
+                            stock: 90,
+                            categories: []
+                        })
+                        .set('access_token', access_token_admin)
+                        .end((err, res) => {
+                            expect(res.status).toBe(400)
+                            expect(res.body).toHaveProperty('msg', 'category required at least 1')
                             done()
                         })
                 })

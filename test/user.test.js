@@ -45,7 +45,6 @@ describe('User Router Test', () => {
                         expect(response.body).toHaveProperty('data.name', expect.any(String))
                         expect(response.body).toHaveProperty('data.email', expect.stringMatching(/[@.com|co]/))
                         expect(response.body).not.toHaveProperty('data.password')
-                        expect(response.body).not.toHaveProperty('data.role')
                         done()
                     })
             })
