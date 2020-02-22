@@ -38,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       validate: {
         isInStock(value, next) {
-          if (value <= 0) {
-            next(`You should have the item in stock!`);
+          if (value < 0) {
+            next(`Stock can't be Negative Number`);
           } else {
             next();
           }
@@ -48,11 +48,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      afterFind: (products, option) => {
-        if (Array.isArray(products)) {
-          products.forEach(product => {
-            product.price = product.price ? formatCurrency(product.price) : product.price
-          })
+      beforeCreate: (product, option) => {
+        if (!product.image_url) {
+          product.image_url = 'https://static.thenounproject.com/png/340719-200.png'
         }
       }
     },

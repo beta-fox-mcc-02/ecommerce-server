@@ -97,6 +97,7 @@ class Controller {
             where: {
                 user_role: req.query.role,
             },
+            order: [['id', 'ASC']],
         })
             .then(people => {
                 res.status(200).json(people)
