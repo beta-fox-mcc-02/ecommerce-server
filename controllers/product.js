@@ -161,7 +161,7 @@ class ProductController {
                       delete_hash: r.data.data.deletehash
                     })
                   }
-                  return ProductImage.bulkCreate(images, { transaction: t })
+                  return ProductImage.bulkCreate(images)
                 })
               )
               .catch(next)
