@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
 
   class Product extends sequelize.Sequelize.Model {
     static associate(models) {
-      Product.belongsTo(models.User)
     }
   }
 

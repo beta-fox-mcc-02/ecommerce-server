@@ -21,15 +21,14 @@ class ProductController {
   }
 
   static create(req, res, next) {
-    let { name, image_url, price, stock, UserId } = req.body
-    Product.create({ name, image_url, price, stock, UserId })
+    let { name, image_url, price, stock } = req.body
+    Product.create({ name, image_url, price, stock })
       .then(result => {
         let data = {
           name: result.name,
           image_url: result.image_url,
           price: result.price,
-          stock: result.stock,
-          UserId: result.UserId
+          stock: result.stock
         }
         res.status(201).json({
           data,
@@ -44,16 +43,15 @@ class ProductController {
   static update(req, res, next) {
     let msg = 'success update product'
     let id = req.params.id
-    let { name, image_url, price, stock, UserId } = req.body
-    Product.update({ name, image_url, price, stock, UserId }, { where: { id } })
+    let { name, image_url, price, stock } = req.body
+    Product.update({ name, image_url, price, stock }, { where: { id } })
       .then(result => {
         if (!result[0]) { msg = 'failed update product' }
         let data = {
           name,
           image_url,
           price,
-          stock,
-          UserId
+          stock
         }
         res.status(201).json({
           status: result,
