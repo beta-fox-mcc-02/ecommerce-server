@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon bin/http.js",
     "test": "jest --runInBand --detectOpenHandles",
-    "start": "node app.js"
+    "start": "node bin/http.js"
   },
   "repository": {
     "type": "git",
