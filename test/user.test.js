@@ -1,25 +1,27 @@
 const request = require('supertest')
 const app = require('../app')
-const { User, sequelize } = require('../models')
+const { Admin, sequelize } = require('../models')
 const { queryInterface } = sequelize
 
-describe('User test section', () => {
+describe('Admin test section', () => {
 
     beforeAll((done) => {
 
-        User.create({
+        Admin.create({
             username: "jajang",
             email: "jajang@mail.com",
             password: "12345"
         })
-            .then(data => done())
+            .then(data => {
+                done()
+            })
             .catch(err => done(err))
 
     })
 
     afterAll((done) => {
 
-        queryInterface.bulkDelete('Users', {})
+        queryInterface.bulkDelete('Admins', {})
             .then(response => {
                 done()
             })
@@ -31,13 +33,13 @@ describe('User test section', () => {
 
         describe('Register success response', () => {
 
-            test('Register success response and will returning status code 201 and data user', (done) => {
+            test('Register success response and will returning status code 201 and data Admin', (done) => {
 
                 request(app)
-                    .post('/register')
+                    .post('/admin/register')
                     .send({
-                        username: "admin",
-                        email: "admin@mail.com",
+                        username: "mimin",
+                        email: "mimin@mail.com",
                         password: "12345"
                     })
                     .end((err, response) => {
@@ -46,7 +48,7 @@ describe('User test section', () => {
                         expect(response.body.data).toHaveProperty('username', (expect.anything()))
                         expect(response.body.data).toHaveProperty('email', (expect.anything()))
                         expect(response.body.data).toHaveProperty('password', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('role', false)
+                        expect(response.body.data).toHaveProperty('role', true)
                         expect(response.body.data.email).toContain('@')
                         expect(response.body.data.email).toContain('mail.com')
                         expect(response.body.message).toContain('success create')
@@ -62,10 +64,10 @@ describe('User test section', () => {
             test('Register error response because username empty', (done) => {
 
                 request(app)
-                    .post('/register')
+                    .post('/admin/register')
                     .send({
                         username: "",
-                        email: "admin@mail.com",
+                        email: "mimin@mail.com",
                         password: "12345"
                     })
                     .end((err, response) => {
@@ -80,10 +82,10 @@ describe('User test section', () => {
             test('Register error response because email not contain email format', (done) => {
 
                 request(app)
-                    .post('/register')
+                    .post('/admin/register')
                     .send({
-                        username: "admin",
-                        email: "admin@mailcom",
+                        username: "mimin",
+                        email: "mimin@mailcom",
                         password: "12345"
                     })
                     .end((err, response) => {
@@ -98,13 +100,14 @@ describe('User test section', () => {
             test('Register error response because email already in use', (done) => {
 
                 request(app)
-                    .post('/register')
+                    .post('/admin/register')
                     .send({
                         username: "jajang",
                         email: "jajang@mail.com",
                         password: "12345"
                     })
                     .end((err, response) => {
+                        console.log(response.body, 'respon body bang')
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('message', 'email already in use')
@@ -116,9 +119,9 @@ describe('User test section', () => {
             test('Register error response because email empty', (done) => {
 
                 request(app)
-                    .post('/register')
+                    .post('/admin/register')
                     .send({
-                        username: "admin",
+                        username: "mimin",
                         email: "",
                         password: "12345"
                     })
@@ -134,10 +137,10 @@ describe('User test section', () => {
             test('Register error response because password length less than 5 character', (done) => {
 
                 request(app)
-                    .post('/register')
+                    .post('/admin/register')
                     .send({
-                        username: "admin",
-                        email: "admin@mail.com",
+                        username: "mimin",
+                        email: "mimin@mail.com",
                         password: "1234"
                     })
                     .end((err, response) => {
@@ -154,17 +157,17 @@ describe('User test section', () => {
     })
 
     describe('Login test section', () => {
-        
+
         beforeAll((done) => {
 
-            User.create({
+            Admin.create({
                 username: "ujang",
                 email: "ujang@mail.com",
                 password: "12345"
             })
                 .then(data => done())
                 .catch(err => done(err))
-    
+
         })
 
         describe('Login success response', () => {
@@ -172,7 +175,7 @@ describe('User test section', () => {
             test('Login success response and will returning status code 200 and token', (done) => {
 
                 request(app)
-                    .post('/login')
+                    .post('/admin/login')
                     .send({
                         email: "ujang@mail.com",
                         password: "12345"
@@ -181,7 +184,7 @@ describe('User test section', () => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('token', (expect.anything()))
-                        expect(response.body).toHaveProperty('message', 'success login')
+                        expect(response.body).toHaveProperty('message', 'success login admin')
                         done()
                     })
 
@@ -194,7 +197,7 @@ describe('User test section', () => {
             test('Login error response because email not match', (done) => {
 
                 request(app)
-                    .post('/login')
+                    .post('/admin/login')
                     .send({
                         email: "ujan@mail.com",
                         password: "12345"
@@ -211,7 +214,7 @@ describe('User test section', () => {
             test('Login error response because password not match', (done) => {
 
                 request(app)
-                    .post('/login')
+                    .post('/admin/login')
                     .send({
                         email: "ujang@mail.com",
                         password: "1234"

@@ -1,0 +1,26 @@
+[
+    {
+        "name":"Doraemon vol.1",
+        "image_url":"https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg",
+        "price":15000,
+        "stock":10,
+        "createdAt":"NOW()",
+        "updatedAt":"NOW()"
+    },
+    {
+        "name":"Laskar Pelangi",
+        "image_url":"https://upload.wikimedia.org/wikipedia/id/thumb/8/8e/Laskar_pelangi_sampul.jpg/220px-Laskar_pelangi_sampul.jpg",
+        "price":70000,
+        "stock":20,
+        "createdAt":"NOW()",
+        "updatedAt":"NOW()"
+    },
+    {
+        "name":"Sang Pemimpi",
+        "image_url":"https://upload.wikimedia.org/wikipedia/id/8/89/Sang_Pemimpi_sampul.jpg",
+        "price":80000,
+        "stock":5,
+        "createdAt":"NOW()",
+        "updatedAt":"NOW()"
+    }
+]

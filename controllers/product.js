@@ -3,10 +3,10 @@ const { Product } = require('../models')
 class Admin {
 
     static create(req, res, next) {
-        const { name, image_url, price, stock } = req.body
+        const { name, image_url, price, stock, author } = req.body
 
         Product.create({
-            name, image_url, price, stock
+            name, image_url, price, stock, author
         })
             .then(data => {
                 res.status(201).json({
@@ -34,11 +34,11 @@ class Admin {
             .catch(next)
     }
     static update(req, res, next) {
-        const { name, image_url, price, stock } = req.body
+        const { name, image_url, price, stock, author } = req.body
         const { id } = req.params
 
         Product.update({
-            name, image_url, price, stock
+            name, image_url, price, stock, author
         }, { where: { id }, returning: true })
             .then(data => {
                 // console.log(data[1][0].dataValues, 'from controlleeeeeeeeeeeeeeeeeeeeeer');

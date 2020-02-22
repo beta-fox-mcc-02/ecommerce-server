@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
   Product.init({
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
         len: {
           args: [1],
@@ -19,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     image_url: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
         len: {
           args: [1],
@@ -29,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       validate: {
         min: {
           args: [0],
@@ -39,11 +36,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     stock: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       validate: {
         min: {
           args: [0],
           msg: 'stock cant be less than 0'
+        }
+      }
+    },
+    author: {
+      type: DataTypes.STRING,
+      validate: {
+        len: {
+          args: [1],
+          msg: 'author Name cant be empty'
         }
       }
     }

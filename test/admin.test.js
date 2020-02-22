@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('../app')
-const { User, Product, sequelize } = require('../models')
+const { Admin, Product, sequelize } = require('../models')
 const { queryInterface } = sequelize
 const { createToken } = require('../helpers/jwt')
 
@@ -11,17 +11,19 @@ describe('Administrator test section', () => {
 
     beforeAll((done) => {
 
-        User.create({
-            username: "kadiso",
-            email: "kadiso@mail.com",
-            password: "12345",
+        Admin.create({
+            username: 'kadiso',
+            email: 'kadiso@mail.com',
+            password: '12345',
             role: true
         })
             .then(data => {
                 token = createToken(data.id)
+                console.log(data)
                 return Product.create({
                     name: 'crayon sinchan',
                     image_url: 'https://ssvr.bukukita.com/babacms/displaybuku/94071_f.jpg',
+                    author: 'Yoshito Usui',
                     price: 17000,
                     stock: 5
                 })
@@ -36,7 +38,7 @@ describe('Administrator test section', () => {
 
     afterAll((done) => {
 
-        queryInterface.bulkDelete('Products', null, {})
+        queryInterface.bulkDelete('Product', null, {})
             .then(data => {
                 return queryInterface.bulkDelete('Users', null, {})
             })
@@ -52,11 +54,12 @@ describe('Administrator test section', () => {
             test('Create success response', (done) => {
 
                 request(app)
-                    .post('/products')
+                    .post('/admin/product')
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: 10
                     })
@@ -80,11 +83,12 @@ describe('Administrator test section', () => {
             test('Create error response because name empty', (done) => {
 
                 request(app)
-                    .post('/products')
+                    .post('/admin/product')
                     .set('token', token)
                     .send({
                         name: '',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: 10
                     })
@@ -100,11 +104,12 @@ describe('Administrator test section', () => {
             test('Create error response because image_url empty', (done) => {
 
                 request(app)
-                    .post('/products')
+                    .post('/admin/product')
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: '',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: 10
                     })
@@ -120,11 +125,12 @@ describe('Administrator test section', () => {
             test('Create error response because price less than 0', (done) => {
 
                 request(app)
-                    .post('/products')
+                    .post('/admin/product')
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: -15000,
                         stock: 10
                     })
@@ -140,11 +146,12 @@ describe('Administrator test section', () => {
             test('Create error response because stock less than 0', (done) => {
 
                 request(app)
-                    .post('/products')
+                    .post('/admin/product')
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: -10
                     })
@@ -157,18 +164,40 @@ describe('Administrator test section', () => {
 
             })
 
+            test('Create product error because author name empty', (done) => {
+
+                request(app)
+                    .post(`/admin/product`)
+                    .set('token', token)
+                    .send({
+                        name: 'doraemon vol.40',
+                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: '',
+                        price: 15000,
+                        stock: 10
+                    })
+                    .end((err, response) => {
+                        expect(err).toBe(null)
+                        expect(response.status).toBe(400)
+                        expect(response.body.message).toContain('author Name cant be empty')
+                        done()
+                    })
+
+            })
+
         })
 
     })
 
-    describe('Find all products test section', () => {
+    describe('Find all product test section', () => {
 
         describe('Find all success response', () => {
 
             test('Find all success response', (done) => {
 
                 request(app)
-                    .get('/products')
+                    .get('/admin/product')
+                    .set('token', token)
                     .end((err, response) => {
                         // console.log(response.body.data, '{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}}{}')
                         expect(err).toBe(null)
@@ -190,11 +219,12 @@ describe('Administrator test section', () => {
             test('Update product success response', (done) => {
 
                 request(app)
-                    .put(`/products/${id}`)
+                    .put(`/admin/product/${id}`)
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: 10
                     })
@@ -217,11 +247,12 @@ describe('Administrator test section', () => {
             test('Update product error because name empty', (done) => {
 
                 request(app)
-                    .put(`/products/${id}`)
+                    .put(`/admin/product/${id}`)
                     .set('token', token)
                     .send({
                         name: '',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: 10
                     })
@@ -237,11 +268,12 @@ describe('Administrator test section', () => {
             test('Update product error because image url empty', (done) => {
 
                 request(app)
-                    .put(`/products/${id}`)
+                    .put(`/admin/product/${id}`)
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: '',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: 10
                     })
@@ -257,11 +289,12 @@ describe('Administrator test section', () => {
             test('Update product error because price less than 0', (done) => {
 
                 request(app)
-                    .put(`/products/${id}`)
+                    .put(`/admin/product/${id}`)
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: -15000,
                         stock: 10
                     })
@@ -277,11 +310,12 @@ describe('Administrator test section', () => {
             test('Update product error because stock less than 0', (done) => {
 
                 request(app)
-                    .put(`/products/${id}`)
+                    .put(`/admin/product/${id}`)
                     .set('token', token)
                     .send({
                         name: 'doraemon vol.40',
                         image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: 'fujiko f fujio',
                         price: 15000,
                         stock: -10
                     })
@@ -289,6 +323,28 @@ describe('Administrator test section', () => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
                         expect(response.body.message).toContain('stock cant be less than 0')
+                        done()
+                    })
+
+            })
+
+            test('Update product error because author name empty', (done) => {
+
+                request(app)
+                    .put(`/admin/product/${id}`)
+                    .set('token', token)
+                    .send({
+                        name: 'doraemon vol.40',
+                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
+                        author: '',
+                        price: 15000,
+                        stock: 10
+                    })
+                    .end((err, response) => {
+                        console.log(response.body, '~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                        expect(err).toBe(null)
+                        expect(response.status).toBe(400)
+                        expect(response.body.message).toContain('author Name cant be empty')
                         done()
                     })
 
@@ -305,7 +361,7 @@ describe('Administrator test section', () => {
             test('Delete product success response', (done) => {
 
                 request(app)
-                    .delete(`/products/${id}`)
+                    .delete(`/admin/product/${id}`)
                     .set('token', token)
                     .end((err, response) => {
                         expect(err).toBe(null)

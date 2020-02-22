@@ -1,14 +1,14 @@
-const { User } = require('../models')
+const { Admin } = require('../models')
 const { verifyToken } = require('../helpers/jwt')
 
 module.exports = (req, res, next) => {
-    // console.log(req.headers,'>===============================')
+    console.log(req.headers,'>===============================')
     try {
         const { id } = verifyToken(req.headers.token)
-
-        User.findOne({ where: { id } })
-            .then(data => {
-                // console.log(data,'<============')
+        
+        Admin.findOne({ where: { id } })
+        .then(data => {
+            console.log(data,id,'<============')
                 if (data) {
                     req.decoded = data.dataValues
                     next()
