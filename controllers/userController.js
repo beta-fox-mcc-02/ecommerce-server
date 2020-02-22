@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const { checkPassword } = require('../helpers/password')
-const { generatetoken, verifytoken } = require('../helpers/jwt')
+const { generatetoken } = require('../helpers/jwt')
 
 class UserController {
     static register (req, res, next) {

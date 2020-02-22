@@ -2,7 +2,7 @@ const { Product, Category, CategoryProduct } = require('../models')
 
 class ProductController {
     static addProduct (req, res, next) {
-        const {name, image_url, price, stock} = req.body
+        const {name, image_url, price, stock, category} = req.body
         let response = {}
         Product.create({
             name, image_url, stock, price
@@ -15,10 +15,10 @@ class ProductController {
                     stock: product.stock
                 }
                 const promises = []
-                for (let i = 0; i < req.body.category.length; i++) {
+                for (let i = 0; i < category.length; i++) {
                     promises.push(CategoryProduct.create({
                         ProductId: product.id,
-                        CategoryId: req.body.category[i]
+                        CategoryId: category[i]
                     }))
                 }
                 return Promise.all(promises)
@@ -44,20 +44,36 @@ class ProductController {
     }
 
     static updateProduct (req, res, next) {
-        const {name, image_url, price, stock} = req.body
-        Product.update({
-            name, image_url, price, stock
-        }, {
-            where: {
-                id: req.params.id
-            }
-        })
+        const {name, image_url, price, stock, category} = req.body
+        const promises = [
+            Product.update({
+                name, image_url, price, stock
+            }, {
+                where: {
+                    id: req.params.id
+                }
+            }),
+            CategoryProduct.destroy({
+                where: {
+                    ProductId: req.params.id
+                }
+            })
+        ]
+        Promise.all(promises)
             .then(product => {
+                const promises2 = []
+                for (let i = 0; i < category.length; i++) {
+                    promises2.push(CategoryProduct.create({
+                        ProductId: req.params.id,
+                        CategoryId: req.body.category[i]
+                    }))
+                }
+                return Promise.all(promises2)
+            })
+            .then(data => {
                 res.status(200).json({
-                    name: name,
-                    image_url: image_url,
-                    price: price,
-                    stock: stock
+                    msg: 'update success',
+                    data
                 })
             })
             .catch(next)

@@ -27,6 +27,7 @@ describe('Products', () => {
                             id: user.id,
                             email: user.email
                         })
+                        console.log(tokenAdmin, '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                         done()
                     })
                     .catch(err => {
@@ -63,10 +64,10 @@ describe('Products', () => {
                         name: "Jersey Home Chelsea FC",
                         image_url: "http://link-foto.com",
                         price: 1500000,
-                        stock: 10
+                        stock: 10,
+                        category: [1, 2]
                     })
                     .end((err, response) => {
-                        // console.log(response, "+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}")
                         expect(err).toBe(null)
                         expect(response.body).toHaveProperty('name', expect.any(String))
                         expect(response.body).toHaveProperty('image_url', expect.any(String))
@@ -126,7 +127,7 @@ describe('Products', () => {
                             name: "Jersey Home Chelsea FC",
                             image_url: "http://link-foto.com",
                             price: 1500000,
-                            stock: 10
+                            stock: 10,
                         })
                         .end((err, response) => {
                             expect(err).toBe(null)
@@ -433,10 +434,7 @@ describe('Products', () => {
                     .end((err, response) => {
                         const { body } = response
                         expect(err).toBe(null)
-                        expect(body).toHaveProperty('name', expect.any(String))
-                        expect(body).toHaveProperty('image_url', expect.any(String))
-                        expect(body).toHaveProperty('price', expect.any(Number))
-                        expect(body).toHaveProperty('stock', expect.any(Number))
+                        expect(body).toHaveProperty('msg', expect.any(String))
                         done()
                     })
             })
@@ -670,5 +668,4 @@ describe('Products', () => {
             })
         })
     })
-
 })
