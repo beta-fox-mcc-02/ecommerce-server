@@ -4,7 +4,6 @@ module.exports =
     let errors = []
     let status = 500
     
-    console.log(err, "masuuukk siap")
     if (err.name == "SequelizeValidationError" ||
         err.name == "SequelizeUniqueConstraintError"
     ) status = 400

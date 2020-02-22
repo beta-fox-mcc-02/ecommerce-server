@@ -124,7 +124,8 @@
       data: {
         username: ...,
         email: ...,
-        password: ...
+        password: ...,
+        role: ...
       }
     });
       .then(response => {
