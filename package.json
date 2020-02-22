@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=development jest --detectOpenHandles --runInBand"
+    "test": "NODE_ENV=development jest --detectOpenHandles --runInBand",
+    "start": "./bin/http.js"
   },
   "repository": {
     "type": "git",
