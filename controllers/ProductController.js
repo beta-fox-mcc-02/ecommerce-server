@@ -8,7 +8,11 @@ class ProductController {
       .then(product => {
         res.status(201).json({ message: 'Success Create Product' });
       })
-      .catch(next);
+      .catch(err => {
+        console.log(err);
+        next(err);
+      });
+
   }
 
   static findAll(req, res, next) {
