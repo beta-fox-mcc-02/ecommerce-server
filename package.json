@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
-    "dev": "NODE_ENV=development nodemon bin/www/http.js"
+    "dev": "NODE_ENV=development nodemon bin/www/http.js",
+    "start": "node ./bin/www/http.js"
   },
   "repository": {
     "type": "git",
