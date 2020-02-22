@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         isUrl: {
           args: true,
           msg: 'invalid url'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'imageurl cannot be empty'
         }
       }
     },
@@ -42,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           args: true,
           msg: 'price cannot be null'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'price cannot be empty'
         },
         customValidator(value) {
           if (value < 0) {
