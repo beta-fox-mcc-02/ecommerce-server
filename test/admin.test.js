@@ -9,19 +9,6 @@ const {
   queryInterface
 } = sequelize;
 
-// describe("User routes", () => {
-//   afterAll(done => {
-//     queryInterface
-//       .bulkDelete("Users", {})
-//       .then(response => {
-//         done();
-//       })
-//       .catch(err => {
-//         done(err);
-//       });
-//   });
-// });
-
 describe("User register", () => {
 
   afterAll(done => {

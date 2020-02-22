@@ -12,18 +12,11 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-   return queryInterface.bulkInsert('Admins', [{
+   const { Admin } = require("../models")
+   return Admin.create({
     email: 'admin@mail.com',
     password: 'admin'
-  },
-  {
-    email: 'tes@mail.com',
-    password: 'tes'
-  },
-  {
-    email: 'yupi@mail.com',
-    password: 'yupi'
-  }], {});
+  })
   },
 
   down: (queryInterface, Sequelize) => {
@@ -34,6 +27,7 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-   return queryInterface.bulkDelete('Admins', null, {});
+   return queryInterface.bulkDelete('People', null, {});
+
   }
 };
