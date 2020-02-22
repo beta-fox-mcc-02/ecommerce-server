@@ -1,4 +1,5 @@
 const errorHandler = (err, req, res, next) => {
+  console.log(err)
   let status = 500
   if (err.name === 'SequelizeValidationError') {
     status = 400
