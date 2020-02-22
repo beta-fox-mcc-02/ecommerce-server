@@ -1,11 +1,5 @@
-const dropboxAPI = require('dropbox-v2-api')
-const fs = require('fs')
 const axios = require('axios')
 const { Product, ProductImage, sequelize, Category } = require('../models')
-
-const dropbox = dropboxAPI.authenticate({
-  token: 'QAKfRt0bOUEAAAAAAAACQ12g89DmieYR617zrXtle2_AICJmp1hgLISm629-pFMf'
-})
 
 class ProductController {
 
@@ -107,12 +101,10 @@ class ProductController {
         })
       })
       .catch(err => {
-        console.log(err)
         next(err)
       })
     })
     .catch(err => {
-      console.log(err)
       next(err)
     })
   }
