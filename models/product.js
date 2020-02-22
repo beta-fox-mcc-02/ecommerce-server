@@ -1,34 +1,34 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
 
-  class Product extends sequelize.Sequelize.Model{
-    static associate(models){
+  class Product extends sequelize.Sequelize.Model {
+    static associate(models) {
       Product.belongsTo(models.User)
     }
   }
 
   Product.init({
     name: {
-      type : DataTypes.STRING,
-      allowNull : false,
-      validate : {
-        notNull : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
           args: true,
-          msg : 'name cannot be null'
+          msg: 'name cannot be null'
         },
         notEmpty: {
           args: true,
           msg: 'name cannot be empty'
-        } 
-      } 
+        }
+      }
     },
     image_url: {
-      type: DataTypes.STRING, 
-      allowNull: false, 
+      type: DataTypes.STRING,
+      allowNull: false,
       validate: {
-        notNull : {
+        notNull: {
           args: true,
-          msg : 'image url cannot be null'
+          msg: 'image url cannot be null'
         },
         isUrl: {
           args: true,
@@ -40,12 +40,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        notNull : {
+        notNull: {
           args: true,
-          msg : 'price cannot be null'
+          msg: 'price cannot be null'
         },
-        customValidator(value){
-          if (value<0){
+        customValidator(value) {
+          if (value < 0) {
             throw new Error('price cannot be negative')
           }
         }
@@ -55,19 +55,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notNull : {
+        notNull: {
           args: true,
-          msg : 'stock cannot be null'
+          msg: 'stock cannot be null'
         },
-        customValidator(value){
-          if (value<0){
+        notEmpty: {
+          args: true,
+          msg: 'stock cannot be empty'
+        },
+        customValidator(value) {
+          if (value < 0) {
             throw new Error('stock cannot be negative')
           }
         }
       }
-    },
-    UserId: {
-      type: DataTypes.INTEGER
     }
   }, {
     sequelize
