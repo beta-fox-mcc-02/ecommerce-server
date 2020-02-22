@@ -4,12 +4,14 @@ const BcryptPassword = require('../helpers/encryptpassword.js')
 
 class AdminController{
     static getAll (req, res, next) {
+        console.log(`ashjasdbakjsdbakjsbdaksjdkasjdkasd`)
         Admin.findAll({
             attributes: ['id', 'email']
         })
         .then((data) => {
             res.status(200).json({ admins: data })
         })
+        .catch((err) => next(err))
     }
     static register (req, res, next) {
         Admin.create ({
