@@ -4,10 +4,10 @@ const authentication = require('../middlewares/authentication')
 const author = require('../middlewares/authorization')
 
 router.use(authentication)
-router.post('/',  ProductController.create)
-router.get('/', ProductController.findAll)
-router.get('/:id', ProductController.findOne)
-router.put('/:id',author, ProductController.update)
-router.delete('/:id',author, ProductController.delete)
+router.post('/', author, ProductController.create)
+router.get('/', author, ProductController.findAll)
+router.get('/:id', author, ProductController.findOne)
+router.put('/:id', author, ProductController.update)
+router.delete('/:id', author, ProductController.delete)
 
 module.exports = router  
