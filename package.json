@@ -2,7 +2,7 @@
   "name": "ecommerce-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --detectOpenHandles --forceExit",
     "dev": "NODE_ENV=development nodemon bin/www/http.js",
