@@ -8,10 +8,7 @@ class ProductController {
       .then(product => {
         res.status(201).json({ message: 'Success Create Product' });
       })
-      .catch(err => {
-        console.log(err);
-        next(err);
-      });
+      .catch(next);
 
   }
 
