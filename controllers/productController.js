@@ -1,10 +1,29 @@
 const { User, Product, Cart, Category } = require('../models')
 
 class ProductController {
+   // static create(req, res, next) {
+   //    let newProduct = {
+   //       name: req.body.name,
+   //       image_url: req.body.image_url,
+   //       price: req.body.price,
+   //       stock: req.body.stock,
+   //       CategoryId: req.body.CategoryId
+   //    }
+
+   //    Product.create(newProduct)
+   //       .then(data => {
+   //          res.status(201).json(data)
+   //       })
+   //       .catch(err => {
+
+   //          next(err)
+   //       })
+   // }
+
    static create(req, res, next) {
       let newProduct = {
          name: req.body.name,
-         image_url: req.body.image_url,
+         image_url: req.file.cloudStoragePublicUrl,
          price: req.body.price,
          stock: req.body.stock,
          CategoryId: req.body.CategoryId
@@ -37,7 +56,7 @@ class ProductController {
    static update(req, res, next) {
       let productUpdate = {
          name: req.body.name,
-         image_url: req.body.image_url,
+         image_url: req.file.cloudStoragePublicUrl,
          price: req.body.price,
          stock: req.body.stock,
          CategoryId: req.body.CategoryId
