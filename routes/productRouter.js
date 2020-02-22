@@ -13,7 +13,7 @@ router.post(
   productController.add
 );
 router.get('/', productController.getAll)
-router.delete('/:id', productController.remove)
+router.delete('/:id', authenticated, authorized, productController.remove)
 router.put('/:id', authenticated, authorized,  images.multer.single("image"),
 images.sendUploadToGCS, productController.update)
 
