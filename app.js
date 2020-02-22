@@ -10,7 +10,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const logger = require("morgan");
 app.use(logger("dev"));
 
-var cors = require("cors");
+const cors = require("cors");
 app.use(cors());
 
 app.use(express.json());
