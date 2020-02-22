@@ -52,6 +52,119 @@
     }
 ----
 
+**Person Delete**
+----
+  Return number of deleted person and message (only authorized for master role).
+
+* **URL**
+
+  http://localhost:3000/findUser/:userId
+
+* **Headers**
+
+  `token`
+
+* **Method:**
+
+    `DELETE`
+  
+*  **URL Params**
+
+    `userId=[Number]`
+
+* **Data Params**
+
+    none
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    {
+    "delete": 1,
+    "message": "Successfully delete"
+    }
+* **Error Response:**
+
+  * **Code:** 401 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Unauthorized"
+    }
+  OR
+  * **Code:** 404 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "User not found"
+    }
+  OR
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
+**Person FindOne**
+----
+  Return json data person.
+
+* **URL**
+
+  http://localhost:3000/findUser/:userId
+
+* **Headers**
+
+  none
+
+* **Method:**
+
+    `GET`
+  
+*  **URL Params**
+
+    `userId=[Number]`
+
+* **Data Params**
+
+    none
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    {
+    "id": 3,
+    "email": "user@mail.com",
+    "user_role": "user"
+    }
+* **Error Response:**
+
+  * **Code:** 404 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "User not found"
+    }
+  OR
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
 **Person Login**
 ----
   Return object of person and token after successfully login.
@@ -110,6 +223,10 @@
 * **URL**
 
   http://localhost:3000/products
+
+* **Headers**
+
+  `token`
 
 * **Method:**
 
@@ -176,6 +293,10 @@
 * **URL**
 
   http://localhost:3000/products/:productId
+
+* **Headers**
+
+  `token`
 
 * **Method:**
 
@@ -253,6 +374,10 @@
 
   http://localhost:3000/products/:productId
 
+* **Headers**
+
+  `token`
+
 * **Method:**
 
     `DELETE`
@@ -313,7 +438,7 @@
     }
 ----
 
-**Product Find All**
+**Product FindAll**
 ----
   Return array of object all products.
 
