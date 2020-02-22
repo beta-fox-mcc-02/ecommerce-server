@@ -149,3 +149,53 @@ describe('Admin login test', () => {
             })
     })
 })
+describe('Token Error Test', () => {
+    beforeAll((done) => {
+        Admin.create({
+            email : 'kiko@mail.com',
+            password : 'admin123'
+        })
+        .then(res => {
+            done()
+        })
+        .catch(done)
+    })
+    afterAll((done) => {
+        queryInterface.bulkDelete('Admins', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+    })
+    test('it should return with error "jwt must be provided"', (done) => {
+        request(app).post('/products/list')
+            .set('token', '')
+            .send({
+                name : 'baju',
+                image_url : '',
+                price : 1000,
+                stock : 1
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                // console.log(response.body)
+                expect(response.body).toHaveProperty('err', 'jwt must be provided')
+                done()
+            })
+    })
+    test('it should return with error "jwt malformed"', (done) => {
+        request(app).post('/products/list')
+            .set('token', 'token')
+            .send({
+                name : 'baju',
+                image_url : '',
+                price : 1000,
+                stock : 1
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                // console.log(response.body)
+                expect(response.body).toHaveProperty('err', 'jwt malformed')
+                done()
+            })
+    })
+})

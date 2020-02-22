@@ -60,7 +60,13 @@ class ProductController{
                 }
             })
             .then(product => {
-                res.status(200).json({product})
+                if (product[0] === 0){
+                    const err = {
+                        name : 'dataNotFound'
+                    }
+                    next(err)
+                }
+                else res.status(200).json({product})
             })
             .catch(next)
     }
@@ -72,7 +78,13 @@ class ProductController{
                 }
             })
             .then(product => {
-                res.status(200).json({product})
+                if (product === 0){
+                    const err = {
+                        name : 'dataNotFound'
+                    }
+                    next(err)
+                }
+                else res.status(200).json({product})
             })
             .catch(next)
     }

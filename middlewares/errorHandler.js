@@ -20,9 +20,19 @@ module.exports = (err, req, res, next) => {
             err : 'Cannot find Data'
         })
     }
+    else if(error.name === 'NotAuthorized'){
+        res.status(401).json({
+            err : error.message
+        })
+    }
     else if(error.name === 'SequelizeDatabaseError'){
         res.status(500).json({
             err : 'Internal Server Error'
+        })
+    }
+    else if(error.name === 'JsonWebTokenError'){
+        res.status(401).json({
+            err : error.message
         })
     }
     else{

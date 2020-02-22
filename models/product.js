@@ -15,24 +15,30 @@ module.exports = (sequelize, DataTypes) => {
     price: {
       type : DataTypes.FLOAT,
       validate : {
-        min : {
-          args : 1,
-          msg : 'price must greater than 0'
+        isPositive : (value, next) =>{
+          if (value >= 0) next()
+          else next('price must positive number')
         }
       }
     },
     stock: {
       type : DataTypes.INTEGER,
       validate : {
-        min : {
-          args : 1,
-          msg : 'stock must greater than 0'
+        isPositive : (value, next) =>{
+          if (value >= 0) next()
+          else next('stock must positive number')
         }
       }
     }
   }, {
     sequelize,
     hooks : {
+      beforeBulkUpdate : (product, options) => {
+        // console.log(product)
+        if(product.attributes.image_url === ''){
+          product.image_url = 'https://cdn.dribbble.com/users/2022451/screenshots/5557745/empty_bag.gif'
+        }
+      },
       beforeCreate : (product, options) => {
         if(product.image_url === ''){
           product.image_url = 'https://cdn.dribbble.com/users/2022451/screenshots/5557745/empty_bag.gif'
