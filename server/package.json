@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest --detectOpenHandles",
     "dev": "NODE_ENV=development nodemon bin/www/http.js",
-    "start": "node app.js"
+    "start": "node bin/www/http.js"
   },
   "keywords": [],
   "author": "Ridza Adhandra",
