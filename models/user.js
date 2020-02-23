@@ -28,27 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isEmail:true,
-        isUnique(email) {
-          return User.findOne({
-            where:{
-              email:email
-            }
-          })
-          .then(data =>{
-            if(data){
-              throw new Error('email has taken');
-            }
-          })
-          // if (this.country) {
-          //   if (!validator.isPostalCode(String(this.postalCode), this.country)) {
-          //     throw new Error('Wrong postal code');
-          //   }
-          // }
-        }
-      },
-      unique: {
-          args: true,
-          msg: 'Email address already in use!'
       }
     },
     password: {
