@@ -16,14 +16,16 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles"
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
+    "dev": "NODE_ENV=development nodemon ./bin/http.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lukmanbayhaqi/ecommerce-server.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Lukman Bayhaqi",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/lukmanbayhaqi/ecommerce-server/issues"

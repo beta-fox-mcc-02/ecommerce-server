@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV == 'test'){
+if(process.env.NODE_ENV == 'development'){
     require('dotenv').config()
 }
 const cors = require('cors')

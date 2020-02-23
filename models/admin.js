@@ -55,7 +55,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     validate: {
       checkEmail(next) {
-        console.log(this.email)
         Admin.findOne({ where: { email: this.email } })
           .then(data => {
             if (data) {

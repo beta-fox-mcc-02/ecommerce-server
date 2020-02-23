@@ -1,35 +1,18 @@
 const request = require('supertest')
 const app = require('../app')
-const { Admin, Product, sequelize } = require('../models')
+const { Admin, sequelize } = require('../models')
 const { queryInterface } = sequelize
-const { createToken } = require('../helpers/jwt')
 
-let token = ''
-let id = ''
-
-describe('Administrator test section', () => {
+describe('Admin test section', () => {
 
     beforeAll((done) => {
 
         Admin.create({
-            username: 'kadiso',
-            email: 'kadiso@mail.com',
-            password: '12345',
-            role: true
+            username: "jajang",
+            email: "jajang@mail.com",
+            password: "12345"
         })
             .then(data => {
-                token = createToken(data.id)
-                console.log(data)
-                return Product.create({
-                    name: 'crayon sinchan',
-                    image_url: 'https://ssvr.bukukita.com/babacms/displaybuku/94071_f.jpg',
-                    author: 'Yoshito Usui',
-                    price: 17000,
-                    stock: 5
-                })
-            })
-            .then(data => {
-                id = data.id
                 done()
             })
             .catch(err => done(err))
@@ -38,39 +21,37 @@ describe('Administrator test section', () => {
 
     afterAll((done) => {
 
-        queryInterface.bulkDelete('Product', null, {})
-            .then(data => {
-                return queryInterface.bulkDelete('Users', null, {})
+        queryInterface.bulkDelete('Admins', {})
+            .then(response => {
+                done()
             })
-            .then(data => done())
             .catch(err => done(err))
 
     })
 
-    describe('Create product test section', () => {
+    describe('Register test section', () => {
 
-        describe('Create success response', () => {
+        describe('Register success response', () => {
 
-            test('Create success response', (done) => {
+            test('Register success response and will returning status code 201 and data Admin', (done) => {
 
                 request(app)
-                    .post('/admin/product')
-                    .set('token', token)
+                    .post('/admin/register')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: 10
+                        username: "mimin",
+                        email: "mimin@mail.com",
+                        password: "12345"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(201)
-                        expect(response.body.data).toHaveProperty('name', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('image_url', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('price', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('stock', (expect.anything()))
-                        expect(response.body.message).toContain('success create product')
+                        expect(response.body.data).toHaveProperty('username', (expect.anything()))
+                        expect(response.body.data).toHaveProperty('email', (expect.anything()))
+                        expect(response.body.data).toHaveProperty('password', (expect.anything()))
+                        expect(response.body.data).toHaveProperty('role', true)
+                        expect(response.body.data.email).toContain('@')
+                        expect(response.body.data.email).toContain('mail.com')
+                        expect(response.body.message).toContain('success register admin')
                         done()
                     })
 
@@ -78,108 +59,93 @@ describe('Administrator test section', () => {
 
         })
 
-        describe('Create failed response', () => {
+        describe('Register failed response', () => {
 
-            test('Create error response because name empty', (done) => {
+            test('Register error response because username empty', (done) => {
 
                 request(app)
-                    .post('/admin/product')
-                    .set('token', token)
+                    .post('/admin/register')
                     .send({
-                        name: '',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: 10
+                        username: "",
+                        email: "mimin@mail.com",
+                        password: "12345"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body).toHaveProperty('message', 'name cant be empty')
+                        expect(response.body).toHaveProperty('message', 'username cant be empty')
                         done()
                     })
 
             })
 
-            test('Create error response because image_url empty', (done) => {
+            test('Register error response because email not contain email format', (done) => {
 
                 request(app)
-                    .post('/admin/product')
-                    .set('token', token)
+                    .post('/admin/register')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: '',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: 10
+                        username: "mimin",
+                        email: "mimin@mailcom",
+                        password: "12345"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body).toHaveProperty('message', 'image url cant be empty')
+                        expect(response.body).toHaveProperty('message', 'your email must contain email format')
                         done()
                     })
 
             })
 
-            test('Create error response because price less than 0', (done) => {
+            test('Register error response because email already in use', (done) => {
 
                 request(app)
-                    .post('/admin/product')
-                    .set('token', token)
+                    .post('/admin/register')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: -15000,
-                        stock: 10
+                        username: "jajang",
+                        email: "jajang@mail.com",
+                        password: "12345"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body).toHaveProperty('message', 'price cant be less than 0')
+                        expect(response.body).toHaveProperty('message', 'email already in use')
                         done()
                     })
 
             })
 
-            test('Create error response because stock less than 0', (done) => {
+            test('Register error response because email empty', (done) => {
 
                 request(app)
-                    .post('/admin/product')
-                    .set('token', token)
+                    .post('/admin/register')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: -10
+                        username: "mimin",
+                        email: "",
+                        password: "12345"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body).toHaveProperty('message', 'stock cant be less than 0')
+                        expect(response.body).toHaveProperty('message', 'email cant be empty')
                         done()
                     })
 
             })
 
-            test('Create product error because author name empty', (done) => {
+            test('Register error response because password length less than 5 character', (done) => {
 
                 request(app)
-                    .post(`/admin/product`)
-                    .set('token', token)
+                    .post('/admin/register')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: '',
-                        price: 15000,
-                        stock: 10
+                        username: "mimin",
+                        email: "mimin@mail.com",
+                        password: "1234"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body.message).toContain('author Name cant be empty')
+                        expect(response.body).toHaveProperty('message', 'password length cannot less than 5')
                         done()
                     })
 
@@ -189,20 +155,35 @@ describe('Administrator test section', () => {
 
     })
 
-    describe('Find all product test section', () => {
+    describe('Login test section', () => {
 
-        describe('Find all success response', () => {
+        beforeAll((done) => {
 
-            test('Find all success response', (done) => {
+            Admin.create({
+                username: "ujang",
+                email: "ujang@mail.com",
+                password: "12345"
+            })
+                .then(data => done())
+                .catch(err => done(err))
+
+        })
+
+        describe('Login success response', () => {
+
+            test('Login success response and will returning status code 200 and token', (done) => {
 
                 request(app)
-                    .get('/admin/product')
-                    .set('token', token)
+                    .post('/admin/login')
+                    .send({
+                        email: "ujang@mail.com",
+                        password: "12345"
+                    })
                     .end((err, response) => {
-                        // console.log(response.body.data, '{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}}{}')
                         expect(err).toBe(null)
                         expect(response.status).toBe(200)
-                        expect(response.body).toHaveProperty('data', (expect.any(Array)))
+                        expect(response.body).toHaveProperty('token', (expect.any(String)))
+                        expect(response.body).toHaveProperty('message', 'success login admin')
                         done()
                     })
 
@@ -210,163 +191,37 @@ describe('Administrator test section', () => {
 
         })
 
-    })
+        describe('Login fail response', () => {
 
-    describe('Update product test section', () => {
-
-        describe('Update product success response', () => {
-
-            test('Update product success response', (done) => {
+            test('Login error response because email not match', (done) => {
 
                 request(app)
-                    .put(`/admin/product/${id}`)
-                    .set('token', token)
+                    .post('/admin/login')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: 10
-                    })
-                    .end((err, response) => {
-                        expect(err).toBe(null)
-                        expect(response.status).toBe(200)
-                        expect(response.body.data).toHaveProperty('name', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('image_url', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('price', (expect.anything()))
-                        expect(response.body.data).toHaveProperty('stock', (expect.anything()))
-                        expect(response.body.message).toContain('success update product')
-                        done()
-                    })
-            })
-
-        })
-
-        describe('Update product error response', () => {
-
-            test('Update product error because name empty', (done) => {
-
-                request(app)
-                    .put(`/admin/product/${id}`)
-                    .set('token', token)
-                    .send({
-                        name: '',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: 10
+                        email: "ujan@mail.com",
+                        password: "12345"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body.message).toContain('name cant be empty')
+                        expect(response.body).toHaveProperty('message', 'email not found')
                         done()
                     })
 
             })
 
-            test('Update product error because image url empty', (done) => {
+            test('Login error response because password not match', (done) => {
 
                 request(app)
-                    .put(`/admin/product/${id}`)
-                    .set('token', token)
+                    .post('/admin/login')
                     .send({
-                        name: 'doraemon vol.40',
-                        image_url: '',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: 10
+                        email: "ujang@mail.com",
+                        password: "1234"
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
-                        expect(response.body.message).toContain('image url cant be empty')
-                        done()
-                    })
-
-            })
-
-            test('Update product error because price less than 0', (done) => {
-
-                request(app)
-                    .put(`/admin/product/${id}`)
-                    .set('token', token)
-                    .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: -15000,
-                        stock: 10
-                    })
-                    .end((err, response) => {
-                        expect(err).toBe(null)
-                        expect(response.status).toBe(400)
-                        expect(response.body.message).toContain('price cant be less than 0')
-                        done()
-                    })
-
-            })
-
-            test('Update product error because stock less than 0', (done) => {
-
-                request(app)
-                    .put(`/admin/product/${id}`)
-                    .set('token', token)
-                    .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: 'fujiko f fujio',
-                        price: 15000,
-                        stock: -10
-                    })
-                    .end((err, response) => {
-                        expect(err).toBe(null)
-                        expect(response.status).toBe(400)
-                        expect(response.body.message).toContain('stock cant be less than 0')
-                        done()
-                    })
-
-            })
-
-            test('Update product error because author name empty', (done) => {
-
-                request(app)
-                    .put(`/admin/product/${id}`)
-                    .set('token', token)
-                    .send({
-                        name: 'doraemon vol.40',
-                        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81lWONV4PvL.jpg',
-                        author: '',
-                        price: 15000,
-                        stock: 10
-                    })
-                    .end((err, response) => {
-                        console.log(response.body, '~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                        expect(err).toBe(null)
-                        expect(response.status).toBe(400)
-                        expect(response.body.message).toContain('author Name cant be empty')
-                        done()
-                    })
-
-            })
-
-        })
-
-    })
-
-    describe('Delete product test section', () => {
-
-        describe('Delete product success response', () => {
-
-            test('Delete product success response', (done) => {
-
-                request(app)
-                    .delete(`/admin/product/${id}`)
-                    .set('token', token)
-                    .end((err, response) => {
-                        expect(err).toBe(null)
-                        expect(response.status).toBe(200)
-                        expect(response.body.message).toContain('success delete product')
+                        expect(response.body).toHaveProperty('message', 'invalid password / email')
                         done()
                     })
 

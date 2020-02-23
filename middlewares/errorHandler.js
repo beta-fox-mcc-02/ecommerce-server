@@ -2,7 +2,7 @@ module.exports = (err, req, res, next)=>{
     let statusCode = null
     let message = ''
     let temp = []
-    console.log(err, "<><><>")
+    // console.log(err, "<><><>")
     if(err.name == 'SequelizeValidationError'){
         err.errors.forEach(el => {
             temp.push(el.message)
@@ -16,8 +16,6 @@ module.exports = (err, req, res, next)=>{
         statusCode = 500
         message = 'Internal server error'
     }
-    // console.log(statusCode,message,'"/\/\/\///\/\//\\/\/\/\/\/\//\\//\\/\/\//\"')
-    
     res.status(statusCode).json({
         message
     })
