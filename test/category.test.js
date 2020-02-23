@@ -226,6 +226,38 @@ describe('Category Routes', () => {
     })
   })
 
+  describe('Get Category Test', () => {
+    describe('Get Category Success', () => {
+      it('should return a object category and status 200', (done) => {
+        request(app)
+          .get('/categories/' + category_id)
+          .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('id', expect.any(Number))
+            expect(response.body).toHaveProperty('name', 'Bearing')
+            expect(response.body).toHaveProperty('path', 'bearing')
+            expect(response.status).toBe(200)
+            done()
+          })
+      })
+    })
+
+    describe('Get Category Failed', () => {
+      it('should return a message and status 404', (done) => {
+        request(app)
+          .get('/categories/' + (+category_id + 1))
+          .end((err, response) => {
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('name', 'NOT_FOUND')
+            expect(response.body).toHaveProperty('error', expect.any(String))
+            expect(response.status).toBe(404)
+            done()
+          })
+      })
+    })
+
+  })
+
   describe('Update Category Test', () => {
     describe('Update Category Success', () => {
       test('it should return an updated object category and status 200', (done) => {

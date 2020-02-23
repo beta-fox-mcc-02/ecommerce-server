@@ -99,7 +99,7 @@ class ProductController {
       name: input.name,
       price: +input.price,
       stock: +input.stock,
-      category_id: +input.category_id,
+      category_id: +input.category.id,
       SKU: input.SKU,
       description: input.description,
       weight: +input.weight

@@ -8,8 +8,8 @@ let product_id = 0
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config()
 }
-let token;
-let invalid_token;
+let token
+let invalid_token
 const jwt = require('jsonwebtoken')
 describe('Product Routes', () => {
 
@@ -284,9 +284,7 @@ describe('Product Routes', () => {
         request(app)
           .put('/products/' + product_id)
           .set('Authorization', 'Bearer ' + token)
-          .send({
-            product
-          })
+          .send({product})
           .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body.product).toHaveProperty('id', expect.any(Number))
