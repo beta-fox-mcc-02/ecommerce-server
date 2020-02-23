@@ -1,5 +1,6 @@
 const axios = require('axios')
 const { Product, ProductImage, sequelize, Category } = require('../models')
+const { ImageHelper } = require('../helpers')
 
 class ProductController {
 
@@ -21,7 +22,7 @@ class ProductController {
       return Product.create(parameters, { transaction: t})
       .then(newProduct => {
         response = newProduct
-        return ProductController.uploadImage(files, newProduct)
+        return ImageHelper.uploadImage(files, newProduct)
         .then(
           axios.spread((...responses) => {
             const images = []
@@ -54,55 +55,37 @@ class ProductController {
     })
   }
 
-  static deleteProductImagesInCloud (images) {
-    const requests = []
-    for (const image of images) {
-      const request = axios({
-        method: 'DELETE',
-        headers: {
-          Authorization :'Client-ID '+process.env.IMGUR_CLIENT_ID,
-        },
-        url: `${process.env.IMGURL_DELETE_API_URL}/${image.delete_hash}`,
-      })
-      requests.push(request)
-    }
-    return axios.all(requests)
-  }
-
-  static deleteProductImage (id, next) {
-    return ProductImage.findAll({
-      where: {
-        product_id: id
-      }
-    })
-    .then(images => {
-      const ids = []
-      return ProductController.deleteProductImagesInCloud(images)
-    })
-    .catch(next)
-  }
-
   static deleteProduct (req, res, next) {
     const id = +req.params.id
-    ProductImage.destroy({
-      where: {
-        product_id: id
-      }
-    })
-    .then(response => {
-      Product.destroy({
+    return sequelize.transaction((t) => {
+      return ProductImage.destroy({
         where: {
-          id
+          product_id: id
         }
-      })
+      }, { transaction: t })
       .then(response => {
-        res.status(200).json({
-          message: 'Delete Product with id '+id+ ' successfully'
-        })
+        return Product.destroy({
+          where: {
+            id
+          }
+        }, { transaction : t})
       })
       .catch(err => {
         next(err)
       })
+    })
+    .then(response => {
+      if (response) {
+        res.status(200).json({
+          message: 'Delete product with id '+id+ ' successfully'
+        })
+      } else {
+        next({
+          status: 404,
+          name: 'NOT_FOUND',
+          message: 'Product with id '+id + ' is not found'
+        })
+      }
     })
     .catch(err => {
       next(err)
@@ -111,70 +94,38 @@ class ProductController {
 
   static editProduct (req, res, next) {
     const id = +req.params.id
-    const files = req.files
-    const input = JSON.parse(req.body.product)[0]
+    const input = req.body.product
     const parameters = {
       name: input.name,
-      price: input.price,
-      stock: input.stock,
-      category_id: input.category.id,
+      price: +input.price,
+      stock: +input.stock,
+      category_id: input.category_id,
       SKU: input.SKU,
       description: input.description,
-      weight: input.weight
+      weight: +input.weight
     }
 
-    let response = {}
-    return sequelize.transaction ((t) => {
-      return Product.update(parameters, {
+    Product.update(parameters, {
         where :{
           id
         },returning: true
-      } ,{ transaction: t})
-      .then(product => {
-        response = product[1][0]
-        return ProductController.deleteProductImage(id)
-        .then(
-          axios.spread((...responses) => {
-            ProductImage.destroy({
-              where: {
-                product_id: id
-              }
-            }, { transaction: t })
-            .then(response => {
-              return ProductController.uploadImage(files, product[1][0])
-              .then(
-                axios.spread((...responses) => {
-                  const images = []
-                  for (const r of responses) {
-                    images.push({
-                      url: r.data.data.link,
-                      product_id: product[1][0].id,
-                      title: r.data.data.title,
-                      delete_hash: r.data.data.deletehash
-                    })
-                  }
-                  return ProductImage.bulkCreate(images)
-                })
-              )
-              .catch(next)
-            })
-            .catch(next)
+      })
+      .then(response => {
+        if (response[0]) {
+          res.status(200).json({
+            product: response[1][0]
           })
-        )
-        .catch(errors => {
-          next(errors)
-        })
+        } else {
+          next({
+            status: 404,
+            name:'NOT_FOUND',
+            message:'Product with id '+id + ' is not found'
+          })
+        }
       })
       .catch(err => {
         next(err)
       })
-    })
-    .then(result => {
-      res.status(200).json(response)
-    })
-    .catch(err => {
-      next(err)
-    })
   }
 
   static uploadImage(files, product) {
@@ -202,8 +153,9 @@ class ProductController {
     const page = req.query.page ? req.query.page : 1
     Product.findAll({
       include: [Category, ProductImage],
-      limit,
-      page
+      order: [
+        ['id', 'DESC']
+      ]
     })
     .then(products => {
       res.status(200).json({
