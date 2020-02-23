@@ -359,7 +359,7 @@ describe('Product Routes', () => {
 
    //DELETE
    describe('delete product', () => {
-      test.only('success delete product', done => {
+      test('success delete product', done => {
         // console.log(id, '===================')
         // console.log(access_token)
          request(app)

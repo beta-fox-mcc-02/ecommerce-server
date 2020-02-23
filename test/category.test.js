@@ -145,7 +145,7 @@ describe('Category Routes', () => {
 
   //DELETE
   describe('delete category', () => {
-    test.only('success delete category', done => {
+    test('success delete category', done => {
       console.log(id, '===================')
       // console.log(access_token)
        request(app)

@@ -30,7 +30,6 @@ describe('Users Routes', () => {
          .catch(err => done(err))
    })
 
-   
    //REGISTER
    describe('Users Register Test', () => {
       test('Register user success 201', done => {
@@ -144,7 +143,7 @@ describe('Users Routes', () => {
 
    // LOGIN
    describe('Users Login Test', () => { 
-      test.only('User login success 200', done => {
+      test('User login success 200', done => {
          request(app)
             .post('/users/login')
             .send({
