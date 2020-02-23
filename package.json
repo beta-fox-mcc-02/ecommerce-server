@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon bin/http.js"
+    "dev": "nodemon bin/http.js",
+    "start": "node bin/http.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adamjay041/ecommerce-server.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Adam Jay",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/adamjay041/ecommerce-server/issues"
