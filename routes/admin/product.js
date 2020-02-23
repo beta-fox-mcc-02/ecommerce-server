@@ -1,7 +1,7 @@
 const router = require('express').Router()
-const { create, findAll, update, destroy} = require('../controllers/product')
-const authentication = require('../middlewares/authentication')
-const { admin } = require('../middlewares/authorized')
+const { create, findAll, update, destroy} = require('../../controllers/product')
+const authentication = require('../../middlewares/authentication')
+const { admin } = require('../../middlewares/authorized')
 
 
 router.use(authentication)

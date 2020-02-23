@@ -1,8 +1,6 @@
 const router = require('express').Router()
-const user = require('./admin')
-const product = require('./product')
+const admin = require('./admin')
 
-router.use('/admin', user)
-router.use('/admin/product', product)
+router.use('/', admin)
 
 module.exports = router
