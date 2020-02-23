@@ -9,8 +9,9 @@ class ImageHelper {
           method: 'POST',
           headers: {
             Authorization :'Client-ID '+process.env.IMGUR_CLIENT_ID,
+            'Content-Type': 'application/json',
           },
-          url: process.env.IMGURL_UPLOAD_API_URL,
+          url: process.env.IMGURL_API_URL,
           data: {
             image: file,
             title: `${product.id}-${f.originalname}`
@@ -28,8 +29,9 @@ class ImageHelper {
         method: 'DELETE',
         headers: {
           Authorization :'Client-ID '+process.env.IMGUR_CLIENT_ID,
+          'Content-Type': 'application/json',
         },
-        url: `${process.env.IMGURL_DELETE_API_URL}/${image.delete_hash}`,
+        url: `${process.env.IMGURL_API_URL}/${image.delete_hash}`,
       })
       requests.push(request)
     }

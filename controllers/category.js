@@ -79,6 +79,12 @@ class CategoryController {
           res.status(200).json({
             message: 'CATEGORY_DELETED'
           })
+        } else {
+          next({
+            status: 404,
+            name: 'NOT_FOUND',
+            message: 'Category with id '+id + ' is not found'
+          })
         }
       })
       .catch(next)

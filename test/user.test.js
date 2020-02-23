@@ -4,6 +4,20 @@ const { sequelize: { queryInterface } } = require('../models')
 
 describe('User Routes', () => {
 
+  beforeAll((done) => {
+    queryInterface.bulkDelete('Users', {})
+      .then(response => {
+        done()
+      }).catch(err => done(err))
+  })
+
+  afterAll((done) => {
+    queryInterface.bulkDelete('Users', {})
+      .then(response => {
+        done()
+      }).catch(err => done(err))
+  })
+
   describe('User Register Test', () => {
 
     describe('User Register Success', () => {

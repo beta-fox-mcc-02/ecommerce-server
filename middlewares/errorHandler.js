@@ -1,4 +1,5 @@
 const errorHandler = (err, req, res, next) => {
+  console.log(err)
   let status = 500
   if (err.name === 'SequelizeValidationError') {
     status = 400
@@ -26,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
     status = 400
     res.status(status).json({
       name: 'BAD REQUEST',
-      message:'FOREIGN_KEY_CONSTRAINT',
+      message: 'FOREIGN_KEY_CONSTRAINT',
       errors: [err.parent.detail]
     })
   } else if (err.name === 'LOGIN_FAILED') {

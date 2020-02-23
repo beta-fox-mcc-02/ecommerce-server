@@ -87,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     weight: {
-      type: DataTypes.DECIMAL(10,2),
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       validate: {
         notNull: {

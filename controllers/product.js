@@ -9,53 +9,53 @@ class ProductController {
     const input = JSON.parse(req.body.product)[0]
     const parameters = {
       name: input.name,
-      price: input.price,
-      stock: input.stock,
-      category_id: input.category.id,
+      price: +input.price,
+      stock: +input.stock,
+      category_id: +input.category.id,
       SKU: input.SKU,
       description: input.description,
-      weight: input.weight
+      weight: +input.weight
     }
 
     let response = {}
-    return sequelize.transaction ((t) => {
-      return Product.create(parameters, { transaction: t})
-      .then(newProduct => {
-        response = newProduct
-        return ImageHelper.uploadImage(files, newProduct)
-        .then(
-          axios.spread((...responses) => {
-            const images = []
-            for (const r of responses) {
-              images.push({
-                url: r.data.data.link,
-                product_id: newProduct.id,
-                title: r.data.data.title,
-                delete_hash: r.data.data.deletehash
+    return sequelize.transaction((t) => {
+      return Product.create(parameters, { transaction: t })
+        .then(newProduct => {
+          response = newProduct
+          return ImageHelper.uploadImage(files, newProduct)
+            .then(
+              axios.spread((...responses) => {
+                const images = []
+                for (const r of responses) {
+                  images.push({
+                    url: r.data.data.link,
+                    product_id: newProduct.id,
+                    title: r.data.data.title,
+                    delete_hash: r.data.data.deletehash
+                  })
+                }
+                return ProductImage.bulkCreate(images, { transaction: t })
               })
-            }
-            return ProductImage.bulkCreate(images, { transaction: t})
-          })
-        )
-        .catch(errors => {
-          next(errors)
+            )
+            .catch(err => {
+              next(err)
+            })
+        })
+        .catch(err => {
+          next(err)
+        })
+    })
+      .then(result => {
+        res.status(201).json({
+          product: response
         })
       })
       .catch(err => {
         next(err)
       })
-    })
-    .then(result => {
-      res.status(201).json({
-        product: response
-      })
-    })
-    .catch(err => {
-      next(err)
-    })
   }
 
-  static deleteProduct (req, res, next) {
+  static deleteProduct(req, res, next) {
     const id = +req.params.id
     return sequelize.transaction((t) => {
       return ProductImage.destroy({
@@ -63,53 +63,53 @@ class ProductController {
           product_id: id
         }
       }, { transaction: t })
+        .then(response => {
+          return Product.destroy({
+            where: {
+              id
+            }
+          }, { transaction: t })
+        })
+        .catch(err => {
+          next(err)
+        })
+    })
       .then(response => {
-        return Product.destroy({
-          where: {
-            id
-          }
-        }, { transaction : t})
+        if (response) {
+          res.status(200).json({
+            message: 'Delete product with id ' + id + ' successfully'
+          })
+        } else {
+          next({
+            status: 404,
+            name: 'NOT_FOUND',
+            message: 'Product with id ' + id + ' is not found'
+          })
+        }
       })
       .catch(err => {
         next(err)
       })
-    })
-    .then(response => {
-      if (response) {
-        res.status(200).json({
-          message: 'Delete product with id '+id+ ' successfully'
-        })
-      } else {
-        next({
-          status: 404,
-          name: 'NOT_FOUND',
-          message: 'Product with id '+id + ' is not found'
-        })
-      }
-    })
-    .catch(err => {
-      next(err)
-    })
   }
 
-  static editProduct (req, res, next) {
+  static editProduct(req, res, next) {
     const id = +req.params.id
     const input = req.body.product
     const parameters = {
       name: input.name,
       price: +input.price,
       stock: +input.stock,
-      category_id: input.category_id,
+      category_id: +input.category_id,
       SKU: input.SKU,
       description: input.description,
       weight: +input.weight
     }
 
     Product.update(parameters, {
-        where :{
-          id
-        },returning: true
-      })
+      where: {
+        id
+      }, returning: true
+    })
       .then(response => {
         if (response[0]) {
           res.status(200).json({
@@ -118,8 +118,8 @@ class ProductController {
         } else {
           next({
             status: 404,
-            name:'NOT_FOUND',
-            message:'Product with id '+id + ' is not found'
+            name: 'NOT_FOUND',
+            message: 'Product with id ' + id + ' is not found'
           })
         }
       })
@@ -133,16 +133,16 @@ class ProductController {
     for (const f of files) {
       const file = f.buffer.toString('base64')
       const request = axios({
-          method: 'POST',
-          headers: {
-            Authorization :'Client-ID '+process.env.IMGUR_CLIENT_ID,
-          },
-          url: process.env.IMGURL_UPLOAD_API_URL,
-          data: {
-            image: file,
-            title: `${product.id}-${f.originalname}`
-          }
-        })
+        method: 'POST',
+        headers: {
+          Authorization: 'Client-ID ' + process.env.IMGUR_CLIENT_ID,
+        },
+        url: process.env.IMGURL_UPLOAD_API_URL,
+        data: {
+          image: file,
+          title: `${product.id}-${f.originalname}`
+        }
+      })
       requests.push(request)
     }
     return axios.all(requests)
@@ -157,36 +157,36 @@ class ProductController {
         ['id', 'DESC']
       ]
     })
-    .then(products => {
-      res.status(200).json({
-        products
+      .then(products => {
+        res.status(200).json({
+          products
+        })
       })
-    })
-    .catch(next)
+      .catch(next)
   }
 
   static findOneProduct(req, res, next) {
     const id = req.params.id
     Product.findOne({
-      include:[Category, ProductImage],
+      include: [Category, ProductImage],
       where: {
         id
       }
     })
-    .then(product => {
-      if (product) {
-        res.status(200).json({
-          product
-        })
-      } else {
-        next({
-          status: 404,
-          name: 'NOT_FOUND',
-          message: 'Product with id '+id+ ' not found'
-        })
-      }
-    })
-    .catch(next)
+      .then(product => {
+        if (product) {
+          res.status(200).json({
+            product
+          })
+        } else {
+          next({
+            status: 404,
+            name: 'NOT_FOUND',
+            message: 'Product with id ' + id + ' not found'
+          })
+        }
+      })
+      .catch(next)
   }
 }
 

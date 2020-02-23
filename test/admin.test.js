@@ -5,6 +5,13 @@ let token
 
 describe('Admin Routes', () => {
 
+  beforeAll((done) => {
+    queryInterface.bulkDelete('Users', {})
+      .then(response => {
+        done()
+      }).catch(err => done(err))
+  })
+
   afterAll((done) => {
     queryInterface.bulkDelete('Users', {})
       .then(response => {
