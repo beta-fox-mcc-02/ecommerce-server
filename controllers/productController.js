@@ -11,7 +11,10 @@ class ProductController{
         // console.log(req.body)
         Product.create(newProduct)
             .then(product => {
-                res.status(201).json(product)
+                if(req.body.categories){
+                    
+                }
+                else res.status(201).json(product)
             })
             .catch(next)
     }
