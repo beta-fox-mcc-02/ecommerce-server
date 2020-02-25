@@ -94,15 +94,15 @@ class ProductController {
 
   static editProduct(req, res, next) {
     const id = +req.params.id
-    const input = req.body.product
+    const { name, price, stock, category, SKU, description, weight } = req.body
     const parameters = {
-      name: input.name,
-      price: +input.price,
-      stock: +input.stock,
-      category_id: +input.category.id,
-      SKU: input.SKU,
-      description: input.description,
-      weight: +input.weight
+      name,
+      price: +price,
+      stock: +stock,
+      category_id: category.id,
+      SKU: SKU,
+      description: description,
+      weight: +weight
     }
 
     Product.update(parameters, {

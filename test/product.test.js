@@ -284,7 +284,7 @@ describe('Product Routes', () => {
         request(app)
           .put('/products/' + product_id)
           .set('Authorization', 'Bearer ' + token)
-          .send({product})
+          .send(product)
           .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body.product).toHaveProperty('id', expect.any(Number))
@@ -315,9 +315,7 @@ describe('Product Routes', () => {
         request(app)
           .put('/products/' + product_id)
           .set('Authorization', 'Bearer ' + token)
-          .send({
-            product
-          })
+          .send(product)
           .end((err, response) => {
             const expected = ['Price has to be greater than zero', 'Stock minimal zero']
             expect(err).toBe(null)
@@ -345,9 +343,7 @@ describe('Product Routes', () => {
         request(app)
           .put('/products/' + product_id)
           .set('Authorization', 'Bearer ' + invalid_token)
-          .send({
-            product
-          })
+          .send(product)
           .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('name', 'UNAUTHORIZED')
