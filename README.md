@@ -25,7 +25,7 @@
 
 * **Data Params**
 
-`email, passwords` 
+`name, email, passwords` 
 
 * **Success Response:**
 
@@ -87,6 +87,7 @@
   + **Code:** 200 <br />
 
     **Content:** `{ 
+      "name": "...",
       "token": "...",
     "isAdmin": Boolean
      }`

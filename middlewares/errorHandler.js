@@ -15,7 +15,7 @@ module.exports = (err, req, res, next) => {
          errors.push(err.errors[i].message)
       }
 
-      res.status(status).json({ msg: errors })
+      res.status(status).json({ errors })
    }
    else if (err.code === 404) {
       status = 404

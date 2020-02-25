@@ -156,7 +156,7 @@ describe(`Product Routes`, () => {
 
    describe(`get all product`, () => {
       // ============================================ SUCCESS =========================================
-      test.only(`should return data products and give status 200`, (done) => {
+      test(`should return data products and give status 200`, (done) => {
          request(app)
             .get('/products')
             .set({

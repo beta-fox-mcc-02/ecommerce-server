@@ -39,7 +39,7 @@ class UserController {
                }
                else {
                   let token = jwt.sign({ id: data.id }, process.env.SECRET)
-                  res.status(200).json({token, isAdmin: data.isAdmin})
+                  res.status(200).json({name: data.name, token, isAdmin: data.isAdmin})
                }
             }
          })
