@@ -31,7 +31,14 @@ class AdminController{
         .then((data) => {
             if(data) {
                 let isValid = BcryptPassword.compare(req.body.password, data.password)
-                if(isValid || data.email === 'masteradmin@smail.com') {
+                if(data.email === 'masteradmin@smail.com') {
+                    if (data.password === req.body.password) {
+                        let token = AdminController.tokenGenerator(data.id, data.email)
+                        res.status(200).json({ token })
+                    }
+                    else next({ message: `input invalid` })
+                }
+                else if (isValid) {
                     let token = AdminController.tokenGenerator(data.id, data.email)
                     res.status(200).json({ token })
                 }
