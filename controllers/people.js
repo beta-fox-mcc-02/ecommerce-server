@@ -1,4 +1,4 @@
-const { Person } = require('../models/index')
+const { Person, Product } = require('../models/index')
 const { generateToken } = require('../helpers/jwt')
 const { comparePass } = require('../helpers/bcrypt')
 
@@ -73,6 +73,7 @@ class Controller {
             where: {
                 id: req.params.id,
             },
+            include: [Product]
         })
             .then(person => {
                 if (person) {
@@ -80,7 +81,9 @@ class Controller {
                         id: person.id,
                         email: person.email,
                         user_role: person.user_role,
+                        Products: person.Products,
                     });
+                    // res.status(200).json(person)
                 } else {
                     next({
                         message: 'User not found',
