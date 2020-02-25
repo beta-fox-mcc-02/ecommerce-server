@@ -48,7 +48,7 @@ class UserController {
             res.status(200).json({
               msg: 'Login Success',
               token,
-              isAdmin: payload.isAdmin
+              username: payload.username
             })
           } else {
             next({

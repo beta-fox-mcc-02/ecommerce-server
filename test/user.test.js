@@ -16,7 +16,6 @@ describe('User Routes', () => {
   })
   // User Register
   describe('User Register', () => {
-
     describe('Register Success Test', () => {
       test('it should return new user object and status 201', (done) => {
         request(app)

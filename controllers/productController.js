@@ -2,7 +2,6 @@ const { Product, Category } = require('../models')
 
 class ProductController {
   static addProduct (req, res, next) {
-    console.log(req.body, '[][][][][][][]')
     let product = {
       name: req.body.name,
       description: req.body.description,
@@ -11,7 +10,6 @@ class ProductController {
       stock: req.body.stock,
       CategoryId: req.body.CategoryId
     }
-    console.log(product, '-=-=-=-=-=-=-')
     Product
       .create(product)
       .then(data => {
@@ -22,16 +20,32 @@ class ProductController {
         })
       })
       .catch(err => {
-        console.log('masuk sini')
         next(err)
       })
   }
 
-  static getProduct (req, res, next) {
+  static getAllProduct (req, res, next) {
     Product
       .findAll({
         include: {
           model: Category
+        },
+        order: [['id']]
+      })
+      .then(data => {
+        res.status(200).json(data)
+      })
+      .catch(next)
+  }
+
+  static getProduct (req, res, next) {
+    Product
+      .findOne({
+        include: {
+          model: Category
+        },
+        where: {
+          id: req.params.id
         }
       })
       .then(data => {
@@ -41,14 +55,15 @@ class ProductController {
   }
 
   static updateProduct (req, res, next) {
-    let { name, description, imageUrl, price, stock } = req.body
+    let { name, description, imageUrl, price, stock, CategoryId } = req.body
     Product
       .update({
         name,
         description,
         imageUrl,
         price,
-        stock
+        stock,
+        CategoryId
       },{
         where: {
           id: req.params.id

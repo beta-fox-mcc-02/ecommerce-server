@@ -86,6 +86,7 @@ describe('Product Routes Test', () => {
           })
           .set('token', adminToken)
           .end((err, res) => {
+            console.log(res.body, 'createeeeeeeeeee')
             expect(err).toBe(null)
             expect(res.status).toBe(201)
             expect(res.body.data).toHaveProperty('name', expect.any(String))

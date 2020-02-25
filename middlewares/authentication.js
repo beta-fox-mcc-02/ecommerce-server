@@ -7,12 +7,10 @@ module.exports = (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, SECRET)
-      console.log(decoded, 'di authentication')
       if (decoded) {
         User
           .findByPk(decoded.id)
           .then(user => {
-            console.log(user, 'di authentication')
             if(user) {
               req.currentUserId = user.id,
               req.currentUsername = user.username

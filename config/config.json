@@ -6,7 +6,7 @@
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
-  "testing": {
+  "test": {
     "username": "postgres",
     "password": null,
     "database": "db_ecommerce_test",
