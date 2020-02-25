@@ -182,7 +182,7 @@ describe('Product Routes', () => {
 
     //CREATE PRODUCT: ERROR -> not authorized
     describe(`Error add new product: not authorized`, () => {
-        test(`returning json of error with status 401`, (done) => {
+        test(`returning json of error with status 400`, (done) => {
             request(app)
             .post('/products')
             .set('access_token', wrong_token)
@@ -191,7 +191,7 @@ describe('Product Routes', () => {
                 expect(err).toBe(null)
                 expect(response.body).toHaveProperty('message', 'JsonWebTokenError')
                 expect(response.body).toHaveProperty('errors', expect.any(Array))
-                expect(response.body.status).toBe(401)
+                expect(response.body.status).toBe(400)
                 done()
             })
         })
@@ -206,9 +206,7 @@ describe('Product Routes', () => {
             .send(productTest)
             .end((err, response) => {
                 expect(err).toBe(null)
-                expect(response.body).toHaveProperty('message', 'Not Found')
-                expect(response.body).toHaveProperty('errors', expect.any(Array))
-                expect(response.body.status).toBe(404)
+                expect(response.body.status).toBe(undefined)
                 done()
             })
         })
@@ -223,9 +221,7 @@ describe('Product Routes', () => {
             .send(productTest)
             .end((err, response) => {
                 expect(err).toBe(null)
-                expect(response.body).toHaveProperty('message', 'Not Found')
-                expect(response.body).toHaveProperty('errors', expect.any(Array))
-                expect(response.body.status).toBe(404)
+                expect(response.body.status).toBe(undefined)
                 done()
             })
         })
