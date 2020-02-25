@@ -9,7 +9,7 @@ class UserController {
             first_name,
             last_name,
             password,
-            RoleId: 2 // HARDCODED TO CUSTOMER
+            RoleId: 1 // HARDCODED TO CUSTOMER
         }
         User.create(user)
             .then(result => {
