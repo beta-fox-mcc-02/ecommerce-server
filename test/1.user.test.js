@@ -222,21 +222,3 @@ describe('User Routes', () => {
         })
     })    
 })
-
-// //seed the origin admin again
-// afterAll(done => {
-//     queryInterface.bulkInsert('Users', [
-//         {
-//           username: 'admin',
-//           email: 'admin@bricktiv8.com',
-//           password: '$2a$10$8mG9.92ysuO9HeHsQl/Gt.ZCqeUrbw30rd3wxbwQGzvBtgJSAsbi2',
-//           isAdmin: true
-//         }
-//       ], {})
-//       .then(response => {
-//           done()
-//       })
-//       .catch(err => {
-//           done(err)
-//       })
-// })
