@@ -91,7 +91,10 @@ module.exports = (sequelize, DataTypes) => {
     hooks : {
       beforeCreate (user, option) {
         user.password = BcryptHelper.encryptPass(user.password)
-      }
+      }//,
+      // beforeUpdate (user, option) {
+
+      // }
     }
   })
 

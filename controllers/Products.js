@@ -14,29 +14,22 @@ class ProductController {
                   msg : 'success get all product'
                })
             } else {
-               next({
-                  error : {
-                     name : 'authentication fail'
-                  },
-                  status : 400,
-                  msg : 'please log in first'
-               })
+              res.status(200).json({
+                data: { name: '', genre: '', CategoryId: '', price: '', image_url: '', stock: '' },
+                msg: '' 
+              })
             }
          })
          .catch(err => {
             // console.log(err)
-            next({
-              error : err
-            })
+            next({error : err})
          })
    }
 
    static findOne(req, res, next) {
      let id = +req.params.id
     Product.findOne({
-      where : {
-        id
-      }
+      where : { id }
     })
       .then(product => {
         // console.log(product, '======================')

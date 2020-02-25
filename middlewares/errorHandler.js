@@ -4,20 +4,23 @@ function errorHandler (err, req, res, next) {
    // console.log(err.error, err.error.name)
    if(err.error.name === 'SequelizeValidationError') {
       let status = 400
-      if(err.error.errors.length > 1) {
-         let errorMessage = []
-         err.error.errors.forEach(er => { 
-            errorMessage.push(er.message)
-         })
-         console.log(errorMessage, 'error message')
-         res.status(status).json({
-            msg : errorMessage.join(', ')
-         })
-      } else {
-         res.status(status).json({
-            msg : err.msg
-         })
-      }
+      res.status(status).json({
+        msg: err.error.errors
+      })
+      // if(err.error.errors.length > 1) {
+      //    let errorMessage = []
+      //    err.error.errors.forEach(er => { 
+      //       errorMessage.push(er.message)
+      //    })
+      //    console.log(errorMessage, 'error message')
+      //    res.status(status).json({
+      //       msg : errorMessage.join(', ')
+      //    })
+      // } else {
+      //    res.status(status).json({
+      //       msg : err.msg
+      //    })
+      // }
    } else if(err.error.name === 'JsonWebTokenError') {
       let status = 401
       res.status(status).json({

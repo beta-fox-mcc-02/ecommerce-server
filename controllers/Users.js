@@ -15,10 +15,8 @@ class UserController {
             })
          })
          .catch(err => {
-            next({
-               error : err,
-               msg: 'fail register user'
-            })
+          //  console.log(err)
+            next({ error : err })
          })
    }
 
@@ -28,6 +26,7 @@ class UserController {
          where : { email }
       })
          .then(user => {
+           console.log('masuk sini ============')
             if(user) {
               //  console.log('then login user')
                let valid = BcryptHelper.decryptPass(password, user.password)
@@ -37,6 +36,7 @@ class UserController {
                   // localStorage.token = token
                   res.status(200).json({
                      access_token : token,
+                     data: user,
                      msg : 'login success'
                   })
                } else {
@@ -55,10 +55,7 @@ class UserController {
             }
          })
          .catch(err => {
-            next({
-               error: err,
-               msg: 'wrong username/password'
-            })
+            next({ error: err })
          })
    }
 
@@ -91,6 +88,46 @@ class UserController {
          })
        })
    }
+
+   static getProfile (req, res, next) {
+    let id = +req.params.id
+   //  console.log(id)
+    User.findOne({
+      where: { id }
+    })
+     .then(user => {
+       // console.log(user)
+       res.status(200).json({
+         data: {
+           id: user.id,
+           name: user.name,
+           email: user.email
+         }
+       })
+     })
+     .catch(next)
+  }
+
+  static editProfile (req, res, next) {
+    let id = +req.params.id
+    // console.log(req.body)
+    let { name, email } = req.body
+    let input = { name, email }
+    User.update(input, {
+      where : { id }
+    })
+      .then(user => {
+        // console.log(user)
+        if(user[0]) {
+          res.status(200).json({
+            msg: 'success update user'
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 }
 
 
