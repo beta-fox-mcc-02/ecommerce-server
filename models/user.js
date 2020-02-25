@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     class User extends sequelize.Sequelize.Model {
         static associate(models) {
             User.belongsTo(models.Role)
-            User.hasMany(models.ShoppingCart)
+            User.hasOne(models.ShoppingCart)
         }
     }
 
