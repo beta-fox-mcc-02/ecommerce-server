@@ -59,6 +59,7 @@ class AdminController {
   static register(req, res, next) {
     const input = {
       first_name: req.body.first_name,
+      last_name: req.body.last_name,
       username: req.body.username,
       password: req.body.password,
       phone_number: req.body.phone_number,

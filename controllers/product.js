@@ -151,11 +151,14 @@ class ProductController {
   static getProducts(req, res, next) {
     const limit = req.query.limit ? req.query.limit : 10
     const page = req.query.page ? req.query.page : 1
+    const offset = (page - 1) * limit
     Product.findAll({
       include: [Category, ProductImage],
       order: [
         ['id', 'DESC']
-      ]
+      ],
+      offset,
+      limit
     })
       .then(products => {
         res.status(200).json({
