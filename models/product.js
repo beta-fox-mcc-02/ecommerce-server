@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.belongsToMany(models.User, {through: models.Cart})
       // Product.belongsToMany(models.Category, {through: models.ProductCategory})
       Product.belongsTo(models.Category)
+      Product.hasMany(models.Cart)
     }
   }
   Product.init({

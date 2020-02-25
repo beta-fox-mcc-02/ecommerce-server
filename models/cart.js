@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: `minimum item to put in cart is 1!`
         }
       }
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      defaultValue: false
     }
   }, {
     sequelize

@@ -14,12 +14,18 @@ module.exports = {
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync("12345", salt)
 
-    return queryInterface.bulkInsert('Users', [{
-      name: `admin`,
-      email: `admin@admin.com`,
-      password: hash,
-      isAdmin: true
-    }], {});
+    return queryInterface.bulkInsert('Users', [
+      {
+        name: `admin`,
+        email: `admin@admin.com`,
+        password: hash,
+        isAdmin: true
+      },
+      {
+        name: `dummy`,
+        email: `dummy@dummy.com`,
+        password: hash,
+      }], {});
   },
 
   down: (queryInterface, Sequelize) => {
