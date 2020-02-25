@@ -6,15 +6,15 @@ class ProductController {
 
   static addProduct(req, res, next) {
     const files = req.files
-    const input = JSON.parse(req.body.product)[0]
+    const { name, price, stock, category_id, SKU, description, weight } = req.body
     const parameters = {
-      name: input.name,
-      price: +input.price,
-      stock: +input.stock,
-      category_id: +input.category.id,
-      SKU: input.SKU,
-      description: input.description,
-      weight: +input.weight
+      name,
+      price: +price,
+      stock: +stock,
+      category_id,
+      SKU,
+      description,
+      weight: +weight
     }
 
     let response = {}
@@ -94,12 +94,12 @@ class ProductController {
 
   static editProduct(req, res, next) {
     const id = +req.params.id
-    const { name, price, stock, category, SKU, description, weight } = req.body
+    const { name, price, stock, category_id, SKU, description, weight } = req.body
     const parameters = {
       name,
       price: +price,
       stock: +stock,
-      category_id: category.id,
+      category_id,
       SKU: SKU,
       description: description,
       weight: +weight

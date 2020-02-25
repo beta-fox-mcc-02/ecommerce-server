@@ -671,7 +671,9 @@ Returns json category
 
       **Optional**
 
-      `images=[file]`
+      `productImages=[file]`
+
+      ## Must use form data
 
 -   **Success Response:**
 
