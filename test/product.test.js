@@ -127,7 +127,7 @@ describe('People Routes', () => {
                 })
         })
 
-        test('Return error when stock is below 1, status 400', (done) => {
+        test('Return error when stock is below 0, status 400', (done) => {
             request(app)
                 .post('/products')
                 .set('token', tokenAdmin)
@@ -135,13 +135,13 @@ describe('People Routes', () => {
                     name: 'Baju',
                     image_url: '',
                     price: 50000,
-                    stock: 0
+                    stock: -1
                 })
                 .end((err, response) => {
                     expect(err).toBe(null)
                     expect(response.body).toHaveProperty('type', expect.any(String));
                     expect(response.status).toBe(400);
-                    expect(response.body.error[0]).toBe(`You should have the item in stock!`);
+                    expect(response.body.error[0]).toBe(`Stock can't be Negative Number`);
                     done()
                 })
         })
