@@ -27,8 +27,6 @@ describe("User register", () => {
       request(app)
         .post("/admin/register")
         .send({
-          // email: "yupi41@mail.com",
-          // password: "yupi"
           email: "admin@mail.com",
           password: "admin"
         })
@@ -54,9 +52,6 @@ describe("User register", () => {
           role: 1
         })
         .end((err, response) => {
-          // expect(err).toBe(null);
-          // console.log(response.body.msg[0], "---------------------");
-          // console.log(response.body.err, "error email register")
           expect(response.body).toHaveProperty("msg");
           expect(response.status).toBe(400);
           done();
@@ -91,8 +86,8 @@ describe("Admin Login", () => {
       request(app)
         .post("/admin/login")
         .send({
-          email: "yupi41@mail.com",
-          password: "yupi"
+          email: "admin@mail.com",
+          password: "admin"
         })
         .end((err, response) => {
           expect(err).toBe(null);

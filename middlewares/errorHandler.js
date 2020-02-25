@@ -7,12 +7,15 @@ module.exports = (err, req, res, next) => {
     if (err.name === "SequelizeValidationError") {
         status = 400;
         errObj.err = err.name
-        // console.log(err.errors)
         err.errors.forEach(error => {
             errObj.msg.push(error.message)
         })
         res.status(status).json(errObj)
-        // console.log(errObj, "dari errorhandler")
+    } else if (err.name === "SequelizeUniqueConstraintError") {
+        status = 400;
+        errObj.err = err.name
+        errObj.msg = "Email has already been taken"
+        res.status(status).json(errObj)
     } else if (err.err) {
         status = 404;
         res.status(status).json(err)

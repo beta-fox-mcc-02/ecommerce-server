@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Price cannot be empty or null'
         },
         min: {
-          args: '0',
+          args: '1',
           msg: 'price cannot be 0 or less than 0'
         }
       },
@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Stock cannot be empty'
         },
         min: {
-          args: '0',
-          msg: 'price cannot be 0 or less than 0'
+          args: '1',
+          msg: 'stock cannot be 0 or less than 0'
         }
       },
       allowNull: false
