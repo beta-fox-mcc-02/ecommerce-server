@@ -4,7 +4,6 @@ const BcryptPassword = require('../helpers/encryptpassword.js')
 
 class AdminController{
     static getAll (req, res, next) {
-        console.log(`ashjasdbakjsdbakjsbdaksjdkasjdkasd`)
         Admin.findAll({
             attributes: ['id', 'email']
         })

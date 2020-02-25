@@ -8,6 +8,9 @@ const jwt = require('jsonwebtoken')
 let token = ''
 
 describe('API route test', () => {
+
+    // beforeEach buat create si master
+    // afterEach buat delete Admin
     beforeAll((done) => {
         let master = {
             id: 1,
@@ -18,11 +21,6 @@ describe('API route test', () => {
     })
     afterAll((done) => {
         queryInterface.bulkDelete('Admins', {
-            where: {
-                email: {
-                    [Op.not]: `masteradmin@smail.com`
-                }
-            }
         })
         .then(() => done())
         .catch((err) => done(err))
@@ -49,8 +47,7 @@ describe('API route test', () => {
         })
         .end((err, response) => {
             expect(err).toBe(null)
-            expect(response.body).toHaveProperty('message')
-            expect(response.body.message).toBe(`Success added new admin mail@mail.com`)
+            expect(response.body).toHaveProperty('message', `Success added new admin mail@mail.com`)
             expect(response.status).toBe(201)
             done()
         })
@@ -121,7 +118,7 @@ describe('API route test', () => {
         .post('/admin/register')
         .set('token', 'sadasdbasdbasdbasd')
         .send({
-            email: `smail@mail.com`,
+            email: `mail@mail.com`,
             password: `qqqqq`
         })
         .end((err, response) => {

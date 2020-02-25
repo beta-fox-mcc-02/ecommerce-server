@@ -33,28 +33,15 @@ class ProductController{
         .catch(err => next(err))
     }
 
-    static findOne(req, res, next) {
-        let product
-        Product.findByPk(req.params.id)
+    static findParticularProduct({ params }, res, next) {
+        Product.findAll({
+            where: {
+                CategoryId: params.id
+            }
+        })
             .then((data) => {
-                product = data
-                return Category.findAll ({
-                    where: {
-                        id: {
-                            [Op.not]: data.CategoryId
-                        }
-                    }
-                })
+                res.status(200).json({ data })
             })
-            .then((data) => {
-                let categoryNames = []
-                for (let key of data) {
-                    categoryNames.push(key.name)
-                }
-                product.dataValues.changeCategory = categoryNames
-                return product
-            })
-            .then((data) => res.status(200).json({ data }))
             .catch((err) => next(err))
     }
 

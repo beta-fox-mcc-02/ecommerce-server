@@ -30,13 +30,16 @@ module.exports = (sequelize, DataTypes) => {
           if(value <= 0) throw new Error(`Stock cant be negative`)
         }
       }
-    }
+    },
+    CategoryId: DataTypes.INTEGER,
+    CustomerId: DataTypes.INTEGER
   }, {
     sequelize,
     hooks: { beforeCreate, afterFind }
   })
   Product.associate = function(models) {
     Product.belongsTo(models.Category)
+    Product.belongsTo(models.Customer)
   };
   return Product;
 };

@@ -34,18 +34,8 @@ describe(`This is product CRUD test`, () => {
             category: `Fashions`
         })
         .then((data) => {
-            return Product.findOne({
-                where: {
-                    name: data.name
-                }
-            })
-        })
-        .then((data) => {
-            if (!data) done()
-            else {
-                id_params = data.id
+            id_params = data.id
                 done()
-            }
         })
         .catch((err) => done(err))
     })
@@ -137,7 +127,6 @@ describe(`This is product CRUD test`, () => {
             category: 'Fashions'
         })
         .end((err, response) => {
-            console.log(response.body)
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
             expect(response.body).toHaveProperty('details')
@@ -159,8 +148,15 @@ describe(`This is product CRUD test`, () => {
     })
     test(`Broken token or unregistered user`, (done) => {
         request(app)
-        .get('/products')
+        .post('/products')
         .set('token', `asdasdasfaffeadaedawdaacefawdaw`)
+        .send({
+            name: 'bag',
+            imageUrl: 'bit.ly/image.jpg',
+            price: 1000,
+            stock: 20,
+            category: 'Fashions'
+        })
         .end((err, response) => {
             expect(err).toBe(null)
             expect(response.body).toHaveProperty('message')
