@@ -6,7 +6,9 @@ const { Op } = require('sequelize')
 const {generateToken} = require('../helpers/jwt')
 
 describe('Product CRUD Features, admin only', () => {
+    let admin_data;
     let access_token_admin;
+    let user_data;
     let access_token_user;
     let product_id;
     let categories = ['men', 'converse']
@@ -65,6 +67,7 @@ describe('Product CRUD Features, admin only', () => {
                 })
             })
             .then(admin => {
+                admin_data = admin
                 access_token_admin = generateToken({
                     id: admin.id,
                     name: admin.name,
@@ -79,6 +82,7 @@ describe('Product CRUD Features, admin only', () => {
                 })
             })
             .then(user => {
+                user_data = user
                 access_token_user = generateToken({
                     id: user.id,
                     name: user.name,
@@ -93,10 +97,11 @@ describe('Product CRUD Features, admin only', () => {
         
     })
     afterAll(done => {
-        let deleteUser = queryInterface.bulkDelete('Users', null)
+        let deleteUser = User.destroy({where: {id: user_data.id}})
+        let deleteAdmin = User.destroy({where: {id: admin_data.id}})
         let deleteProduct = queryInterface.bulkDelete('Products', null)
         let deleteCategoryProduct = queryInterface.bulkDelete('CategoryProducts', null)
-        Promise.all([deleteUser, deleteProduct, deleteCategoryProduct])
+        Promise.all([deleteUser, deleteAdmin, deleteProduct, deleteCategoryProduct])
             .then(results => {
                 done()
             })
@@ -123,11 +128,11 @@ describe('Product CRUD Features, admin only', () => {
                             expect(err).toBe(null)
                             expect(res.status).toBe(201)
                             expect(res.body).toHaveProperty('msg', 'product created successfully')
-                            expect(res.body).toHaveProperty('data.name', expect.any(String))
-                            expect(res.body).toHaveProperty('data.description', expect.any(String))
-                            expect(res.body).toHaveProperty('data.image_url', expect.any(String))
-                            expect(res.body).toHaveProperty('data.price', expect.any(Number))
-                            expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                            expect(res.body).toHaveProperty('data.name', 'Nike Free 202')
+                            expect(res.body).toHaveProperty('data.description', "Running shoes for all generation, affordable price, and many color choices")
+                            expect(res.body).toHaveProperty('data.image_url', 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80')
+                            expect(res.body).toHaveProperty('data.price', 453210)
+                            expect(res.body).toHaveProperty('data.stock', 100)
                             done()
                         })
                         
@@ -148,11 +153,11 @@ describe('Product CRUD Features, admin only', () => {
                             expect(err).toBe(null)
                             expect(res.status).toBe(201)
                             expect(res.body).toHaveProperty('msg', 'product created successfully')
-                            expect(res.body).toHaveProperty('data.name', expect.any(String))
-                            expect(res.body).toHaveProperty('data.description', expect.any(String))
-                            expect(res.body).toHaveProperty('data.image_url', expect.any(String))
-                            expect(res.body).toHaveProperty('data.price', expect.any(Number))
-                            expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                            expect(res.body).toHaveProperty('data.name', 'Nike Free 203')
+                            expect(res.body).toHaveProperty('data.description', "")
+                            expect(res.body).toHaveProperty('data.image_url', 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80')
+                            expect(res.body).toHaveProperty('data.price', 251210)
+                            expect(res.body).toHaveProperty('data.stock', 1000)
                             done()
                         })
                 })
@@ -172,11 +177,11 @@ describe('Product CRUD Features, admin only', () => {
                             expect(err).toBe(null)
                             expect(res.status).toBe(201)
                             expect(res.body).toHaveProperty('msg', 'product created successfully')
-                            expect(res.body).toHaveProperty('data.name', expect.any(String))
-                            expect(res.body).toHaveProperty('data.description', expect.any(String))
-                            expect(res.body).toHaveProperty('data.image_url', expect.any(String))
-                            expect(res.body).toHaveProperty('data.price', expect.any(Number))
-                            expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                            expect(res.body).toHaveProperty('data.name', 'Nike Free 203')
+                            expect(res.body).toHaveProperty('data.description', "")
+                            expect(res.body).toHaveProperty('data.image_url', 'https://thumbs.gfycat.com/AgileDelayedIndianjackal-small.gif')
+                            expect(res.body).toHaveProperty('data.price', 251210)
+                            expect(res.body).toHaveProperty('data.stock', 1000)
                             done()
                         })
                 })
@@ -351,11 +356,11 @@ describe('Product CRUD Features, admin only', () => {
             .end((err, res) => {
                 expect(res.status).toBe(200)
                 expect(res.body).toHaveProperty('msg', 'get the product')
-                expect(res.body).toHaveProperty('data.name', expect.any(String))
-                expect(res.body).toHaveProperty('data.description', expect.any(String))
-                expect(res.body).toHaveProperty('data.image_url', expect.any(String))
-                expect(res.body).toHaveProperty('data.price', expect.any(Number))
-                expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                expect(res.body).toHaveProperty('data.name', 'Converse 123')
+                expect(res.body).toHaveProperty('data.description', 'First Converse in 2020')
+                expect(res.body).toHaveProperty('data.image_url', 'https://thumbs.gfycat.com/AgileDelayedIndianjackal-small.gif')
+                expect(res.body).toHaveProperty('data.price', 100000)
+                expect(res.body).toHaveProperty('data.stock', 100)
                 expect(res.body).toHaveProperty('data.Categories', expect.any(Array))
                 done()
             })
@@ -391,11 +396,11 @@ describe('Product CRUD Features, admin only', () => {
                             expect(err).toBe(null)
                             expect(res.status).toBe(200)
                             expect(res.body).toHaveProperty('msg', 'product updated successfully')
-                            expect(res.body).toHaveProperty('data.name', expect.any(String))
-                            expect(res.body).toHaveProperty('data.description', expect.any(String))
-                            expect(res.body).toHaveProperty('data.image_url', expect.any(String))
-                            expect(res.body).toHaveProperty('data.price', expect.any(Number))
-                            expect(res.body).toHaveProperty('data.stock', expect.any(Number))
+                            expect(res.body).toHaveProperty('data.name', 'Nike Ground Running 101')
+                            expect(res.body).toHaveProperty('data.description', "Running shoes for all ground status, affordable price, many color choices, and very durable")
+                            expect(res.body).toHaveProperty('data.image_url', 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80')
+                            expect(res.body).toHaveProperty('data.price', 500000)
+                            expect(res.body).toHaveProperty('data.stock', 50)
                             done()
                         })
             })

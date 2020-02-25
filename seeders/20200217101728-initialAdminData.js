@@ -2,62 +2,20 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    let categoryData = [
+    let adminData = [
       {
-        name: 'men',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'women',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'converse',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'sneaker',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'running',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'heels',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'high heels',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'boots',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'skate',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'formal',
+        name: 'Gaga',
+        email: 'gaga@gmail.com',
+        password: '$2a$10$CDWe5mtyRPs/XF9MhoQ54ua7kyskz57ody.jS87n.cj/MR9H/DiV2',
+        role: 'admin',
         createdAt: new Date(),
         updatedAt: new Date()
       }
     ]
-    return queryInterface.bulkInsert('Categories', categoryData)
+    return queryInterface.bulkInsert('Users', adminData)
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Categories', null)
+    return queryInterface.bulkDelete('Users', null)
   }
 };

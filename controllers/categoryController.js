@@ -3,7 +3,8 @@ const {Product, CategoryProduct, Category} = require('../models')
 class CategoryController {
     static allCategories(req, res, next) {
         Category.findAll({
-            include: [Product]
+            include: [Product],
+            order: [['id', 'ASC']]
         })
             .then(categories => {
                 res.status(200).json({
