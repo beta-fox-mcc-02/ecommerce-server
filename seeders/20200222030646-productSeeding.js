@@ -14,26 +14,106 @@ module.exports = {
     */
     return queryInterface.bulkInsert('Products', [
       {
-        name: 'HP',
-        image_url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.v5TgtiXEUe_ayOilyKoM0AHaEK%26pid%3DApi&f=1',
-        price: 3000000,
+        name: 'Bonavita - Digital Coffee Brewer',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/573d90fac4633_600x.jpg?v=1490263063',
+        price: 12000000,
         stock: '50',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Asus',
-        image_url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.thewirecutter.com%2Fwp-content%2Fuploads%2F2018%2F07%2Flaptops-under-500-lowres-9990.jpg&f=1&nofb=1',
-        price: 3500000,
+        name: 'Breville - The Oracle Espresso BES980',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/5897e377606c4_1500x.jpg?v=1490263450',
+        price: 13000000,
         stock: '30',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Lenovo',
-        image_url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.windowscentral.com%2Fsites%2Fwpcentral.com%2Ffiles%2Fstyles%2Flarge%2Fpublic%2Ffield%2Fimage%2F2017%2F09%2Fthinkpad-p71-1.jpg%3Fitok%3De8kMNRbf&f=1&nofb=1',
+        name: 'Getra Coffee Machine L Anna-1GR',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/572338e016185_1500x.jpg?v=1490263006',
+        price: 22000000,
+        stock: '35',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Breville Coffee Machine Dual Boiler BES920',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/5649a570aa63d_1500x.jpg?v=1490263512',
+        price: 11000000,
+        stock: '20',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Chemex - Ottomatic Coffee Maker',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/589d250a80b4a_1500x.jpg?v=1490263606',
+        price: 7000000,
+        stock: '35',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Coffee Grinder with Glass Base',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/5879b76ec4e4f_1500x.jpg?v=1490263433',
+        price: 3000000,
+        stock: '30',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Delonghi Dedica EC 680.R',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/5811aae89c54b_1500x.jpg?v=1490263490',
+        price: 5000000,
+        stock: '15',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Getra Pro Commercial Blender KS-10000',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/572460d1d93f3_1500x.jpg?v=1490263035',
+        price: 6000000,
+        stock: '40',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Delonghi EC 860.M',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/2288_1500x.jpg?v=1490263254',
+        price: 12000000,
+        stock: '8',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Delonghi ICM 14011',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/2292_1500x.jpg?v=1490262410',
+        price: 8000000,
+        stock: '25',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Delonghi Icona ECO 310.B',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/589d855973a93_1500x.jpg?v=1490262711',
         price: 5000000,
         stock: '35',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Delonghi Icona ECO 310.W',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/2565_1500x.jpg?v=1490263497',
+        price: 5000000,
+        stock: '35',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Delonghi Icona Vintage ECOV 310.AZ',
+        image_url: 'https://cdn.shopify.com/s/files/1/1776/2069/products/2568_1500x.jpg?v=1490263287',
+        price: 5000000,
+        stock: '10',
         createdAt: new Date(),
         updatedAt: new Date()
       }

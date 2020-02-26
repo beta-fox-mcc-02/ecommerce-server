@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Cart, Product } = require('../models')
 const { comparePassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
@@ -29,6 +29,8 @@ class Controller {
 
     static userSignIn(req, res, next) {
         const { email, password } = req.body
+        let token
+        let UserId
 
         User.findOne({
             where: {
@@ -49,11 +51,11 @@ class Controller {
                             role: response.role
                         }
 
-                        const token = generateToken(payload)
+                        UserId = response.id
+                        token = generateToken(payload)
 
-                        res.status(200).json({
-                            msg: 'sign in success',
-                            token
+                        return Cart.findAll({
+                            include: [ Product ]
                         })
                     } else {
                         next(err)
@@ -61,6 +63,14 @@ class Controller {
                 } else {
                     next(err)
                 }
+            })
+            .then(response => {
+                res.status(200).json({  
+                    msg: 'sign in success',
+                    token,
+                    UserId,
+                    carts: response
+                })
             })
             .catch(err => {
                 console.log(err)
