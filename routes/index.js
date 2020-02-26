@@ -3,13 +3,25 @@ const router = express.Router()
 const UserController = require('../controllers/user')
 const ProductRouter = require('./product')
 const RoleController = require('../controllers/role')
+const CostumersController = require('../controllers/costumer')
 const errorHandler = require('../middlewares/errorHandler')
 
-router.post('/registerCostumer', UserController.registerCostumer )
+
+// COSTUMERS =====================================
+router.post('/register', CostumersController.register)
+router.post('/login', CostumersController.login)
+
+
+//ADMIN ==========================================
 router.post('/registerAdmin', UserController.registerAdmin )
-router.post('/login', UserController.login)
+router.post('/loginAdmin', UserController.login)
+
+// PRODUCT =======================================
 router.use('/products', ProductRouter )
 router.get('/roles', RoleController.findAll)
+
+
+// ERROR HANDLER =================================s
 router.use(errorHandler)
 
 

@@ -3,7 +3,7 @@ if(process.env.NODE_ENV=='development') {
 }
 const express = require('express')
 const app = express()
-const routes = require('./routes/')
+const routes = require('./routes/index')
 const PORT = process.env.PORT || 3000
 const cors = require('cors')
 

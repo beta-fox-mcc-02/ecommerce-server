@@ -143,7 +143,99 @@
     { error : "Internal Server Error" }
     ```
 
+**Costumers Registration**
+----
+  Returns json data about data registered of Costumers.
 
+* **URL**
+
+  `/registration`
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `none`
+
+* **Data Params**
+
+  `email = string,
+  password = string
+  <!-- RoleId = integer -->
+  `
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** 
+    ```javascript
+    { id : 1, email : "mara@mail.com" }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+  **Content:** 
+    ```javascript
+    { errors : ['You have to register an email', 'You have to set your password', 'Input is not email format', 'Password length must between 2 and 8'] }
+    ```
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** 
+    ```javascript
+    { error : "Internal Server Error" }
+    ```
+
+**Costumers Login**
+----
+  Returns json data about access token of user.
+
+* **URL**
+
+  `/login`
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `none`
+
+* **Data Params**
+
+  `email = string,
+  password = string
+  `
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```javascript
+    { access_token : "asdiugtuytdwqi8a8ye32eh9d8y3h" }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```javascript
+    { error : "please fill email and password" }
+    ```
+
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** 
+    ```javascript
+    { error : "Internal Server Error" }
+    ```
 
 
 

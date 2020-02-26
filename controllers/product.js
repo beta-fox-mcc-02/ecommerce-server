@@ -2,7 +2,6 @@
 const { Product } = require('../models')
 
 class ProductController {
-
     static create(req, res, next){
         console.log(req.bod)
         let { name, image_url, price, stock, RoleId } = req.body
@@ -16,14 +15,18 @@ class ProductController {
                     msg: 'success adding a product'
                 })
             })
-            .catch(next)
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     static findAll(req, res, next){
 
+        console.log('masuk nih 1')
         Product
             .findAll()
             .then(products => {
+                console.log('masuk nih')
                 res.status(200).json({
                     data: products,
                     msg: 'success find all data'
