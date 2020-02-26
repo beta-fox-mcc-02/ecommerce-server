@@ -7,7 +7,7 @@ router.use(authentication);
 
 // based on user id (token)
 router.get('/', CartController.findCurrentItems);
-router.get('/history', CartController.history);
+router.get('/histories', CartController.history);
 
 // based on cartId and productId
 router.post('/', CartController.create);

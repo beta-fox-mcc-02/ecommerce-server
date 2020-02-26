@@ -145,7 +145,7 @@ class CartController {
               ProductId: el.ProductId,
               status: true,
               quantity: el.quantity,
-              price: el.price
+              price: el.price * el.quantity
             };
             const newPromise = Cart.update(data, {
               where: { id: data.id },
