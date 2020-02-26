@@ -508,6 +508,7 @@ OR
         "ProductId": ...,
         "quantity": ...,
         "status": boolean,
+        "updatedAt",
         "Product": {
             "id": ...,
             "name": "...",

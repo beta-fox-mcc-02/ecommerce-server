@@ -175,7 +175,7 @@ class CartController {
          where: {
             UserId: req.currentUserId,
          },
-         attributes: ['id', 'UserId', 'ProductId', 'quantity', 'status'],
+         attributes: ['id', 'UserId', 'ProductId', 'quantity', 'status', 'updatedAt'],
          include: ['Product']
       })
          .then(data => {
@@ -228,6 +228,8 @@ class CartController {
    }
 
    static updateStock (req, res, next) {
+      console.log(req.body.quantity, `INI JANCOKKKKKKKKKKKK`);
+      
       let newQuantity = (+req.cartQuantity) + (+req.body.quantity)
       let stock
 
