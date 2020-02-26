@@ -40,7 +40,7 @@ describe('Product add test', () => {
             })
             .end((err, response) => {
                 expect(err).toBe(null)
-                expect(response.body).toHaveProperty('name')
+                expect(response.body).toHaveProperty('name', 'baju')
                 expect(response.body).toHaveProperty('image_url')
                 expect(response.body).toHaveProperty('price')
                 expect(response.body).toHaveProperty('stock')
