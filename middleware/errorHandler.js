@@ -1,6 +1,6 @@
 module.exports = function (err, req, res, next) {
     // console.log(err, "<<<<<<<<<<<<<<<<<<<<< ERRORR")
-    console.log(err.message, `erorrrrrrrrrrrrrrrrrrrr`);
+    console.log(err, `erorrrrrrrrrrrrrrrrrrrr`);
     
     let status = 500
     let errObj = { message : "Internal Server Error", err }
@@ -18,26 +18,32 @@ module.exports = function (err, req, res, next) {
         status = 400
         let errorData = {
             message : "BAD REQUEST",
-            error : err.errors[0].message
+            errors : ['Email is already exists']
         }
         errObj = errorData
     } else if (err.name === "Email/Password Incorrectly") {
         status = 400
         errObj = {
             message : "BAD REQUEST",
-            error : err.name
+            errors : [err.name]
         }
     } else if (err.name === "NotFound") {
         status = 404
         errObj = {
             message : "NOT FOUND",
-            error : "Products Out of Stock"
+            errors : ["Products Out of Stock"]
         }
     } else if (err.name === "NotAuthorized") {
         status = 401
         errObj = {
             message : "Not Authorized",
-            error : "Access denied"
+            errors : ["Access denied"]
+        }
+    } else if (err.name === 'Email/password wrong') {
+        status = 400
+        errObj = {
+            message : "BAD REQUEST",
+            errors : [err.name]
         }
     }
 

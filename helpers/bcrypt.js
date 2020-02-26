@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs')
-
 module.exports = {
     hashPassword : function(inputPassword) {
         let salt = bcrypt.genSaltSync(10)

@@ -33,7 +33,8 @@ class AdminControllers {
                         let adminData = {
                             id : admin.id,
                             name : admin.name,
-                            email : admin.email
+                            email : admin.email,
+                            isAdmin : true
                         }
                         let token = generateToken(adminData)
                         res.status(200).json({
