@@ -154,7 +154,15 @@ class CostumerController {
                     }
                 })
         }
-        
+        const cartUpdate = promises.map(el => {
+            return CartProduct.update({el, where: {CartId: el.CartId, ProductId: el.ProductId}})
+        })
+        Promise.all(cartUpdate)
+            .then(data => {
+                const productUpdate = promises.map(el => {
+                    return Product.update({el, where: {CartId: el.CartId, ProductId: el.ProductId}})
+                })
+            })
     }
 }
 
