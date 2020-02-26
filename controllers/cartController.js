@@ -130,6 +130,7 @@ class CartController {
             })
          })
          .then(cart => {
+
             if (cart) {
                newQuantity = Number(cart.quantity) + Number(req.body.quantity)
                if (stock >= newQuantity) {
@@ -173,12 +174,84 @@ class CartController {
       Cart.findAll({
          where: {
             UserId: req.currentUserId,
-            status: false
          },
+         attributes: ['id', 'UserId', 'ProductId', 'quantity', 'status'],
          include: ['Product']
       })
          .then(data => {
             res.status(200).json(data)
+         })
+         .catch(next)
+   }
+
+   static updateStatus(req, res, next) {
+      let stock
+      let updatedProduct
+      Cart.update({ status: true },
+         {
+            where: {
+               id: req.params.cartId
+            }
+         })
+         .then(data => {
+            return Product.findByPk(req.ProductId)
+         })
+         .then(product => {
+            stock = product.stock
+            let newStock = stock - req.cartQuantity
+            updatedProduct = product
+            return Product.update({
+               stock: newStock
+            },
+               {
+                  where: {
+                     id: req.ProductId
+                  }
+               })
+         })
+         .then(result => {
+            res.status(200).json({ message: `you purchased ${req.cartQuantity} ${updatedProduct.name} successfully` })
+         })
+         .catch(next)
+   }
+
+   static delete (req, res, next) {
+      Cart.destroy({
+         where: {
+            id: req.params.cartId
+         }
+      })
+         .then(data => {
+            res.status(200).json({message: `cart with id ${req.params.cartId} has been deleted`})
+         })
+         .catch(next)
+   }
+
+   static updateStock (req, res, next) {
+      let newQuantity = (+req.cartQuantity) + (+req.body.quantity)
+      let stock
+
+      Product.findByPk(req.ProductId)
+         .then(data => {
+            
+            stock = data.stock
+            if (stock >= newQuantity) {
+               return Cart.update({
+                  quantity: newQuantity
+               },
+               {
+                  where: {
+                     id: req.params.cartId
+                  },
+                  returning: true
+               })
+            }
+            else {
+               throw ({code: 400, message: 'stock is not available'})
+            }
+         })
+         .then(updatedCart => {
+            res.status(200).json(updatedCart[1][0])
          })
          .catch(next)
    }

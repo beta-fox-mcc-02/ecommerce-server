@@ -12,6 +12,8 @@ module.exports = (req, res, next) => {
          }
          else {
             if (data.UserId == req.currentUserId) {
+               req.cartQuantity = data.quantity
+               req.ProductId = data.ProductId
                next()
             }
             else {

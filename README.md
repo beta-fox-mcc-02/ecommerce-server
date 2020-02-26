@@ -1,6 +1,5 @@
 # ecommerce-server
 
-
 **Create user**
 ----
 
@@ -54,7 +53,6 @@
   + **Code:** 400 <br />
 
     **Content:** `{ errors : [....] }` 
-
 
 **login user**
 ----
@@ -114,7 +112,7 @@
 
 OR
 
-+ **Code:** 401 <br />
+* **Code:** 401 <br />
 
     **Content:** `{ "msg": "invalid token" || "msg": 'JsonWebTokenError' }` 
 
@@ -142,7 +140,7 @@ OR
 
 * **Data Params**
 
-`name, image_url, price, stock, CategoryId`
+`name, image_url, price, stock, CategoryId` 
 
 * **Success Response:**
 
@@ -181,10 +179,9 @@ OR
 
 OR
 
-+ **Code:** 401 <br />
+* **Code:** 401 <br />
 
     **Content:** `{ "msg": "..." }` 
-
 
 **Get Product**
 ----
@@ -210,7 +207,7 @@ OR
 
 * **Data Params**
 
-`none`
+`none` 
 
 * **Success Response:**
 
@@ -260,7 +257,7 @@ OR
 
    **Optional:**
 
-`name, image_url, price, stock, CategoryId`
+`name, image_url, price, stock, CategoryId` 
 
 * **Success Response:**
 
@@ -290,8 +287,6 @@ OR
 
     **Content:** `{ "msg": Product not found' }` 
 
-
-
 **Delete Product**
 ----
 
@@ -316,7 +311,7 @@ OR
 
 * **Data Params**
 
-`none`
+`none` 
 
 * **Success Response:**
 
@@ -352,7 +347,6 @@ OR
 
     **Content:** `{ "msg": Product not found' }` 
 
-
 **Get One Product**
 ----
 
@@ -377,7 +371,7 @@ OR
 
 * **Data Params**
 
-`none`
+`none` 
 
 * **Success Response:**
 
@@ -414,10 +408,291 @@ OR
 
   + **Code:** 401 <br />
 
-    **Content:** `{ "msg": "jwt must be provided" }`
+    **Content:** `{ "msg": "jwt must be provided" }` 
 
    OR
 
   + **Code:** 404 <br />
 
     **Content:** `{ "msg": Product not found' }` 
+
+**Add cart**
+----
+
+* **URL**
+
+`/carts` 
+
+* **Method:**
+
+`POST` 
+  
+
+*  **URL Params**
+
+   **Required:**
+ 
+`token` 
+
+   **Optional:**
+ 
+`None` 
+
+* **Data Params**
+
+`ProductId, quantity` 
+
+* **Success Response:**
+
+  + **Code:** 201 <br />
+
+    **Content:** `{ 
+      "status": boolean,
+    "UserId": ...,
+    "ProductId": ...,
+    "quantity": ...,
+    "updatedAt": "...",
+    "createdAt": "...",
+    "id": ... 
+    }`
+
+ 
+
+* **Error Response:**
+
+  + **Code:** 500 <br />
+
+    **Content:** `{ msg : err.message }` 
+
+  OR
+
+  + **Code:** 400 <br />
+
+    **Content:** `{ "message": "stock is not available" }` 
+
+
+**Get all user cart**
+----
+
+* **URL**
+
+`/carts` 
+
+* **Method:**
+
+`GET` 
+  
+
+*  **URL Params**
+
+   **Required:**
+ 
+`token` 
+
+   **Optional:**
+ 
+`None` 
+
+* **Data Params**
+
+`none` 
+
+* **Success Response:**
+
+  + **Code:** 200 <br />
+
+    **Content:** `[
+      {
+        "id": ...,
+        "UserId": ...,
+        "ProductId": ...,
+        "quantity": ...,
+        "status": boolean,
+        "Product": {
+            "id": ...,
+            "name": "...",
+            "image_url": "...",
+            "price": ...,
+            "stock": ...,
+            "CategoryId": ...,
+            "createdAt": "...",
+            "updatedAt": "..."
+        }
+    },
+    {
+      ...
+    }
+    ]`
+
+ 
+
+* **Error Response:**
+
+  + **Code:** 500 <br />
+
+    **Content:** `{ msg : err.message }` 
+
+
+**Update status cart (purchase)**
+----
+
+* **URL**
+
+`/carts/checkout/:cartId` 
+
+* **Method:**
+
+`PUT` 
+  
+
+*  **URL Params**
+
+   **Required:**
+ 
+`token` 
+
+   **Optional:**
+ 
+`None` 
+
+* **Data Params**
+
+`none` 
+
+* **Success Response:**
+
+  + **Code:** 200 <br />
+
+    **Content:** `{
+      'message': 'you purchased ${req.cartQuantity} ${updatedProduct.name} successfully'
+    }`
+
+ 
+
+* **Error Response:**
+
+  + **Code:** 500 <br />
+
+    **Content:** `{ msg : err.message }` 
+  
+  OR
+
+  + **Code:** 404 <br />
+
+    **Content:** `{ message: 'cart with id ${req.params.cartId} not found' }` 
+
+  OR
+
+  + **Code:** 401 <br />
+
+    **Content:** `{ message: 'you're not allowed to make this request' }` 
+
+
+**Delete cart**
+----
+
+* **URL**
+
+`/carts/:cartId` 
+
+* **Method:**
+
+`DELETE` 
+  
+
+*  **URL Params**
+
+   **Required:**
+ 
+`token` 
+
+   **Optional:**
+ 
+`None` 
+
+* **Data Params**
+
+`none` 
+
+* **Success Response:**
+
+  + **Code:** 200 <br />
+
+    **Content:** `{
+      'message': 'cart with id ${req.params.cartId} has been deleted'
+    }`
+
+ 
+
+* **Error Response:**
+
+  + **Code:** 500 <br />
+
+    **Content:** `{ msg : err.message }` 
+
+  OR
+
+  + **Code:** 404 <br />
+
+    **Content:** `{ message: 'cart with id ${req.params.cartId} not found' }` 
+
+  OR
+
+  + **Code:** 401 <br />
+
+    **Content:** `{ message: 'you're not allowed to make this request' }` 
+
+
+**Update stock cart (unpurchase)**
+----
+
+* **URL**
+
+`/carts/:cartId` 
+
+* **Method:**
+
+`PUT` 
+  
+
+*  **URL Params**
+
+   **Required:**
+ 
+`token` 
+
+   **Optional:**
+ 
+`None` 
+
+* **Data Params**
+
+`quantity` 
+
+* **Success Response:**
+
+  + **Code:** 200 <br />
+
+    **Content:** `{
+    "id": ...,
+    "UserId": ...,
+    "ProductId": ...,
+    "quantity": ...,
+    "createdAt": "...",
+    "updatedAt": "...",
+    "status": ...
+    }`
+
+ 
+
+* **Error Response:**
+
+  + **Code:** 500 <br />
+
+    **Content:** `{ msg : err.message }` 
+
+  OR
+
+  + **Code:** 400 <br />
+
+    **Content:** `{ message: 'cart with id ${req.params.cartId} not found' }` 

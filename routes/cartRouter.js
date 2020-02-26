@@ -6,5 +6,9 @@ const customerAuthorization = require('../middlewares/customerAuthorization')
 
 router.post('/', authentication, cartController.create)
 router.get('/', authentication, cartController.getAllCart)
+// put update stock belum
+router.put('/:cartId', authentication, customerAuthorization, cartController.updateStock)
+router.put('/checkout/:cartId', authentication, customerAuthorization, cartController.updateStatus) //mengurangi stock product juga
+router.delete('/:cartId', authentication, customerAuthorization, cartController.delete)
 
 module.exports = router
