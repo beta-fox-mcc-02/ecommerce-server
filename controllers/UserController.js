@@ -26,6 +26,8 @@ class UserController {
                     let access_token = jwt.sign(payload, `${process.env.SECRET}`)
                     res.status(201).json({
                         message: 'Register Success!',
+                        username: newUser.username,
+                        isAdmin: newUser.isAdmin,
                         access_token
                     })
                 })
@@ -54,6 +56,8 @@ class UserController {
                     let access_token = jwt.sign(payload, `${process.env.SECRET}`)
                     res.status(200).json({
                         message: 'Login Success!',
+                        isAdmin: user.isAdmin,
+                        username: user.username,
                         access_token
                     })
                 } else {
