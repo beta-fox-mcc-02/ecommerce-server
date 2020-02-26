@@ -1,0 +1,12 @@
+Transactions: 
+- TotalPrice
+- UserId
+
+TransactionDetails
+- TransactionId
+- ProductName
+- ProductId
+- Price
+- quantity
+- image_url
+

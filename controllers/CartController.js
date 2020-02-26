@@ -1,4 +1,11 @@
-const { CartItem, ShoppingCart, Product } = require('../models')
+const {
+  CartItem,
+  ShoppingCart,
+  Product,
+  sequelize,
+  Transaction,
+  TransactionDetail
+} = require('../models')
 
 class CartController {
   static create(req, res, next) {
@@ -55,7 +62,59 @@ class CartController {
         res.status(200).json(cart)
       })
       .catch(next)
-    // res.status(200).json(req.jwtPayload)
+  }
+
+  static checkout(req, res, next) {
+    const ShoppingCartId = +req.params.id
+
+    CartItem.findAll({
+      where: { ShoppingCartId },
+      include: [Product]
+    })
+      .then(cartItems => {
+        let transactionDetails = []
+        let totalPrice = 0
+        cartItems.forEach(el => {
+          let item = {
+            productName: el.Product.name,
+            ProductId: el.Product.id,
+            price: el.Product.price,
+            quantity: el.quantity,
+            image_url: el.Product.image_url
+          }
+          transactionDetails.push(item)
+          totalPrice += el.Product.price
+        })
+        let trans = { UserId: req.jwtPayload.id, totalPrice }
+
+        return sequelize
+          .transaction(function(t) {
+            return Transaction.create(trans, { transaction: t }).then(function(
+              result
+            ) {
+              const transId = result.id
+              transactionDetails.forEach(el => {
+                el.TransactionId = transId
+              })
+
+              return TransactionDetail.bulkCreate(transactionDetails, {
+                transaction: t
+              }).then(resCreate => {
+                return ShoppingCart.destroy({
+                  where: { id: ShoppingCartId },
+                  transaction: t
+                }).then(resdel => {
+                  return CartItem.destroy({ where: { ShoppingCartId } })
+                })
+              })
+            })
+          })
+          .then(endResult => {
+            res.status(200).json(endResult)
+          })
+          .catch(next)
+      })
+      .catch(next)
   }
 
   static update(req, res, next) {}
