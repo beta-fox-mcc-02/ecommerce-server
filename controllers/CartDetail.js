@@ -21,13 +21,13 @@ class CartDetailController {
         })
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
         next({ error: err })
       })
   }
 
   static addToCart (req, res, next) {
-    console.log(req.body, req.currentUserId)
+    // console.log(req.body, req.currentUserId)
     Cart.findOne({ 
       where: { UserId: req.currentUserId, status: false },
       include: [{
@@ -49,21 +49,23 @@ class CartDetailController {
         } else { return cart }
       })
       .then(data => {
-        console.log(data, '==== masuk then kedua =====')
-        console.log(data.CartDetails, '==== masuk then kedua, baris dua =====')
+        // console.log(data, '==== masuk then kedua =====')
+        // console.log(data.CartDetails, '==== masuk then kedua, baris dua =====')
         let newCartDetail = {
           CartId: data.id,
           ProductId: req.body.productId,
           qty: req.body.qty
         }
-        console.log('disini kayaknya')
+        // console.log('disini kayaknya')
         CartDetail.findOne({
           where: { CartId: data.id, ProductId: req.body.productId }
         })
           .then(cart => {
             if(cart) {
-              console.log(cart, '=CART=')
-              newCartDetail.qty += cart.qty
+              // console.log(cart, '=CART=')
+              if (newCartDetail.qty + cart.qty >= +req.body.stock) {
+                newCartDetail.qty = +req.body.stock
+              }
               newCartDetail.total = req.body.price * newCartDetail.qty
               CartDetail.update(newCartDetail, { where: { id: cart.id }})
                 .then(product => {
@@ -97,6 +99,31 @@ class CartDetailController {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  static updateCart (req, res, next) {
+    // console.log(req.body)
+    // console.log(req.params.id)
+    const id = req.params.id
+    const input = {
+      qty: req.body.qty,
+      total: req.body.qty * req.body.price
+    }
+    // console.log(input.total, '===========')
+    CartDetail.update(input, {
+      where: { id }, returning: true
+    })
+      .then(data => {
+        // console.log(data[1])
+        res.status(200).json({
+          data: data[1]
+        })
+      })
+      .catch(next)
+  }
+
+  static checkOut (req, res, next) {
+    console.log('masuk sini')
   }
 
   static delete (req, res, next) {
