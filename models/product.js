@@ -14,7 +14,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    imageUrl: { type: DataTypes.STRING },
+    imageUrl: { 
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: {
+          args: true,
+          msg: 'image url expected to be webformat'
+        }
+      }
+    },
     price: {
       type: DataTypes.INTEGER,
       validate: {

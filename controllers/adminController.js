@@ -1,4 +1,4 @@
-const { Admin } = require('../models')
+const { Admin, Banner } = require('../models')
 const jwt = require('jsonwebtoken')
 const BcryptPassword = require('../helpers/encryptpassword.js')
 
@@ -52,6 +52,22 @@ class AdminController{
         let payload = { id, email }
         let token = jwt.sign(payload, 'ucul')
         return token
+    }
+
+    static setBanner ({ body }, res, next) {
+        Banner.create({
+            bannerUrl: body.url
+        })
+        .then((data) => {
+            res.status(201).json(data)
+        })
+        .catch((err) => next(err))
+    }
+
+    static fetchBanners (req, res, next) {
+        Banner.findAll({ attributes: ['bannerUrl'] })
+        .then((data) => res.status(200).json(data))
+        .catch((err) => next(err))
     }
 }
 
