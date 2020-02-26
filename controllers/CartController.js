@@ -11,7 +11,8 @@ class CartController {
       include: [{
         model: Product,
         attributes: ['name', 'price']
-      }]
+      }],
+      order: [['id', 'ASC']]
     })
       .then(carts => {
         if (carts) res.status(200).json(carts);
