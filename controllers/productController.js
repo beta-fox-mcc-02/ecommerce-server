@@ -33,7 +33,17 @@ class ProductController{
         .catch(err => next(err))
     }
 
-    static findParticularProduct({ params }, res, next) {
+    static findOne ({ params }, res, next) {
+        Product.findOne({
+            where: {
+                id: params.id
+            }
+        })
+        .then((data) => res.status(200).json(data))
+        .catch((err) => next(err))
+    }
+
+    static productByCategory({ params }, res, next) {
         Product.findAll({
             where: {
                 CategoryId: params.id

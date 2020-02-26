@@ -4,7 +4,7 @@ const {authentication} = require('../middlewares/secureUserIdentificator.js')
 
 router.post('/', authentication, ProductController.create)
 router.get('/', ProductController.findall)
-router.get('/:id', ProductController.findParticularProduct)
+router.get('/:id', ProductController.productByCategory)
 router.delete('/:id', authentication, ProductController.delete)
 router.put('/:id', authentication, ProductController.update)
 
