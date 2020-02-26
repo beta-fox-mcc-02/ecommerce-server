@@ -3,8 +3,8 @@ const ProductController = require('../controllers/ProductController');
 const authentication = require('../middlewares/authentication');
 const authorization = require('../middlewares/authorization');
 
-router.use(authentication);
 router.get('/', ProductController.findAll);
+router.use(authentication);
 router.get('/:id', ProductController.findOne);
 router.post('/', authorization, ProductController.create);
 router.put('/:id', authorization, ProductController.update);

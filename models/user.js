@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 
   class User extends sequelize.Sequelize.Model {
     static associate(models) {
+      User.hasMany(models.Cart);
     }
   }
 
@@ -40,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         user.password = hashPassword(user.password);
       }
     }
-  })
+  });
 
 
   return User;
