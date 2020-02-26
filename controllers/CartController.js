@@ -43,7 +43,6 @@ class CartController {
 
   static create(req, res, next) {
     const userId = req.currentUserId;
-    const cartId = req.params.id;
     const productId = req.params.productId;
     const { status, quantity } = req.body;
     let productName = '';
