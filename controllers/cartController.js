@@ -50,7 +50,8 @@ class CartController {
             where: {
                 UserId: req.currentUserId
             }, 
-            include: [Product, User]
+            attributes: ['id', 'quantity', 'price'],
+            include: [Product, User],
         })
             .then(carts => {
                 console.log(carts)
