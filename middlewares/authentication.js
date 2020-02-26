@@ -4,7 +4,7 @@ const { JwtHelper } = require('../helpers/index')
 module.exports = (req, res, next) => {
    let token = req.headers.access_token
    let userToken = req.headers.access_token_user
-  //  console.log(token, '===')
+   console.log(token, '===')
   //  console.log(userToken, '====')
    if(token) {
       try {
