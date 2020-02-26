@@ -11,8 +11,8 @@ router.get('/history', CartController.history);
 
 // based on cartId and productId
 router.post('/', CartController.create);
+router.put('/checkout', CartController.checkout);
 router.put('/:id', customerAuthorization, CartController.update);
 router.delete('/:id', customerAuthorization, CartController.destroy);
-// router.put('/checkout', CartController.checkout);
 
 module.exports = router;
