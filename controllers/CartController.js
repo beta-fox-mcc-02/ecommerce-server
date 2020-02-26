@@ -40,6 +40,37 @@ class CartController {
       })
       .catch(next);
   }
+
+  static create(req, res, next) {
+    const userId = req.currentUserId;
+    const cartId = req.params.id;
+    const productId = req.params.productId;
+    const { status, quantity } = req.body;
+    let productName = '';
+    // find particular price
+    // create data
+    // insert to db
+
+    Product.findOne({
+      where: { id: productId }
+    })
+      .then(product => {
+        const data = {
+          UserId: userId,
+          ProductId: productId,
+          status,
+          quantity,
+          price: quantity * product.price
+        };
+        productName = product.name;
+        return Cart.create(data);
+      })
+      .then(cart => {
+        res.status(201).json({ message: `Success Add ${productName} to Cart` });
+      })
+      .catch(next);
+
+  }
 }
 
 module.exports = CartController;
