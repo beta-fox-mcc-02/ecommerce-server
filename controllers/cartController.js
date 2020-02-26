@@ -13,7 +13,9 @@ class CartController {
             ProductId: el.Product.id,
             quantity: el.quantity,
             totalPrice: el.totalPrice,
-            image_url: el.Product.image_url
+            image_url: el.Product.image_url,
+            status: el.status,
+            updatedAt: el.updatedAt
           }
         })
         res.status(200).json(output)
@@ -67,6 +69,33 @@ class CartController {
           status: result,
           msg: 'success delete cart'
         })
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+
+  static checkOut(req, res, next) {
+    let { ProductId, quantity, id } = req.body
+    let maxStock
+    Product.findOne({ where: { id: +ProductId } })
+      .then(product => {
+        maxStock = product.stock
+        if (product.stock >= quantity) {
+          let stock = product.stock - quantity
+          return Cart.update({ status: true }, { where: { id } })
+            .then(cart => {
+              return Product.update({ stock }, { where: { id: ProductId } })
+            })
+            .then(result => {
+              res.status(200).json({ result, msg: 'transaction success' })
+            })
+        } else {
+          next({
+            status: 400,
+            msg: `not enough stock, stock is only ${maxStock}`
+          })
+        }
       })
       .catch(err => {
         next(err)
