@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const CartController = require('../controllers/carts')
+const CartController = require('../controllers/carts');
+const authentication = require('../middlewares/authentication');
 
-router.post('/', CartController.createCart)
+router.post('/', authentication, CartController.createCart);
 
 module.exports = router;
