@@ -47,6 +47,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeUniqueConstraintError');
                 expect(response.body).toHaveProperty('message', 'Bad request');                
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
+
                 expect(response.body.errors.length).toBeGreaterThan(0);
                 expect(response.status).toBe(400);
                 done();
@@ -98,9 +99,9 @@ describe('User Register Test', () =>{
             .post('/register')
             .send({
                 username: 'user2',
-                email: 'user2@gmail',
+                email: 'user2@gmail,com',
                 password: '12345',
-                roles: 'admin'
+                roles: 'admin2'
             })
             .end((err, response) => {
                 expect(err).toBe(null);
@@ -118,7 +119,7 @@ describe('User Register Test', () =>{
             .post('/register')
             .send({
                 username: '',
-                email: 'user@gmail.com',
+                email: '',
                 password: '',
                 roles: 'admin'
             })
@@ -127,7 +128,7 @@ describe('User Register Test', () =>{
                 expect(response.body).toHaveProperty('name', 'SequelizeValidationError');
                 expect(response.body).toHaveProperty('message', 'Bad request');  
                 expect(response.body).toHaveProperty('errors', expect.any(Array));
-                expect(response.body.errors.length).toBeGreaterThan(0);
+                expect(response.body.errors.length).toBe(3);
                 expect(response.status).toBe(400);
                 done();
             })

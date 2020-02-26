@@ -266,18 +266,18 @@ describe('Product findAll test', () => {
             })
     });
 
-    test('It should return authentication error', (done) => {
-        request(app)
-            .get('/product')
-            .end((err, response) => {
-                expect(err).toBe(null);
-                expect(response.body).toHaveProperty('name', 'Not authenticated');
-                expect(response.body).toHaveProperty('message', 'You are not authenticated');
-                expect(response.body).toHaveProperty('errors', expect.any(Array));
-                expect(response.status).toBe(500);
-                done();
-            })
-    });
+    // test('It should return authentication error', (done) => {
+    //     request(app)
+    //         .get('/product')
+    //         .end((err, response) => {
+    //             expect(err).toBe(null);
+    //             expect(response.body).toHaveProperty('name', 'Not authenticated');
+    //             expect(response.body).toHaveProperty('message', 'You are not authenticated');
+    //             expect(response.body).toHaveProperty('errors', expect.any(Array));
+    //             expect(response.status).toBe(500);
+    //             done();
+    //         })
+    // });
 });
 
 describe('Product delete test', () => {
