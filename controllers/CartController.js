@@ -73,20 +73,24 @@ class CartController {
       where: { id: ProductId }
     })
       .then(product => {
-        const data = {
-          UserId,
-          ProductId,
-          status,
-          quantity,
-          price: product.price * quantity
-        };
-
-        return Cart.update(data, {
-          where: { id: cartId }
-        });
-      })
-      .then(cart => {
-        res.status(200).json({ message: 'Success Update Cart' });
+        if (product.stock < quantity) {
+          next({ status: 400, message: 'Not Enough Product' });
+        } else {
+          const data = {
+            UserId,
+            ProductId,
+            status,
+            quantity,
+            price: product.price * quantity
+          };
+          Cart.update(data, {
+            where: { id: cartId }
+          })
+            .then(cart => {
+              res.status(200).json({ message: 'Success Update Cart' });
+            })
+            .catch(next);
+        }
       })
       .catch(next);
   }
