@@ -1,4 +1,4 @@
-const { User, Role } = require('../models')
+const { User, Role, Cart } = require('../models')
 const { Op } = require('sequelize')
 const { BcryptHelper } = require('../helpers')
 const jwt = require('jsonwebtoken')
@@ -11,7 +11,16 @@ class UserController {
     }
 
     User.findOne({
-      include: [Role],
+      include: [
+        {
+         model: Role
+        },{
+          model: Cart,
+          where: {
+            status: false
+          },
+          required: false
+        }],
       where: {
         [Op.and]: [
           {
@@ -59,6 +68,14 @@ class UserController {
   static findOne(req, res, next) {
     const id = req.decoded
     User.findOne({
+      include: [
+      {
+        model: Cart,
+        where: {
+          status: false
+        },
+        required: false,
+      }],
       where: {
         id
       }
@@ -69,6 +86,7 @@ class UserController {
         last_name: user.last_name,
         username: user.username,
         email: user.email,
+        cart: user.Carts,
         phone_number: user.phone_number
       })
     })

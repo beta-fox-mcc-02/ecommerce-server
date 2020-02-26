@@ -148,6 +148,27 @@ class ProductController {
     return axios.all(requests)
   }
 
+  static findProductByCategory (req, res, next) {
+    Product.findAll({
+      include: [{
+        model: Category,
+        where: {
+          path: req.params.category.toLowerCase()
+        }
+      }, {
+        model: ProductImage
+      }]
+    })
+    .then(products => {
+      res.status(200).json({
+        products
+      })
+    })
+    .catch(err => {
+      next(err)
+    })
+  }
+
   static getProducts(req, res, next) {
     const limit = req.query.limit ? req.query.limit : 10
     const page = req.query.page ? req.query.page : 1
