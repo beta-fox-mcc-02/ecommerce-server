@@ -32,7 +32,7 @@ class CustomerController {
                             email: user.email
                         }
                         const access_token = generateToken(payload)
-                        res.status(200).json({ user })
+                        res.status(200).json({ user, access_token })
                     }
                     else {
                         next({ name: 'WrongPassword' })
