@@ -101,6 +101,11 @@ class CartController {
       })
       .catch(next);
   }
+
+  // static checkout(req, res, next) {
+  //   const { data } = req.body;
+  //   Cart.bulkCrea
+  // }
 }
 
 module.exports = CartController;
