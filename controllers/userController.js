@@ -50,12 +50,14 @@ class Controller {
                             email: response.email,
                             role: response.role
                         }
-
+                        
                         UserId = response.id
                         token = generateToken(payload)
 
-                        return Cart.findAll({
-                            include: [ Product ]
+                        res.status(200).json({  
+                            msg: 'sign in success',
+                            token,
+                            UserId
                         })
                     } else {
                         next(err)
@@ -63,14 +65,6 @@ class Controller {
                 } else {
                     next(err)
                 }
-            })
-            .then(response => {
-                res.status(200).json({  
-                    msg: 'sign in success',
-                    token,
-                    UserId,
-                    carts: response
-                })
             })
             .catch(err => {
                 console.log(err)

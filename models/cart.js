@@ -73,6 +73,9 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeValidate(cart, options) {
         const { ProductId, quantity } = cart
+        console.log('userId', cart.UserId)
+        console.log('ProductId=', ProductId)
+        console.log('quantity=', quantity)
         return sequelize.models.Product.findOne({
           where: {
             id: ProductId
@@ -80,6 +83,7 @@ module.exports = (sequelize, DataTypes) => {
         })
           .then(response => {
             if (response) {
+              console.log('response===============================',response)
               if (response.stock < quantity) {
                 return Promise.reject({
                   status: 400,
