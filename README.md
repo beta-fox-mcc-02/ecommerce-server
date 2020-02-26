@@ -340,3 +340,308 @@
     **Content:** `{ message : "Internal Server Error" }`
 
 ---
+**Show All Carts**
+----
+  Returns json data about all carts.
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+        {
+            "id": 48,
+            "UserId": 19,
+            "ProductId": 55,
+            "status": false,
+            "quantity": 1,
+            "price": 550000,
+            "createdAt": "2020-02-26T18:39:08.927Z",
+            "updatedAt": "2020-02-26T18:39:08.927Z",
+            "Product": {
+                "name": "Jam Tangan Alexander Christie",
+                "price": 550000
+            }
+        },
+        {
+            "id": 49,
+            "UserId": 19,
+            "ProductId": 54,
+            "status": false,
+            "quantity": 2,
+            "price": 1400000,
+            "createdAt": "2020-02-26T18:39:17.169Z",
+            "updatedAt": "2020-02-26T18:39:24.075Z",
+            "Product": {
+                "name": "Sepatu Nike\n",
+                "price": 700000
+            }
+        }
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ message : "Internal Server Error" }`
+---
+
+**Show All Purchase History**
+----
+  Returns json data about all purchase history.
+
+* **URL**
+
+  carts/histories
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+        {
+            "id": 31,
+            "UserId": 19,
+            "ProductId": 53,
+            "status": true,
+            "quantity": 4,
+            "price": 120000,
+            "createdAt": "2020-02-26T13:55:27.006Z",
+            "updatedAt": "2020-02-26T17:24:28.629Z",
+            "Product": {
+                "name": "Batik Pria",
+                "price": 120000
+            }
+        },
+        {
+            "id": 43,
+            "UserId": 19,
+            "ProductId": 54,
+            "status": true,
+            "quantity": 2,
+            "price": 1400000,
+            "createdAt": "2020-02-26T18:00:46.924Z",
+            "updatedAt": "2020-02-26T18:01:04.505Z",
+            "Product": {
+                "name": "Sepatu Nike\n",
+                "price": 700000
+            }
+        }
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "You Must Register First" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ message : "Internal Server Error" }`
+---
+
+**Add Item to Cart**
+----
+  Returns message after success add item to cart.
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    {
+        "message": "Success Add Kaos Uniqlo to Cart"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ message : "Bad Request" }`
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "You Must Register First" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ message : "Internal Server Error" }`
+---
+
+**Checkout Cart**
+----
+  Returns message after checkout.
+
+* **URL**
+
+  /carts/checkout
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+        [
+            1
+        ],
+        [
+            1
+        ]
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ message : "Bad Request" }`
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "You Must Register First" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ message : "Internal Server Error" }`
+---
+
+**Update Item Quantity in Cart**
+----
+  Returns message after update.
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+    **Required**
+
+    id=[integer]
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    {
+        "message": "Success Update Cart"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ message : "Bad Request" }`
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "You Must Register First" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ message : "Internal Server Error" }`
+---
+
+**Delete Item in Cart**
+----
+  Returns message after delete.
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+    **Required**
+
+    id=[integer]
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    {
+        "message": "Success Delete Cart"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ message : "Bad Request" }`
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ message : "You Must Register First" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ message : "Internal Server Error" }`
+---
