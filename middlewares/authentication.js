@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
         console.log('CEEEEKKKKKKKKKKK')
         const token = req.headers.token
         const decoded = verifytoken(token)
+        console.log(decoded)
         if (token) {
             User.findByPk(decoded.id)
                 .then(user => {
