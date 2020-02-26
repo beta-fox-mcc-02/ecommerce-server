@@ -10,9 +10,9 @@ router.get('/', CartController.findCurrentItems);
 router.get('/history', CartController.history);
 
 // based on cartId and productId
-router.post('/:productId', CartController.create);
-// router.put('/:id/:productId', customerAuthorization, CartController.update);
-// router.delete('/:id/:productId', customerAuthorization, CartController.delete);
-
+router.post('/', CartController.create);
+router.put('/:id', customerAuthorization, CartController.update);
+// router.delete('/:id', customerAuthorization, CartController.delete);
+// router.put('/checkout', CartController.checkout);
 
 module.exports = router;

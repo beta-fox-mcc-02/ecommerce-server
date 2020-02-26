@@ -3,19 +3,18 @@ const { User, Product, Cart } = require('../models');
 class CartController {
   static findCurrentItems(req, res, next) {
     const id = req.currentUserId;
-    User.findOne({
-      where: { id, role: 'customer' },
-      include: [
-        {
-          model: Cart,
-          where: {
-            status: false
-          }
-        }
-      ]
+    Cart.findAll({
+      where: {
+        UserId: id,
+        status: false
+      },
+      include: [{
+        model: Product,
+        attributes: ['name', 'price']
+      }]
     })
-      .then(user => {
-        if (user) res.status(200).json(user);
+      .then(carts => {
+        if (carts) res.status(200).json(carts);
         else res.status(200).json([]);
       })
       .catch(next);
@@ -23,40 +22,35 @@ class CartController {
 
   static history(req, res, next) {
     const id = req.currentUserId;
-    User.findOne({
-      where: { id, role: 'customer' },
-      include: [
-        {
-          model: Cart,
-          where: {
-            status: true
-          }
-        }
-      ]
+    Cart.findAll({
+      where: {
+        UserId: id,
+        status: true
+      },
+      include: [{
+        model: Product,
+        attributes: ['name', 'price']
+      }]
     })
-      .then(user => {
-        if (user) res.status(200).json(user);
+      .then(carts => {
+        if (carts) res.status(200).json(carts);
         else res.status(200).json([]);
       })
       .catch(next);
   }
 
   static create(req, res, next) {
-    const userId = req.currentUserId;
-    const productId = req.params.productId;
-    const { status, quantity } = req.body;
+    const UserId = req.currentUserId;
+    const { status, quantity, ProductId } = req.body;
     let productName = '';
-    // find particular price
-    // create data
-    // insert to db
 
     Product.findOne({
-      where: { id: productId }
+      where: { id: ProductId }
     })
       .then(product => {
         const data = {
-          UserId: userId,
-          ProductId: productId,
+          UserId,
+          ProductId,
           status,
           quantity,
           price: quantity * product.price
@@ -68,6 +62,9 @@ class CartController {
         res.status(201).json({ message: `Success Add ${productName} to Cart` });
       })
       .catch(next);
+  }
+
+  static update(req, res, next) {
 
   }
 }
