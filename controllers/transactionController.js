@@ -1,5 +1,6 @@
 const { Transaction, Product, Customer } = require('../models')
 const jwt = require('jsonwebtoken')
+const {Op} = require('sequelize')
 
 class TransactionController {
   static checkout ({ body }, res, next) {
@@ -32,6 +33,37 @@ class TransactionController {
       })
       .then((data) => {
         res.status(201).json(data)
+      })
+      .catch((err) => next(err))
+  }
+  static fetchById (req, res, next) {
+    Customer.findOne({
+      where: {
+        id: req.currentUserId
+      },
+      include: {
+        model: Product,
+        through: [Transaction]
+      },
+      attributes: ['id', 'username']
+    })
+      .then((data) => {
+        res.status(200).json(data)
+      })
+      .catch((err) => next(err))
+  }
+
+  static payment ({ params, body }, res, next) {
+    console.log(params.id, body.productId)
+    Transaction.update({
+      status: true
+    }, {
+      where: {
+        [Op.and] : [{CustomerId: params.id}, {ProductId: body.productId}]
+      }
+    })
+      .then((data) => {
+        res.status(200).json(data)
       })
       .catch((err) => next(err))
   }
