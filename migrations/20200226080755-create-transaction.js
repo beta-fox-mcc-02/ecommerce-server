@@ -14,7 +14,7 @@ module.exports = {
       ProductId: {
         type: Sequelize.INTEGER
       },
-      price: {
+      purchasePrice: {
         type: Sequelize.INTEGER
       },
       status: {

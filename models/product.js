@@ -31,15 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    CategoryId: DataTypes.INTEGER,
-    CustomerId: DataTypes.INTEGER
+    CategoryId: DataTypes.INTEGER
   }, {
     sequelize,
     hooks: { beforeCreate, afterFind }
   })
   Product.associate = function(models) {
     Product.belongsTo(models.Category)
-    // Product.belongsToMany(models.Customer, { through: models.Transaction })
+    Product.belongsToMany(models.Customer, { through: models.Transaction })
   };
   return Product;
 };
