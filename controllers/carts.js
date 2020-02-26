@@ -15,6 +15,20 @@ class Controller {
         next(err);
       })
   }
+  static findCart(req, res, next) {
+    Cart.findAll({
+      where: {
+        PersonId: req.params.personId,
+        ProductId: req.params.productId,
+      }
+    })
+      .then(carts => {
+        res.status(200).json(carts);
+      })
+      .catch(err => {
+        next(err);
+      })
+  }
 };
 
 module.exports = Controller;
