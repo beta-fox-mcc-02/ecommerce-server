@@ -29,6 +29,38 @@ class Controller {
         next(err);
       })
   }
+  static editCart(req, res, next) {
+    let update = {
+      PersonId: req.params.personId,
+      ProductId: req.params.productId,
+      quantity: req.body.quantity,
+      price: '',
+    };
+    Cart.update(update, {
+      where: {
+        PersonId: req.params.personId,
+        ProductId: req.params.productId,
+      },
+      returning: true,
+    })
+      .then(response => {
+        if (Array.isArray(response)) {
+          if (response[0]) {
+            res.status(200).json(response[1]);
+          } else {
+            next({
+              message: 'Cart not found',
+              status: 404
+            })
+          }
+        } else {
+          res.status(200).json(response);
+        }
+      })
+      .catch(err => {
+        next(err);
+      })
+  }
 };
 
 module.exports = Controller;

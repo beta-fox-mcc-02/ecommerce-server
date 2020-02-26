@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isValid(value, next) {
           if (value < 0) {
-            next('Quantity should be positive numbers');
+            next('Quantity should be a positive number');
           } else {
             next();
           }
@@ -61,12 +61,12 @@ module.exports = (sequelize, DataTypes) => {
           }
         }).then(product => {
           if (product) {
-            if (product.stock) {
+            if (product.stock >= cart.quantity) {
               cart.price = product.price * cart.quantity
             } else {
               return Promise.reject({
                 status: 400,
-                message: 'Product Stock is Empty'
+                message: 'Stock is not enough'
               })
             }
           } else {
@@ -76,9 +76,47 @@ module.exports = (sequelize, DataTypes) => {
             })
           }
         }).catch(err => {
-          console.log(err)
           return Promise.reject(err)
         })
+      },
+      beforeBulkUpdate: (cart, options) => {
+        if (+cart.attributes.quantity === 0) {
+          return sequelize.models.Cart.destroy({
+            where: {
+              ProductId: cart.attributes.ProductId,
+              PersonId: cart.attributes.PersonId,
+            }
+          })
+            .then((response) => {
+              return Promise.reject({
+                type: 'notError',
+                status: 200,
+                message: 'Successfully Removed',
+              });
+            })
+            .catch(err => {
+              return Promise.reject(err);
+            })
+        }
+      },
+      beforeCreate: (cart, options) => {
+        return sequelize.models.Cart.findOne({
+          where: {
+            ProductId: cart.ProductId,
+            PersonId: cart.PersonId,
+          },
+        })
+          .then((response) => {
+            if (response) {
+              return Promise.reject({
+                status: 400,
+                message: 'This Product is already in Cart',
+              })
+            }
+          })
+          .catch(err => {
+            return Promise.reject(err);
+          })
       }
   },
     sequelize })
