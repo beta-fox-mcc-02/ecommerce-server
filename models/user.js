@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
   class User extends sequelize.Sequelize.Model {
     static associate(models) {
-
+      User.hasMany(models.Cart)
     }
   }
 
@@ -57,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     validate: {
       checkEmail(next) {
-        console.log(this.email)
         User.findOne({ where: { email: this.email } })
           .then(data => {
             if (data) {

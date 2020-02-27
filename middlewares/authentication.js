@@ -1,14 +1,15 @@
-const { Admin } = require('../models')
+const { User } = require('../models')
 const { verifyToken } = require('../helpers/jwt')
 
 module.exports = (req, res, next) => {
     try {
         const { id } = verifyToken(req.headers.token)
-        
-        Admin.findOne({ where: { id } })
-        .then(data => {
+
+        User.findOne({ where: { id } })
+            .then(data => {
                 if (data) {
                     req.decoded = data.dataValues
+                    console.log('lolos gan')
                     next()
                 } else {
                     next({

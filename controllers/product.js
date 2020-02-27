@@ -1,6 +1,6 @@
 const { Product } = require('../models')
 
-class Admin {
+class AdminProduct {
 
     static create(req, res, next) {
         const { name, image_url, price, stock, author } = req.body
@@ -51,7 +51,20 @@ class Admin {
             })
             .catch(next)
     }
+    static findOne(req, res, next) {
+        const { id } = req.params
+        
+        Product.findOne({
+            where: { id }
+        })
+            .then(data => {
+                res.status(200).json({
+                    data
+                })
+            })
+            .catch(next)
+    }
 
 }
 
-module.exports = Admin
+module.exports = AdminProduct

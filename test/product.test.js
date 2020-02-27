@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('../app')
-const { Admin, Product, sequelize } = require('../models')
+const { User, Product, sequelize } = require('../models')
 const { queryInterface } = sequelize
 const { createToken } = require('../helpers/jwt')
 
@@ -11,7 +11,7 @@ describe('Administrator test section', () => {
 
     beforeAll((done) => {
 
-        Admin.create({
+        User.create({
             username: 'kadiso',
             email: 'kadiso@mail.com',
             password: '12345',
@@ -19,7 +19,6 @@ describe('Administrator test section', () => {
         })
             .then(data => {
                 token = createToken(data.id)
-                console.log(data)
                 return Product.create({
                     name: 'crayon sinchan',
                     image_url: 'https://ssvr.bukukita.com/babacms/displaybuku/94071_f.jpg',
@@ -40,7 +39,7 @@ describe('Administrator test section', () => {
 
         queryInterface.bulkDelete('Products', null, {})
             .then(data => {
-                return queryInterface.bulkDelete('Admins', null, {})
+                return queryInterface.bulkDelete('Users', null, {})
             })
             .then(data => done())
             .catch(err => done(err))
@@ -197,7 +196,7 @@ describe('Administrator test section', () => {
             test('Find all success response', (done) => {
 
                 request(app)
-                    .get('/admin/product')
+                    .get('/')
                     .set('token', token)
                     .end((err, response) => {
                         expect(err).toBe(null)

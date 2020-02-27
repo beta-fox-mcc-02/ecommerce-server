@@ -39,6 +39,33 @@ module.exports = {
         "author": "Andrea Hirata",
         "createdAt": "NOW()",
         "updatedAt": "NOW()"
+      },
+      {
+        "name": "Kobo Chan vol.5",
+        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1256183856l/6940095.jpg",
+        "price": 20000,
+        "stock": 10,
+        "author": "Mashashi Ueda",
+        "createdAt": "NOW()",
+        "updatedAt": "NOW()"
+      },
+      {
+        "name": "Dilan 1990",
+        "image_url": "https://blokbojonegoro.com/upload/Image/image_74_img_20180623_081356.jpg",
+        "price": 70000,
+        "stock": 15,
+        "author": "Pidi Baiq",
+        "createdAt": "NOW()",
+        "updatedAt": "NOW()"
+      },
+      {
+        "name": "Dilan 1991",
+        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436161520l/25857857._SX318_.jpg",
+        "price": 70000,
+        "stock": 7,
+        "author": "Pidi Baiq",
+        "createdAt": "NOW()",
+        "updatedAt": "NOW()"
       }
     ], {});
   },

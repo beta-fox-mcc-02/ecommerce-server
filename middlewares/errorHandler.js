@@ -1,8 +1,8 @@
 module.exports = (err, req, res, next)=>{
-    let statusCode = null
-    let message = ''
+    let statusCode = 500
+    let message = 'Internal server error'
     let temp = []
-    // console.log(err, "<><><>")
+    console.log(err, "<><><>")
     if(err.name == 'SequelizeValidationError'){
         err.errors.forEach(el => {
             temp.push(el.message)
@@ -12,9 +12,9 @@ module.exports = (err, req, res, next)=>{
     }else if(err.status){
         statusCode = err.status
         message = err.message
-    }else{
-        statusCode = 500
-        message = 'Internal server error'
+    }else if(err.name === 'JsonWebTokenError'){
+        statusCode = 403
+        message = 'You must login first'
     }
     res.status(statusCode).json({
         message

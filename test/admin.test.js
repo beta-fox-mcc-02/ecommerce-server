@@ -1,16 +1,17 @@
 const request = require('supertest')
 const app = require('../app')
-const { Admin, sequelize } = require('../models')
+const { User, sequelize } = require('../models')
 const { queryInterface } = sequelize
 
 describe('Admin test section', () => {
 
     beforeAll((done) => {
 
-        Admin.create({
+        User.create({
             username: "jajang",
             email: "jajang@mail.com",
-            password: "12345"
+            password: "12345",
+            role: true
         })
             .then(data => {
                 done()
@@ -21,7 +22,7 @@ describe('Admin test section', () => {
 
     afterAll((done) => {
 
-        queryInterface.bulkDelete('Admins', {})
+        queryInterface.bulkDelete('Users', {})
             .then(response => {
                 done()
             })
@@ -40,7 +41,8 @@ describe('Admin test section', () => {
                     .send({
                         username: "mimin",
                         email: "mimin@mail.com",
-                        password: "12345"
+                        password: "12345",
+                        role: true
                     })
                     .end((err, response) => {
                         expect(err).toBe(null)
@@ -159,7 +161,7 @@ describe('Admin test section', () => {
 
         beforeAll((done) => {
 
-            Admin.create({
+            User.create({
                 username: "ujang",
                 email: "ujang@mail.com",
                 password: "12345"
@@ -183,7 +185,7 @@ describe('Admin test section', () => {
                         expect(err).toBe(null)
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('token', (expect.any(String)))
-                        expect(response.body).toHaveProperty('message', 'success login admin')
+                        expect(response.body).toHaveProperty('message', 'success login as ujang')
                         done()
                     })
 

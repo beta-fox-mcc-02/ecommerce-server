@@ -3,7 +3,7 @@
 module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model {
     static associate(models) {
-
+      Product.hasMany(models.Cart)
     }
   }
   Product.init({
