@@ -21,7 +21,7 @@ module.exports = {
     },
     {
       name: 'New York Yankees League Essential 59Fifty Maroon/White Fitted',
-      image_url: "https://az1.hatstoremedia.com/hatstore/images/885430014106_1/652/522/0/los-angeles-dodgers-league-essential-9forty-black-adjustable-new-era.jpg",
+      image_url: "https://az2.hatstoremedia.com/hatstore/images/193648212703_1/652/522/0/new-york-yankees-league-essential-59fifty-maroon-white-fitted-new-era.jpg",
       stock: 115,
       price: 129000
     },

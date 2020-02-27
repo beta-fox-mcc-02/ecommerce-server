@@ -13,7 +13,7 @@ app.use(routes)
 app.use(errorHandler)
 
 app.listen(process.env.PORT, () => {
-    console.log('app running on port 3000');
+    console.log(`app running on port ${process.env.PORT}`);
 })
 
 module.exports = app
