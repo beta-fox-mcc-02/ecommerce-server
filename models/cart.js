@@ -40,13 +40,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
+        isNumeric: {
+          args: true,
+          msg: 'Quantity field is only allow number'
+        },
         notNull: {
           args: true,
-          msg: 'Quantity Id cannot be null'
+          msg: 'Quantity cannot be null'
         },
         notEmpty: {
           args: true,
-          msg: 'Product Id cannot empty'
+          msg: 'Product cannot empty'
+        },
+        customValidator(value) {
+          if (value < 0) {
+            throw new Error('quantity cannot be negative')
+          }
         }
       }
     },
