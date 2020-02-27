@@ -200,14 +200,20 @@ class CartController {
             stock = product.stock
             let newStock = stock - req.cartQuantity
             updatedProduct = product
-            return Product.update({
-               stock: newStock
-            },
-               {
-                  where: {
-                     id: req.ProductId
-                  }
-               })
+
+            if (stock >= newStock) {
+               return Product.update({
+                  stock: newStock
+               },
+                  {
+                     where: {
+                        id: req.ProductId
+                     }
+                  })
+            }
+            else {
+               throw ({code: 400, message: `stock is not available`})
+            }
          })
          .then(result => {
             res.status(200).json({ message: `you purchased ${req.cartQuantity} ${updatedProduct.name} successfully` })

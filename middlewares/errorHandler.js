@@ -10,12 +10,12 @@ module.exports = (err, req, res, next) => {
    }
    else if (err.name == 'SequelizeValidationError') {
       status = 400
-      errors = []
+      let errorArr = []
       for (let i = 0; i <= err.errors.length - 1; i++) {
-         errors.push(err.errors[i].message)
+         errorArr.push(err.errors[i].message)
       }
 
-      res.status(status).json({ errors })
+      res.status(status).json({ msg: errorArr })
    }
    else if (err.code === 404) {
       status = 404
