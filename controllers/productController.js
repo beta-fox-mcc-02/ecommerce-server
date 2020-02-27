@@ -13,7 +13,6 @@ class ProductController {
     Product
       .create(product)
       .then(data => {
-        console.log(data, '[][]a[sd]a]s[d]a[s][asd[a]')
         res.status(201).json({
           msg: 'Create Product Success',
           data

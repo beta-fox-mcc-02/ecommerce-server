@@ -1,16 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
+  
   class Cart extends Model {
-    static  associate (models) {
-      
+    static associate (models) {
+      Cart.belongsTo(models.User)
+      Cart.belongsTo(models.Product)
     }
   }
 
   Cart.init({
-    userId: DataTypes.INTEGER,
-    productId: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    ProductId: DataTypes.INTEGER,
+    quantity: DataTypes.INTEGER,
+    checkout: DataTypes.BOOLEAN
   },{
     sequelize
   })

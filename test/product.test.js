@@ -4,42 +4,26 @@ const { User, sequelize } = require('../models')
 const { queryInterface } = sequelize
 const jwt = require('jsonwebtoken')
 const SECRET = process.env.SECRET || 'indomie'
+const createAdmin = require('../helpers/createAdmin')
 
 describe('Product Routes Test', () => {
   let adminToken
   let userToken
   let productId
+
   beforeAll((done) => {
     // create admin
-    let admin = {
-      username: 'Admin',
-      email: 'admin@admin.com',
-      password: 'admin123',
-      isAdmin: true
-    }
-    User
-      .create(admin)
-      .then(user => {
-        let payload = {
-          id: user.id,
-          username: user.username,
-          email: user.email 
+    createAdmin()
+      .then(token => {
+        adminToken = token
+        let user = {
+          username: 'User',
+          email: 'user@mail.com',
+          password: 'user123',
+          isAdmin: false
         }
-       adminToken = jwt.sign(payload, SECRET)
-       done()
+        return User.create(user)  
       })
-      .catch(err => {
-        done(err)
-      })
-    // create user
-    let user = {
-      username: 'User',
-      email: 'user@mail.com',
-      password: 'user123',
-      isAdmin: false
-    }
-    User
-      .create(user)
       .then(user => {
         let payload = {
           id: user.id,
@@ -52,6 +36,7 @@ describe('Product Routes Test', () => {
       .catch(err => {
         done(err)
       })
+    // create user
   })
 
   afterAll((done) => {
@@ -86,7 +71,6 @@ describe('Product Routes Test', () => {
           })
           .set('token', adminToken)
           .end((err, res) => {
-            console.log(res.body, 'createeeeeeeeeee')
             expect(err).toBe(null)
             expect(res.status).toBe(201)
             expect(res.body.data).toHaveProperty('name', expect.any(String))
@@ -104,8 +88,6 @@ describe('Product Routes Test', () => {
       test('it should be failed and have status 400 if input is undifined', (done) => {
         request(app)
         .post('/products')
-        .send({
-        })
         .set('token', adminToken)
         .end((err, res) => {
           expect(err).toBe(null)
@@ -191,6 +173,9 @@ describe('Product Routes Test', () => {
           .get('/products')
           .end((err, res) => {
             expect(err).toBe(null)
+            // array apa gimana
+            // length berapa
+            // isi produknya
             done()
           })
       })
@@ -277,6 +262,19 @@ describe('Product Routes Test', () => {
             done()
           })
       })
+      
+      // test.only('it should be failed, return status 401 if have no token', (done) => {
+      //   request(app)
+      //     .delete(`/products/abc`)
+      //     .set('token', adminToken)
+      //     .end((err, res) => {
+      //       expect(err).toBe(null)
+      //       console.log(response.body)
+      //       expect(res.status).toBe(401)
+      //       expect(res.body).toHaveProperty('msg', 'You Must Login First')
+      //       done()
+      //     })
+      // })
 
       test('it should be failed, return status 401 if token is not admin', (done) => {
         request(app)

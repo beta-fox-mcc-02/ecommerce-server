@@ -15,23 +15,22 @@ describe('User Routes', () => {
     })
   })
   // User Register
-  describe('User Register', () => {
+  describe('Admin Register', () => {
     describe('Register Success Test', () => {
       test('it should return new user object and status 201', (done) => {
         request(app)
-          .post('/register')
+          .post('/admin/register')
           .send({
             username: 'Admin',
-            email: 'admin@admin.com',
-            password: '123456',
-            isAdmin: true
+            email: 'test@admin.com',
+            password: '123456'
           })
           .end((err, res) => {
             expect(err).toBe(null)
             expect(res.status).toBe(201)
             expect(res.body.data).toHaveProperty('id')
             expect(res.body.data).toHaveProperty('username', 'Admin')
-            expect(res.body.data).toHaveProperty('email', 'admin@admin.com')
+            expect(res.body.data).toHaveProperty('email', 'test@admin.com')
             expect(res.body).toHaveProperty('msg', 'User register success')
             done()
           })
@@ -41,9 +40,7 @@ describe('User Routes', () => {
     describe('Register Failed Test', () => {
       test('it should be failed, return array of errors messages, and have status 400', (done) => {
         request(app)
-          .post('/register')
-          .send({
-          })
+          .post('/admin/register')
           .end((err, res) => {
             expect(err).toBe(null)
             expect(res.status).toBe(400)
@@ -59,7 +56,7 @@ describe('User Routes', () => {
 
       test('it should be failed, return array of errors messages, and have status 400', (done) => {
         request(app)
-          .post('/register')
+          .post('/admin/register')
           .send({
             username: '',
             email: '',
@@ -81,10 +78,10 @@ describe('User Routes', () => {
 
       test('it should be failed, return array with value Please enter your username and have status 400', (done) => {
         request(app)
-          .post('/register')
+          .post('/admin/register')
           .send({
             username: null,
-            email: 'admin@admin.com',
+            email: 'test@admin.com',
             password: '123456'
           })
           .end((err, res) => {
@@ -102,7 +99,7 @@ describe('User Routes', () => {
 
       test('it should be failed, and have status 400', (done) => {
         request(app)
-          .post('/register')
+          .post('/admin/register')
           .send({
             username: 'admin',
             email: 'admin',
@@ -123,7 +120,7 @@ describe('User Routes', () => {
 
       test('it should be failed, and have status 400', (done) => {
         request(app)
-          .post('/register')
+          .post('/admin/register')
           .send({
             username: 'admin',
             email: 'admin@admin.com',
@@ -144,10 +141,10 @@ describe('User Routes', () => {
 
       test('it should be failed, and return status 400', (done) => {
         request(app)
-          .post('/register')
+          .post('/admin/register')
           .send({
             username: 'Admin',
-            email: 'admin@admin.com',
+            email: 'test@admin.com',
             password: '123456'
           })
           .end((err,  res) => {
@@ -168,7 +165,7 @@ describe('User Routes', () => {
         request(app)
           .post('/login')
           .send({
-            email: 'admin@admin.com',
+            email: 'test@admin.com',
             password: '123456'
           })
           .end((err, res) => {
@@ -200,7 +197,7 @@ describe('User Routes', () => {
           request(app)
             .post('/login')
             .send({
-              email: 'admin@admin.com',
+              email: 'test@admin.com',
               password: '123'
             })
             .end((err, res) => {
