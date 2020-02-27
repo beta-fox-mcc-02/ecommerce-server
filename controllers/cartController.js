@@ -228,7 +228,6 @@ class CartController {
    }
 
    static updateStock (req, res, next) {
-      console.log(req.body.quantity, `INI JANCOKKKKKKKKKKKK`);
       
       let newQuantity = (+req.cartQuantity) + (+req.body.quantity)
       let stock
