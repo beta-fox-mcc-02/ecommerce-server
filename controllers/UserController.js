@@ -16,6 +16,19 @@ class UserController{
             .catch(next)
     }
 
+    static createUser(req, res, next) {
+        const { email, password } = req.body;
+    
+        User.create({ email, password, RoleId: 2 })
+            .then( user => {        
+                res.status(201).json({
+                    email: user.email,    
+                    msg: 'Register User Success' 
+                })
+            })
+            .catch(next)
+    }
+
     static  loginAdmin(req, res, next) {
         const { email, password } = req.body;
 
@@ -34,6 +47,44 @@ class UserController{
                         res.status(200).json({
                             token,
                             msg: "Login Admin Success"
+                        });
+                    } else {
+                        const err = {
+                            name: "errLogin"
+                        }
+                        next(err)
+                    }    
+                }
+                else {
+                    const err = {
+                        name: "errLogin"
+                    }
+                    next(err)
+                }
+            })
+            .catch(err=> {
+                next(err);
+            });
+    }
+
+    static loginUser(req, res, next) {
+        const { email, password } = req.body;
+
+        User.findOne({
+            where: { email, RoleId: 2 },
+            include: [{
+                model: Role
+            }]
+        })
+            .then(user => {
+                if(user !== null) {
+                    let isValid = compare(password, user.password);
+
+                    if(isValid) {
+                        const token = sign({ id: user.id });
+                        res.status(200).json({
+                            token,
+                            msg: "Login User Success"
                         });
                     } else {
                         const err = {
