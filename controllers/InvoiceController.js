@@ -2,10 +2,12 @@ const {Cart, Invoice, Product} = require('../models')
 
 class InvoiceController {
     static checkOut (req, res, next) {
-        const products = req.body.cart
+        const products = req.body.cart.cart
+        console.log('>>>>>>>',products.cart)
         let invoices = []
         let total = 0
         let promises = products.map((productCart) => {
+            console.log('>>>>')
             return Product.findByPk(productCart.ProductId)
             .then(product => {
                 if (product) {
@@ -20,7 +22,8 @@ class InvoiceController {
                             name: product.name,
                             price: product.price,
                             quantity: productCart.quantity,
-                            image: product.image_url
+                            image: product.image_url,
+                            transactionDate: productCart.createdAt
                         }
                         total += (+product.price * +productCart.quantity)
                         invoices.push(newObj)
@@ -32,6 +35,7 @@ class InvoiceController {
                             })
                         })
                         .catch(err => {
+                            console.log('>>>>')
                             next(err)
                         })
                     }
@@ -47,6 +51,7 @@ class InvoiceController {
 
         Promise.all(promises)
         .then(data => {
+            console.log('=====')
             let finalObj = {
                 result: ''
             }
@@ -62,10 +67,13 @@ class InvoiceController {
                         total: total
                     }
                     Invoice.create(newInvoice)
+                    console.log('>>>>')
+
                     .then(newInvoice => {
                         res.status(201).json({newInvoice})
                     })
                     .catch(err => {
+                        console.log('>>>>')
                         next(err)
                     })
                 } else {
@@ -77,10 +85,12 @@ class InvoiceController {
                 }
             })
             .catch(err => {
+                console.log('>>>>')
                 next(err)
             })
         })
         .catch(err => {
+            console.log('>>>>')
             next(err)
         })
     }
