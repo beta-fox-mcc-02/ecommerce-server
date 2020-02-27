@@ -29,6 +29,21 @@ class Controller {
         next(err);
       })
   }
+  static findCartByPaid(req, res, next) {
+    Cart.findAll({
+      where: {
+        paid: req.params.paid,
+        PersonId: req.params.personId,
+        ProductId: req.params.productId,
+      }
+    })
+      .then(carts => {
+        res.status(200).json(carts);
+      })
+      .catch(err => {
+        next(err);
+      })
+  }
   static editCart(req, res, next) {
     let update = {
       PersonId: req.params.personId,
@@ -66,6 +81,7 @@ class Controller {
       where: {
         PersonId: req.params.personId,
         ProductId: req.params.productId,
+        paid: false,
       }
     })
     .then(response => {
