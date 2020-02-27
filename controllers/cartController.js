@@ -158,7 +158,10 @@ class CartController {
                 }
             })
             .catch(err => {
-                console.log(err, 'gagal checkout===============')
+                let err = {
+                    error: 'Stocks not available',
+                    msg: 'Stocks not available'
+                }
                 next(err)
             })
     }
