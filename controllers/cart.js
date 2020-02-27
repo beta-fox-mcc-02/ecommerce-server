@@ -96,8 +96,6 @@ class CartController {
           })
         }).then((result) => {
           res.status(200).json(result)
-          // Transaction has been committed
-          // result is whatever the result of the promise chain returned to the transaction callback
         }).catch((err) => {
           next(err)
         });
