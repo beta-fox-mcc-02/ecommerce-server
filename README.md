@@ -504,7 +504,6 @@ Database name: db_ecommerce
 
     **Required:** <br>
     `id=[integer]`
-    "selected task ID"
 
 * **Success Response:**
 
@@ -526,12 +525,150 @@ Database name: db_ecommerce
 
     * **Code:** 500 Internal Server Error <br />
 
-    OR
+***
+## 12. Getting transactions of selected user.
 
-    * **Code:** 401 Unauthorized <br />
-    **Content:** 
+* **URL**
+
+    http://localhost:3000/transactions
+
+* **Method:**
+
+    `GET`
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+    * **Content:** 
     ```javascript
     {
-        "message": 'jwt malformed'
+        customerId: 1,
+        productId: 2,
+        stock: 5,
+        Products: [Array]
     }
+
     ```
+* **Error Response:**
+
+    * **Code:** 500 Internal Server Error <br />
+
+***
+## 13. Create transaction.
+
+* **URL**
+
+    http://localhost:3000/transactions
+
+* **Method:**
+
+    `POST`
+
+* **Request Body:** 
+
+    ```javascript
+        {
+          CustomerId: 1,
+          ProductId: 2,
+          stock: 10,
+          status: false
+        }
+    ```
+
+* **Success Response:**
+
+    * **Code:** 201 <br />
+    * **Content:** 
+    ```javascript
+        {
+          CustomerId: 1,
+          ProductId: 2,
+          stock: 10,
+          status: false,
+          createdAt: 22-11-12
+          updatedAt: 22-11-12
+        }
+    ```
+* **Error Response:**
+
+  * **Code:** 500 Internal Server Error <br />
+
+  OR
+
+  * **Code:** 400 Bad Request <br />
+  * **Content:** 
+  ```
+  { 
+    "message": "SequelizeValidationError",
+    "details": ["number format false", ...]
+  }
+  ```
+
+***
+## 14. Update status purchase on checkout.
+
+* **URL**
+
+    http://localhost:3000/transactions/:id
+
+* **Method:**
+
+    `PUT`
+
+* **URL Params**
+
+    **Required:** <br>
+    `id=[integer]`
+
+* **Request Body:** 
+
+    ```javascript
+        {
+            customerId: 1,
+            productId: 2
+        }
+    ```
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+    * **Content:** 
+    ```javascript
+    {
+          CustomerId: 1,
+          ProductId: 2,
+          stock: 10,
+          status: true,
+          createdAt: 22-11-12
+          updatedAt: 22-11-15
+    }
+
+    ```
+* **Error Response:**
+
+    * **Code:** 500 Internal Server Error <br />
+
+***
+## 15. Delete canceled transaction.
+
+* **URL**
+
+    http://localhost:3000/transactions/:id
+
+* **Method:**
+
+    `DELETE`
+
+* **URL Params**
+
+    **Required:** <br>
+    `id=[integer]`
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+
+* **Error Response:**
+
+    * **Code:** 500 Internal Server Error <br />
+    * **Content:** `{ error : "Internal Server Error" }`
