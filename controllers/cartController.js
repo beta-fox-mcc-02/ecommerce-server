@@ -141,7 +141,7 @@ class Controller {
     } else {
       Cart.update(
         {
-          UserId,
+          UserId: userId,
           ProductId,
           quantity,
           status
@@ -161,6 +161,7 @@ class Controller {
           })
         })
         .catch(err => {
+          console.log(err)
           next(err)
         })
     }

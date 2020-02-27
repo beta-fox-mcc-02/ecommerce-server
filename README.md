@@ -466,3 +466,288 @@
       }
     }
     ```
+
+**Create Cart**
+----
+  Returns json data about new cart or updated cart.
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+  None
+
+* **Headers**
+
+  'Content-Type: application/json',
+
+  token: string
+  
+* **data-raw**
+
+  ```json
+  {
+    "UserId": integer,
+    "ProductId": integer,
+    "quantity": number
+  }
+  ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** <br />
+    ```json
+    {
+        "msg": "success create cart",
+        "data": {}
+    }
+    ```
+
+  * **Code:** 200 <br />
+    **Content:** <br />
+    ```json
+    {
+        "msg": "success update cart",
+        "data": []
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 <br />
+
+      OR
+
+  * **Code:** 400 <br />
+    **Content:**
+    ```json
+    {
+      "errObj": {
+          "msg": string,
+          "errors": []
+      }
+    }
+    ```
+    ```json
+    {
+      "errObj": {
+          "msg": string,
+          "errors": "product quantity is not enough"
+      }
+    }
+    ```
+
+**Update Cart**
+----
+  Returns json data about updated cart.
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `PUT`
+
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Headers**
+
+  'Content-Type: application/json',
+  
+  token: string
+    
+  * **data-raw**
+
+    ```json
+    {
+      "UserId": integer,
+      "ProductId": integer,
+      "quantity": integer,
+      "status": boolean
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** <br />
+    ```json
+    {
+      "msg": "success update cart",
+        "data": [
+          1,
+          [
+            {}
+          ]
+        ]
+    }
+    ```
+  
+* **Error Response:**
+
+  * **Code:** 500 <br />
+
+    OR
+
+  * **Code:** 400 <br />
+    **Content:**
+    ```json
+    {
+      "errObj": {
+          "msg": string,
+          "errors": []
+      }
+    }
+    ```
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:**
+    ```json
+    {
+      "errObj": {
+          "msg": "not found"
+      }
+    }
+    ```
+
+    OR
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** 
+    
+    ```json
+    {
+      "errObj": {
+          "msg": "you have to login first"
+      }
+    }
+    ```
+
+**Delete cart**
+----
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `DELETE`
+
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Headers**
+
+  token: string
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** <br />
+    ```json
+    {
+      "data": 1,
+      "msg": string
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 <br />
+
+    OR
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:**
+    ```json
+    {
+      "errObj": {
+          "msg": "not found"
+      }
+    }
+    ```
+
+    OR
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** 
+    
+    ```json
+    {
+      "errObj": {
+          "msg": "you have to login first"
+      }
+    }
+    ```
+
+**Show carts**
+----
+  Returns json data about all carts.
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+  None
+
+* **Headers**
+
+  token: string
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** <br />
+    ```json
+    {
+      "msg": "fetch all carts success",
+      "data": []
+    }
+    ```
+
+* **Error Response:**
+
+  * **Code:** 500 <br />
+
+    OR
+
+  * **Code:** 401 authentication <br />
+    **Content:** 
+    
+    ```json
+    {
+      "errObj": {
+          "msg": "you have to login first"
+      }
+    }
+    ```
