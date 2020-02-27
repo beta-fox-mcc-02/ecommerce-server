@@ -9,6 +9,7 @@ class Controller {
     }
     Cart.create(newCart)
       .then(cart => {
+        console.log(cart)
         res.status(201).json(cart);
       })
       .catch(err => {
@@ -20,6 +21,7 @@ class Controller {
       where: {
         PersonId: req.params.personId,
         ProductId: req.params.productId,
+
       }
     })
       .then(carts => {
@@ -55,10 +57,12 @@ class Controller {
       where: {
         PersonId: req.params.personId,
         ProductId: req.params.productId,
+        paid: false,
       },
       returning: true,
     })
       .then(response => {
+        console.log(response, " <<")
         if (Array.isArray(response)) {
           if (response[0]) {
             res.status(200).json(response[1]);
