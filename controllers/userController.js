@@ -14,7 +14,7 @@ class Controller {
         })
             .then(response => {
                 res.status(201).json({
-                    msg: 'success sign up user',
+                    msg: 'Signed up',
                     payload: {
                         id: response.id,
                         email: response.email,
