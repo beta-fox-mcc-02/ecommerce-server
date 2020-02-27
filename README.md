@@ -457,7 +457,7 @@ Return json of new data after update product
 ## **Delete One Product (Admin Side)**
 -   **Success Response:**
 
-    -   **Code:** 201 <br />
+    -   **Code:** 204 <br />
         **Content:**
         ```json
         {
@@ -476,3 +476,272 @@ Return json of new data after update product
             "message": "Not Found"
         }
         ```
+
+## **Find Cart (Customer Side)**
+
+Return json of all cart 
+
+-   **URL**
+
+    /carts
+
+-   **Method:**
+
+    `GET`
+
+-   **URL Params**
+
+    None
+
+-   **Data Params**
+
+      **Required:**
+        None
+
+-   **Success Response:**
+
+    -   **Code:** 200 <br />
+        **Content:**
+        ```json
+        {
+            "cart": [
+                {
+                    "UserId": 2,
+                    "ProductId": 3,
+                    "quantity": 1,
+                    "isActive": true,
+                    "createdAt": "...",
+                    "updatedAt": "...",
+                    "Product": {
+                        "id": 3,
+                        "name": "...",
+                        "image_url": "...",
+                        "price": 100000,
+                        "stock": 6,
+                        "createdAt": "...",
+                        "updatedAt": "..."
+                    }
+                },
+                {
+                    "UserId": 2,
+                    "ProductId": 2,
+                    "quantity": 1,
+                    "isActive": true,
+                    "createdAt": "...",
+                    "updatedAt": "...",
+                    "Product": {
+                        "id": 2,
+                        "name": "...",
+                        "image_url": "...",
+                        "price": 200000,
+                        "stock": 10,
+                        "createdAt": "...",
+                        "updatedAt": "..."
+                    }
+                }
+            ]
+        }
+        ```
+
+-   **Error Response:**
+
+    -   **Code:** 400 BAD REQUEST <br />
+        **Content:**
+        ```json
+        {   
+            "status": 400,
+            "message": "Bad Request",
+            "errors": [
+                "..."
+            ]
+        }
+
+## **Add to Cart (Customer Side)**
+
+Return json of one data 
+
+-   **URL**
+
+    /carts
+
+-   **Method:**
+
+    `POST`
+
+-   **URL Params**
+
+    **Required:**
+
+    none
+
+-   **Data Params**
+
+      **Required:**
+        None
+
+-   **Success Response:**
+
+    -   **Code:** 201 <br />
+        **Content:**
+        ```json
+        {
+            "cart": {
+                "UserId": 2,
+                "ProductId": 1,
+                "quantity": 1,
+                "isActive": true,
+                "updatedAt": "...",
+                "createdAt": "...",
+                "id": 1
+            }
+        }
+        ```
+
+-   **Error Response:**
+    -   **Code:** 404 NOT FOUND <br />
+        **Content:**
+        ```json
+        {
+            "status": 404,
+            "errors": [
+                "product does not exists"
+            ],
+            "message": "Not Found"
+        }
+        ```
+## **Remove One Product from Cart (Customer Side)**
+-   **Success Response:**
+
+    -   **Code:** 204 <br />
+        **Content:**
+        ```json
+        {
+            "message": "Cart contained a product with ID 2 is deleted"
+        }
+        ```
+-   **Error Response:**
+    -   **Code:** 400 BAD REQUEST <br />
+        **Content:**
+        ```json
+        {
+            "status": 404,
+            "errors": [
+                "Cart contained a product with ID 2000 does not exists"
+            ],
+            "message": "Not Found"
+        }
+        ```
+
+## **Create Invoice (Customer Side)**
+
+Return json of data 
+
+-   **URL**
+
+    /invoices
+
+-   **Method:**
+
+    `POST`
+
+-   **URL Params**
+
+    **Required:**
+
+    `id=[integer]`
+
+-   **Data Params**
+
+      **Required:**
+        None
+
+-   **Success Response:**
+
+    -   **Code:** 201 <br />
+        **Content:**
+        ```json
+        {
+            "cart": {
+                "UserId": 2,
+                "ProductId": 1,
+                "quantity": 1,
+                "isActive": true,
+                "updatedAt": "...",
+                "createdAt": "...",
+                "id": 1
+            }
+        }
+        ```
+
+-   **Error Response:**
+    -   **Code:** 404 NOT FOUND <br />
+        **Content:**
+        ```json
+        {
+            "status": 404,
+            "errors": [
+                "cart is empty"
+            ],
+            "message": "Bad Request"
+        }
+        ```
+## **Find All Invoices (Customer Side)**
+
+Return json of all invoices 
+
+-   **URL**
+
+    /invoices
+
+-   **Method:**
+
+    `GET`
+
+-   **URL Params**
+
+    None
+
+-   **Data Params**
+
+      **Required:**
+        None
+
+-   **Success Response:**
+
+    -   **Code:** 200 <br />
+        **Content:**
+        ```json
+        {
+            "invoice": [
+                {
+                    "id": 1,
+                    "UserId": 2,
+                    "transactionDetails": "",
+                    "total": 500000,
+                    "createdAt": "...",
+                    "updatedAt": "..."
+                },
+                {
+                    "id": 2,
+                    "UserId": 2,
+                    "transactionDetails": "",
+                    "total": 500000,
+                    "createdAt": "...",
+                    "updatedAt": "..."
+                }                
+            ]
+        }
+        ```
+
+-   **Error Response:**
+
+    -   **Code:** 400 BAD REQUEST <br />
+        **Content:**
+        ```json
+        {   
+            "status": 400,
+            "message": "Bad Request",
+            "errors": [
+                "..."
+            ]
+        }

@@ -48,13 +48,25 @@ class CartController {
                         next(err)
                     })                    
                 } else {
-                    Cart.create(payload)
-                    .then(cart => {
-                        res.status(200).json({cart})
+                    return Product.findOne({where: {id:+req.body.ProductId}})
+                    .then(product => {
+                        if (product) {
+                            Cart.create(payload)
+                            .then(cart => {
+                                res.status(200).json({cart})
+                            })
+                            .catch(err => {
+                                next(err)
+                            })
+                        } else {
+                            next({
+                                status: 404,
+                                name: 'Not Found',
+                                message: 'product does not exists'
+                            })
+                        }
                     })
-                    .catch(err => {
-                        next(err)
-                    })
+
                 }
 
             }

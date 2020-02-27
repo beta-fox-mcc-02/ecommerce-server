@@ -3,9 +3,15 @@ const {Cart, Invoice, Product} = require('../models')
 class InvoiceController {
     static checkOut (req, res, next) {
         const products = req.body.cart.cart
-        console.log('>>>>>>>',products.cart)
         let invoices = []
         let total = 0
+        if (products.length == 0) {
+            next({
+                status: 404,
+                name: 'Bad Request',
+                message:'cart is empty'
+            })
+        }
         let promises = products.map((productCart) => {
             console.log('>>>>')
             return Product.findByPk(productCart.ProductId)
@@ -21,9 +27,7 @@ class InvoiceController {
                         let newObj = {
                             name: product.name,
                             price: product.price,
-                            quantity: productCart.quantity,
-                            image: product.image_url,
-                            transactionDate: productCart.createdAt
+                            quantity: productCart.quantity
                         }
                         total += (+product.price * +productCart.quantity)
                         invoices.push(newObj)
@@ -56,7 +60,10 @@ class InvoiceController {
                 result: ''
             }
             finalObj.result = invoices
-            let transactionDetails = JSON.stringify(finalObj, null, 2)
+            let transactionDetails = ''
+            for (let i in finalObj.result) {
+                transactionDetails += `| ${finalObj.result[i].quantity} pcs of ${finalObj.result[i].name} @${finalObj.result[i].price} |` 
+            }
             let UserId = req.decoded.id          
             Cart.update({isActive: false}, {where: {UserId}, returning: true})
             .then(cart => {
