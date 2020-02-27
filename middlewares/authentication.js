@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
    if(token) {
       try {
          const payload = JwtHelper.verifyToken(token)
+         console.log(payload, '===payloa===')
          User.findOne({
             where : {
                email : payload.email
@@ -18,6 +19,7 @@ module.exports = (req, res, next) => {
                if(user) {
                   req.currentUserId = payload.id
                   req.RoleId = payload.RoleId
+                  console.log(req.RoleId, req.currentUserId, '=Authentication=')
                   next()
                } else {
                   next({

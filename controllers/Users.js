@@ -7,10 +7,14 @@ class UserController {
       let input = { name, email, password, RoleId }
       User.create(input, { returning : true })
          .then(user => {
-            const token = JwtHelper.generateToken({ id: user.id, email})
+            const token = JwtHelper.generateToken({ id: user.id, email, RoleId})
             // localStorage.token = token
             res.status(201).json({
                access_token : token,
+               data: {
+                 id: user.id,
+                 email: user.email
+               },
                msg : 'success register'
             })
          })
@@ -57,7 +61,7 @@ class UserController {
        order: [['id', 'asc']]
      }) 
        .then(users => {
-        //  console.log(users)
+         console.log(users)
          if(users.length === 0) {
            res.status(200).json({
              data: [{

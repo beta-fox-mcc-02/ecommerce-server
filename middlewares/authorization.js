@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
   let RoleId = +req.RoleId
-  // console.log(RoleId, '========================')
+  console.log(RoleId, '========================')
    if(RoleId === 1) {
       //admin
       next()

@@ -1,10 +1,11 @@
-const { Product } = require('../models')
+const { Product, Category } = require('../models')
 
 class ProductController {
    static findAll(req, res, next) {
       // console.log('masuk siniiiiiiiiiii')
       Product.findAll({
-        order: [['id', 'asc']]
+        order: [['id', 'asc']],
+        include: [Category]
       })
          .then(products => {
             // console.log(products)
