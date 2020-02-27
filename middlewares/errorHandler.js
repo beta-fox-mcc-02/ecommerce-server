@@ -63,6 +63,13 @@ const errorHandler = (err, req, res, next) => {
       message: 'Not enough stock',
       errors: err.errors
     })
+  } else if (err.name === 'BAD_REQUEST') {
+    status = err.status
+    res.status(status).json({
+      name: err.name,
+      message: 'INPUT_ERROR',
+      error: err.message
+    })
   }
 }
 

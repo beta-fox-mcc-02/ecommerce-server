@@ -84,7 +84,7 @@ class CartController {
               })
               .then(product => {
                 Product.update({
-                  stock: product.stock - detail.quantity
+                  stock: product.stock - Number(detail.quantity)
                 },{ where: {
                   id: product.id
                 }, transaction: t })
@@ -97,7 +97,9 @@ class CartController {
             return Promise.all(promises)
           })
         }).then((result) => {
-          res.status(200).json(result)
+          res.status(200).json({
+            message: 'Your order has been successfully placed'
+          })
         }).catch((err) => {
           next(err)
         });
@@ -133,36 +135,126 @@ class CartController {
     })
   }
 
-  static updateCart (req, res, next) {
+  static updateProductInCart (req, res, next) {
     const cart_id = req.params.id
     const { product_id, quantity } = req.body
-    CartDetail.findOne({
-      include:[Product],
+
+    if (quantity <=0) {
+      next({
+        status: 400,
+        name: 'BAD_REQUEST',
+        message: 'Quantity must be greather than zero'
+      })
+    } else {
+      CartDetail.findOne({
+        include:[Product],
+        where: {
+          [Op.and]:[
+            {
+              cart_id
+            },
+            {
+              product_id
+            }
+          ]
+        }
+      })
+      .then(cartDetail => {
+        if (cartDetail) {
+          CartDetail.update({
+            quantity: cartDetail.quantity + Number(quantity),
+            price: cartDetail.Product.price
+          }, {
+            where: {
+              id: cartDetail.id
+            },
+            individualHooks: true,
+            returning: true
+          })
+          .then(updated => {
+            const isUpdated = updated[0]
+            if (isUpdated) {
+              const data = updated[1][0]
+              res.status(200).json(data)
+            } else {
+              next({
+                status: 404,
+                name: 'NOT_FOUND',
+                message: 'Product with id '+ product_id + ' is not found'
+              })
+            }
+          })
+          .catch(err => {
+            next(err)
+          })
+        } else {
+          Product.findOne({
+            where: {
+              id: product_id
+            }
+          })
+          .then(product => {
+            CartDetail.create({
+              cart_id,
+              product_id,
+              quantity,
+              price: product.price
+            })
+            .then(cartDetail => {
+              res.status(200).json(cartDetail)
+            })
+            .catch(err => {
+              next(err)
+            })
+          })
+          .catch(err => {
+            next(err)
+          })
+        }
+      })
+      .catch(err => {
+        next(err)
+      })
+    }
+  }
+
+  static createCart (req, res, next) {
+    const product_id = req.body.product_id
+    const quantity = req.body.quantity ? req.body.quantity : 1
+    const user_id = req.decoded
+
+    Cart.findOne({
       where: {
-        [Op.and]:[
+        [Op.and]: [
           {
-            cart_id
+            user_id
           },
           {
-            product_id
+            status: false
           }
         ]
       }
     })
-    .then(cartDetail => {
-      if (cartDetail) {
-        CartDetail.update({
-          quantity: cartDetail.quantity + quantity,
-          price: cartDetail.Product.price
-        }, {
+    .then(cart => {
+      if (cart) {
+        Product.findOne({
           where: {
-            id: cartDetail.id
-          },
-          individualHooks: true,
-          returning: true
+            id: product_id
+          }
         })
-        .then(updated => {
-          res.status(200).json(updated)
+        .then(product => {
+          CartDetail.create({
+            cart_id: cart.id,
+            product_id,
+            quantity,
+            price: product.price,
+          })
+          .then(cartDetail => {
+            res.status(201).json(cartDetail)
+          })
+          .catch(err =>{
+            next(err)
+          })
         })
         .catch(err => {
           next(err)
@@ -174,18 +266,23 @@ class CartController {
           }
         })
         .then(product => {
-          CartDetail.create({
-            cart_id,
-            product_id,
-            quantity,
-            price: product.price
+          return sequelize.transaction((t) => {
+            return Cart.create({
+              user_id,
+              status: false
+            }, { transaction: t} )
+            .then(cart => {
+              return CartDetail.create({
+                cart_id: cart.id,
+                product_id,
+                quantity,
+                price: product.price,
+              }, { transaction: t })
+            })
           })
-          .then(cartDetail => {
-            res.status(200).json(cartDetail)
-          })
-          .catch(err => {
-            next(err)
-          })
+        })
+        .then(result => {
+          res.status(201).json(result)
         })
         .catch(err => {
           next(err)
@@ -197,33 +294,51 @@ class CartController {
     })
   }
 
-  static createCart (req, res, next) {
-    const product_id = req.body.product_id
-    const quantity = req.body.quantity ? req.body.quantity : 1
-    const user_id = req.decoded
-    Product.findOne({
+  static updateAllProductInCart (req, res, next) {
+    const cartDetails = req.body.cart_details
+    sequelize.transaction((t) => {
+      const promises = []
+      for (const detail of cartDetails) {
+        const promise = CartDetail.update({quantity: +detail.quantity},{
+          where: {
+            id: detail.id
+          }, individualHooks: true, returning: true,
+           transaction: t
+        })
+        promises.push(promise)
+      }
+      return Promise.all(promises);
+   }).then((response) => {
+     const result = []
+     for (const product of response) {
+      result.push(product[1][0])
+     }
+     console.log('Response ======', result)
+     res.status(200).json(result)
+   }).catch((err) => {
+      next(err);
+   });
+  }
+
+  static deleteProductInCart (req, res, next) {
+    const id = +req.params.detail_id
+    CartDetail.destroy({
       where: {
-        id: product_id
+        id
       }
     })
-    .then(product => {
-      return sequelize.transaction((t) => {
-        return Cart.create({
-          user_id,
-          status: false
-        }, { transaction: t} )
-        .then(cart => {
-          return CartDetail.create({
-            cart_id: cart.id,
-            product_id,
-            quantity,
-            price: product.price,
-          }, { transaction: t })
-        })
-      })
-    })
     .then(result => {
-      res.status(201).json(result)
+      if (result) {
+        res.status(200).json({
+          message: 'Delete successfully'
+        })
+      } else {
+        next({
+          status: 404,
+          name: 'NOT_FOUND',
+          message:'Car detail with id '+ id + ' is not found'
+        })
+      }
     })
     .catch(err => {
       next(err)

@@ -8,7 +8,9 @@ router.post('/', CartController.createCart)
 router.get('/', CartController.fetchCarts)
 
 router.use('/:id', isCartAuthorized)
-router.put('/:id', CartController.updateCart)
+router.put('/:id', CartController.updateProductInCart)
+router.put('/:id/all', CartController.updateAllProductInCart)
 router.get('/:id', CartController.findOneCart)
 router.post('/:id/checkout', CartController.checkout)
+router.delete('/:id/:detail_id', CartController.deleteProductInCart)
 module.exports = router
