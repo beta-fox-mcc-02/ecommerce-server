@@ -413,3 +413,336 @@
       "error": "invalid email/password"
     }
     ``    
+**Show All Cart**
+----
+  Returns json data about cart
+* **URL**
+
+  /cart
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   None
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ 
+      
+    ```json
+      [
+    {
+        "id": 23,
+        "name": "mi band 4",
+        "ProductId": 4,
+        "quantity": 100,
+        "totalPrice": 75000000,
+        "image_url": "https://cdn.elevenia.co.id/g/9/7/2/6/7/0/28972670_B.jpg",
+        "status": false,
+        "updatedAt": "2020-02-27T01:39:49.104Z"
+    },
+    {
+        "id": 17,
+        "name": "g-shock limited edition",
+        "ProductId": 2,
+        "quantity": 1,
+        "totalPrice": 550000,
+        "image_url": "https://cdn.elevenia.co.id/g/9/7/2/6/7/0/28972670_B.jpg",
+        "status": true,
+        "updatedAt": "2020-02-26T22:51:18.734Z"
+    },
+    {
+        "id": 25,
+        "name": "I-watch 4",
+        "ProductId": 1,
+        "quantity": 2,
+        "totalPrice": 8000000,
+        "image_url": "https://images-na.ssl-images-amazon.com/images/I/41eJMQgmUrL.jpg",
+        "status": false,
+        "updatedAt": "2020-02-26T23:18:20.987Z"
+    },
+    {
+        "id": 22,
+        "name": "I-watch 4",
+        "ProductId": 1,
+        "quantity": 2,
+        "totalPrice": 8000000,
+        "image_url": "https://images-na.ssl-images-amazon.com/images/I/41eJMQgmUrL.jpg",
+        "status": true,
+        "updatedAt": "2020-02-26T23:10:36.231Z"
+    }
+]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error" }`
+
+  * **Code:** 403 FORBIDDEN <br />
+    **Content:** 
+    ```json
+    {
+    "msg": "Forbidden",
+    "error": "You must login first"
+    }
+    ```
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+    ```json
+    {
+      "msg": "UNAUTHORIZED",
+      "error": "You are not authorized"
+    }
+    ```  
+**Insert New Cart**
+----
+  Insert new cart.
+
+* **URL**
+
+  /cart
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   None
+
+* **Data Params**
+
+   **Required:**
+
+   `ProductId=[number]`<br>
+* **Success Response:**
+
+  * **Code:** 201 <br>
+    **Content:** 
+      
+    ```json
+    {
+        "status": false,
+        "id": 26,
+        "UserId": 2,
+        "ProductId": 2,
+        "quantity": 1,
+        "totalPrice": 550000,
+        "updatedAt": "2020-02-27T03:00:41.909Z",
+        "createdAt": "2020-02-27T03:00:41.909Z"
+    }
+    ```
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error" }` 
+
+  * **Code:** 403 FORBIDDEN <br />
+    **Content:** 
+    ```json
+    {
+    "msg": "Forbidden",
+    "error": "You must login first"
+    }
+    ```
+**Update a Cart**
+----
+   Return data and message of updated cart.
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+
+  `PATCH`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Data Params**
+
+   **Required:**
+ 
+   `quantity=[number]`<br>
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+      
+    ```json
+    {
+        "status": [
+            1
+        ],
+        "msg": "success updated cart"
+    }
+    ```
+* **Error Response:**
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    {
+      "msg": "Bad Request",
+      "error": [
+          "quntity is only allow number",
+        ]
+    }
+    ```
+    **Content:** 
+    ```json
+    {
+      "msg": "Bad Request",
+      "error": [
+          "quantity cannot be negative"
+        ]
+    }
+    ```
+* **Code:** 403 FORBIDDEN <br />
+    **Content:** 
+    ```json
+    {
+    "msg": "Forbidden",
+    "error": "You must login first"
+    }
+    ```
+* **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+    ```json
+    {
+      "msg": "UNAUTHORIZED",
+      "error": "You are not authorized"
+    }
+    ```      
+**Delete a Cart**
+----
+   Delete and Return status of delete in json data.
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+
+  `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+      
+    ```json
+    {
+      "status": 1,
+      "msg": "succes delete cart"
+    }
+    ```
+ 
+* **Error Response:**
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** 
+    ```json
+    {
+      "msg": "Not Found",
+      "error": "failed to delete product"
+    }
+    ```
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error" }`
+
+* **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+    ```json
+    {
+      "msg": "UNAUTHORIZED",
+      "error": "You are not authorized"
+    }
+    ```
+**Checkout**
+----
+   Return data and message of checkout cart and product.
+
+* **URL**
+
+  /checkout
+
+* **Method:**
+
+  `PATCH`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+
+* **Data Params**
+
+   **Required:**
+ 
+   `ProductId=[number]`<br>
+   `quantity=[number]`<br>
+   `id=[number]`<br>
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+      
+    ```json
+    {
+        "result": [
+            1
+        ],
+        "msg": "transaction success"
+    }
+    ```
+* **Error Response:**
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    {
+        "msg": "Bad Request",
+        "error": "not enough stock, stock is only 23"
+    }
+    ```
+* **Code:** 403 FORBIDDEN <br />
+    **Content:** 
+    ```json
+    {
+    "msg": "Forbidden",
+    "error": "You must login first"
+    }
+    ```
+* **Code:** 401 UNAUTHORIZED <br />
+    **Content:** 
+    ```json
+    {
+      "msg": "UNAUTHORIZED",
+      "error": "You are not authorized"
+    }
+    ``` 
