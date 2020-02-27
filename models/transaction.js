@@ -14,7 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         min: 1
       }
     },
-    sum: DataTypes.INTEGER
+    sum: { // maksudnya price
+      type: DataTypes.INTEGER,
+      validate: {
+        min: 1
+      }
+    }
   }, {
     sequelize,
     hooks: {

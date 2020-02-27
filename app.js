@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const userRoute = require('./routes/user-route');
 const productRoute = require('./routes/product-route');
+const cartRoute = require('./routes/cart-route.js');
 const errorHandler = require('./middlewares/error-handler');
 
 app.use(express.urlencoded({ extended: false }));
@@ -14,6 +15,7 @@ app.use(cors());
 
 app.use(userRoute);
 app.use(productRoute);
+app.use(cartRoute);
 app.use(errorHandler);
 
 module.exports = app;
