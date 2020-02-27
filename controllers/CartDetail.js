@@ -1,4 +1,5 @@
 const { CartDetail, Cart, Product } = require('../models')
+const { Op } = require("sequelize")
 
 class CartDetailController {
   static findAll (req, res, next) {
@@ -7,15 +8,17 @@ class CartDetailController {
       include: [
         {
           model: Cart,
-          where: { UserId: req.currentUserId }
+          where: { UserId: req.currentUserId, status: false }
         },
         {
           model: Product
         }
       ]
     })
-      .then(data => {
-        // console.log(data)
+      .then(data => { 
+        // data.forEach(el => {
+        //   console.log(el)
+        // })
         res.status(200).json({
           data
         })
@@ -123,20 +126,74 @@ class CartDetailController {
   }
 
   static checkOut (req, res, next) {
-    console.log('masuk sini')
+    let carts
+    // console.log('masuk sini')
+    // console.log(req.body)
+    // console.log(req.params)
+    // console.log('end of cart detail')
+    CartDetail.findAll({
+      where: {
+        [Op.or] : [{ id: req.body.id}]
+      },
+      include: [
+        {
+          model: Cart,
+          where: { id: req.body.CartId }
+        },
+        {
+          model: Product
+        }
+      ]
+    })
+      .then(data => {
+        carts = data
+        let promises = []
+        data.forEach(cart => {
+          // console.log(cart)
+          if(cart.Product.stock >= cart.qty) {
+            promises.push(Product.update({ stock: cart.Product.stock - cart.qty },
+              { where: { id: cart.Product.id }
+            }))
+          } else {
+            next({
+              error: { name: '' },
+              msg: `stock of ${cart.Product.name} didn't enough`
+            })            
+          }
+        })
+        return Promise.all(promises)
+      })
+      .then(result => {
+        console.log(carts)
+        return Cart.update({ status: true }, {
+          where: { id: carts[0].CartId }
+        })
+      })
+      .then(cart => {
+        res.status(200).json({
+          msg: 'success checkout items'
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        next({ error: err })
+      })
   }
 
   static delete (req, res, next) {
-    // let id = +req.params.id
-    // CartDetail.destroy({ where: id })
-    //   .then(data => {
-    //     res.status(200).json({
-    //       msg: 'success delete'
-    //     })
-    //   })
-    //   .catch(err => {
-    //     next({error: err})
-    //   })
+    let id = +req.params.id
+    console.log('masuk delete', id)
+    CartDetail.destroy({ where: { id } })
+      .then(data => {
+        console.log(data, '===')
+        res.status(200).json({
+          msg: 'success delete'
+        })
+      })
+      .catch(err => {
+        console.log('testing delete =======')
+        next({error: { name : err }})
+      })
   }
 }
 

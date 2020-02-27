@@ -3,7 +3,7 @@ const { CartDetail, Cart } = require('../models')
 module.exports = (req, res, next) => {
   let RoleId = +req.RoleId
   let id = +req.params.id
-  console.log(id, RoleId, req.currentUserId)
+  // console.log(id, RoleId, req.currentUserId)
   // console.log(RoleId, '========================')
    if(RoleId === 1) {
       //admin
