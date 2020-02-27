@@ -1,4 +1,9 @@
 const errorHandler = (err, req, res, next) => {
+    if (err.type === 'notError') {
+        res.status(err.status).json({
+            message: err.message
+        });
+    }
     let type = 'Bad Request';
     let status = err.status ? err.status : 500;
     let error = err.message ? err.message : 'Internal server error';

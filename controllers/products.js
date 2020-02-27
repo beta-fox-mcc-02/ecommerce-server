@@ -84,7 +84,11 @@ class Controller {
       })
   }
   static findProduct(req, res, next) {
-    Product.findOne()
+    Product.findOne({
+      where: {
+        id: req.params.productId,
+      },
+    })
       .then(product => {
         if (product) {
           res.status(200).json(product);
