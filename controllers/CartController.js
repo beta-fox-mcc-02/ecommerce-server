@@ -48,7 +48,7 @@ class CartController {
                         next(err)
                     })                    
                 } else {
-                    Cart.create(payload, {where: {UserId}, include: [Product]})
+                    Cart.create(payload)
                     .then(cart => {
                         res.status(200).json({cart})
                     })
