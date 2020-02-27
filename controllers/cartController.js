@@ -19,10 +19,11 @@ class Controller {
   }
 
   static createCart (req, res, next) {
-    const { UserId, ProductId, quantity } = req.body
+    const { id } = req.decoded
+    const { ProductId, quantity } = req.body
 
     Cart.create({
-      UserId,
+      UserId: id,
       ProductId,
       quantity,
       status: false
@@ -42,6 +43,7 @@ class Controller {
   static editCart (req, res, next) {
     const { id } = req.params
     const { UserId, ProductId, quantity, status } = req.body
+    const userId = req.decoded.id
 
     if (ProductId) {
       Product.findOne({
@@ -59,7 +61,7 @@ class Controller {
               let calPrice = quantity * response.price
               return Cart.update(
                 {
-                  UserId,
+                  UserId: userId,
                   ProductId,
                   quantity,
                   status,

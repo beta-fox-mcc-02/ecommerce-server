@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     hooks: {
       beforeValidate(cart, options) {
-        const { id, ProductId, quantity } = cart
+        const { ProductId, quantity } = cart
         if (ProductId) {
           return sequelize.models.Product.findOne({
             where: {
