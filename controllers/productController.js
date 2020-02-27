@@ -109,7 +109,7 @@ class ProductController {
          .catch(next)
    }
 
-   static delete(req, res, next) {            
+   static delete(req, res, next) {
       Product.destroy({
          where: {
             id: req.params.productId
@@ -120,8 +120,15 @@ class ProductController {
                throw ({ code: 404, message: `Product not found` })
             }
             else {
-               res.status(200).json({ msg: `product with ${req.params.productId} deleted` })
+               return Cart.destroy({
+                  where: {
+                     ProductId: req.params.productId
+                  }
+               })
             }
+         })
+         .then(_ => {
+            res.status(200).json({ msg: `product with ${req.params.productId} deleted` })
          })
          .catch(err => {
             next(err)
@@ -129,21 +136,21 @@ class ProductController {
    }
 
    static getOne(req, res, next) {
-      
+
       Product.findOne({
          where: {
             id: req.params.productId
          },
          include: [
-            {model: Category}
+            { model: Category }
          ]
       })
          .then(data => {
             if (data.length < 1) {
                throw ({ code: 404, message: `Product with id ${req.params.id} not found` })
-            } 
+            }
             else {
-               res.status(200).json({data})
+               res.status(200).json({ data })
             }
          })
          .catch(next)
