@@ -41,15 +41,29 @@ describe("User register", () => {
     });
   });
 
-  describe("Admin register validation failed", () => {
+  describe("Admin register email validation failed", () => {
     test("should return status 400", done => {
       request(app)
         .post("/admin/register")
         .send({
-          username: "yupi",
           email: "yupinotmail.com",
-          password: "yui",
-          role: 1
+          password: "yupi"
+        })
+        .end((err, response) => {
+          expect(response.body).toHaveProperty("msg");
+          expect(response.status).toBe(400);
+          done();
+        });
+    });
+  });
+
+  describe("Admin register password validation failed", () => {
+    test("should return status 400", done => {
+      request(app)
+        .post("/admin/register")
+        .send({
+          email: "yupi@mail.com",
+          password: "yu"
         })
         .end((err, response) => {
           expect(response.body).toHaveProperty("msg");
@@ -64,10 +78,8 @@ describe("User register", () => {
       request(app)
         .post("/admin/register")
         .send({
-          username: "",
           email: "",
           password: "",
-          role: 0
         })
         .end((err, response) => {
           // expect(err).toBe(null);

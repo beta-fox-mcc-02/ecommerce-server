@@ -78,15 +78,35 @@ describe("Product test", () => {
         });
     });
 
-    describe("Failed to create new product", () => {
+    describe("Failed to create new product negative price", () => {
         test("should return status 400", done => {
             request(app)
                 .post("/admin/product/create")
                 .send({
-                    name: "",
-                    image_url: "",
-                    price: 0,
-                    stocks: 0
+                    name: "Radeon VII",
+                    image_url: "http://tinyurl.com/9q8ry2983h",
+                    price: -28722,
+                    stocks: 28
+                })
+                .end((err, response) => {
+                    expect(err).toBe(null);
+                    // console.log(response.body.err, 'error create product')
+                    // expect(response.body).toHaveProperty("err");
+                    expect(response.status).toBe(400);
+                    done();
+                });
+        });
+    });
+
+    describe("Failed to create new product negative stocks", () => {
+        test("should return status 400", done => {
+            request(app)
+                .post("/admin/product/create")
+                .send({
+                    name: "Radeon VII",
+                    image_url: "http://tinyurl.com/9q8ry2983h",
+                    price: 98722,
+                    stocks: -28
                 })
                 .end((err, response) => {
                     expect(err).toBe(null);

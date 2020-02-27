@@ -187,7 +187,7 @@ Add new product to database
     msg: "DATA NOT FOUND"
     ```
 
-## ** Delete prpoduct**
+## ** Delete product**
 
 Delete product from database by product id
 
@@ -611,6 +611,129 @@ Add new cart to database
         total_price: 6400000,
         quantity: 1,
         status: false
+    }
+    ```
+
+* **Error Response:**
+
+  - **Code:** 404 <br />
+    **Content:**
+
+    ```javascript
+    err: "NOT FOUND",
+    msg: "DATA NOT FOUND"
+    ```
+
+## ** Delete cart**
+
+Delete cart from database by cart id
+
+- **URL**
+
+  /cart/delete/:id
+
+- **Method:**
+
+  `DELETE`
+
+- **URL Params**
+  **Required:**
+  id=['integer']
+
+- **Data Params**
+  none
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```javascript
+    msg: "Data deleted successfully";
+    ```
+
+* **Error Response:**
+
+  - **Code:** 404 <br />
+    **Content:**
+
+    ```javascript
+    err: "NOT FOUND",
+    msg: "DATA NOT FOUND"
+    ```
+  
+## ** Update cart**
+
+Update cart quantity
+
+- **URL**
+
+  /cart/update/:id
+
+- **Method:**
+
+  `PUT`
+
+- **URL Params**
+  **Required:**
+  none
+- **Data Params**
+  quantity: ['integer']
+  status: ['boolean']
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```javascript
+    {
+        UserId: 1,
+        ProductId: 23,
+        total_price: 6400000,
+        quantity: 1,
+        status: false
+    }
+    ```
+
+* **Error Response:**
+
+  - **Code:** 404 <br />
+    **Content:**
+
+    ```javascript
+    err: "NOT FOUND",
+    msg: "DATA NOT FOUND"
+    ```
+
+## ** Checkout cart**
+
+Checkout, Update cart status to true 
+
+- **URL**
+
+  /cart/checkout/:id
+
+- **Method:**
+
+  `PUT`
+
+- **URL Params**
+  **Required:**
+  none
+- **Data Params**
+  quantity: ['integer']
+  status: ['boolean']
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```javascript
+    {
+        UserId: 1,
+        ProductId: 23,
+        total_price: 6400000,
+        quantity: 1,
+        status: true
     }
     ```
 
