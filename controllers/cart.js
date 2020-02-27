@@ -70,22 +70,24 @@ class CartController {
             where: {
               id: cart_id
             },
-            returning: true
-          }, { transaction: t })
+            returning: true,
+            transaction: t
+          })
           .then(updated => {
             const promises = []
             for (const detail of cart_details) {
              const promise = Product.findOne({
                 where: {
                   id: detail.product_id
-                }
-              }, { transaction: t })
+                },
+                transaction: t
+              })
               .then(product => {
                 Product.update({
                   stock: product.stock - detail.quantity
                 },{ where: {
                   id: product.id
-                }}, { transaction: t })
+                }, transaction: t })
               })
               .catch(err => {
                 next(err)

@@ -37,8 +37,9 @@ class CartDetailController {
         const promise = CartDetail.update({quantity: +detail.quantity},{
           where: {
             id: detail.id
-          }, individualHooks: true, returning: true
-        }, { transaction: t })
+          }, individualHooks: true, returning: true,
+           transaction: t
+        })
         promises.push(promise)
       }
       return Promise.all(promises);

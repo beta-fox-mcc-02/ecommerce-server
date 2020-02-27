@@ -910,3 +910,130 @@ Returns json category
         }
         ```
 
+## **Register User**
+
+Return json user object
+
+-   **URL**
+
+    /users
+
+-   **Method:**
+
+    `POST`
+
+-   **URL Params**
+
+    None
+
+-   **Data Params**
+
+      **Required:**
+
+      `first_name=[string]`\
+      `username=[string]`\
+      `password=[string]`\
+      `email=[string]`
+
+      **Optional:**
+
+      `last_name=[string]`\
+      `phone_number=[string]`
+
+-   **Success Response:**
+
+    -   **Code:** 200 <br />
+        **Content:**
+        ```json
+        {
+          "id": 272,
+          "email": "hansin91@gmail.com",
+          "username": "hansin1991",
+          "message": "USER_CREATED"
+        }
+        ```
+
+-   **Error Response:**
+
+    -   **Code:** 400 BAD REQUEST <br />
+        **Content:**
+        ```json
+        {
+          "name": "BAD REQUEST",
+          "message": "INPUT_ERROR",
+          "errors": [
+            "First name is required",
+            "Username is required"
+          ]
+        }
+        ```
+
+     -  **Code:** 400 BAD REQUEST <br />
+        **Content:**
+        ```json
+        {
+          "name": "BAD REQUEST",
+          "message": "UNIQUE_VALIDATION",
+          "errors": [
+            "email must be unique"
+          ]
+        }
+        ```
+
+    -  **Code:** 400 BAD REQUEST <br />
+      **Content:**
+      ```json
+      {
+        "name": "BAD REQUEST",
+        "message": "INPUT_ERROR",
+        "errors": [
+          "Username has minimal 6 characters",
+          "Password has minimum 8 characters"
+        ]
+      }
+      ```
+
+## **Login User**
+
+Returns json access token and message
+
+-   **URL**
+
+    /admin/login
+
+-   **Method:**
+
+    `POST`
+
+-   **URL Params**
+
+    None
+
+-   **Data Params**
+
+      **Required:**
+
+      `email=[string]`\
+      `password=[string]`
+
+-   **Success Response:**
+
+    -   **Code:** 200 <br />
+        **Content:**
+        ```json
+        {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjcxLCJlbWFpbCI6ImhhbnNpbnN1c2F0eWFAZ21haWwuY29tIiwidXNlcm5hbWUiOiJoYW5zaW45MSIsInJvbGUiOnsiaWQiOjEsIm5hbWUiOiJBZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjAtMDItMjJUMDg6NDQ6NTIuMjEwWiIsInVwZGF0ZWRBdCI6IjIwMjAtMDItMjJUMDg6NDQ6NTIuMjEwWiJ9LCJpYXQiOjE1ODI0NTUyNTl9.5q2rnJbwz6j7Cu82j7lDqLFRU1ndkrCTGcnr4nEx3GQ",
+          "message": "LOGIN_SUCCESS"
+        }
+        ```
+
+-   **Error Response:**
+    -   **Code:** 400 BAD REQUEST <br />
+        **Content:**
+        ```json
+        {
+          "name": "BAD REQUEST",
+          "message": "LOGIN_FAILED",
+          "error": "Email / password is incorrect"
+        }
+        ```
