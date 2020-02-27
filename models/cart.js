@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Cart extends sequelize.Sequelize.Model {
     static associate(models) {
       Cart.belongsTo(models.Product)
+      Cart.belongsTo(models.User)
     }
   }
 
@@ -72,39 +73,44 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     hooks: {
       beforeValidate(cart, options) {
-        const { ProductId, quantity } = cart
-        console.log('userId', cart.UserId)
+        console.log(cart)
+        const { id, ProductId, quantity } = cart
+        console.log('cartId=', id)
+        console.log('userId=', cart.UserId)
         console.log('ProductId=', ProductId)
         console.log('quantity=', quantity)
-        return sequelize.models.Product.findOne({
-          where: {
-            id: ProductId
-          }
-        })
-          .then(response => {
-            if (response) {
-              console.log('response===============================',response)
-              if (response.stock < quantity) {
-                return Promise.reject({
-                  status: 400,
-                  msg: 'product quantity is not enough'
-                })
-              } else {
-                let calPrice = quantity * response.price
-                cart.price = calPrice
-              }
-            } else {
-              return Promise.reject({
-                status: 404,
-                msg: 'product not found'
-              })
+        if (ProductId) {
+          return sequelize.models.Product.findOne({
+            where: {
+              id: ProductId
             }
           })
-          .catch(err => {
-            return Promise.reject({
-              err
+            .then(response => {
+              if (response) {
+                if (response.stock < quantity) {
+                  return Promise.reject({
+                    status: 400,
+                    msg: 'product quantity is not enough'
+                  })
+                } else {
+                  let calPrice = quantity * response.price
+                  cart.price = calPrice
+                  console.log('quantity ' + quantity + ' X ' + 'price ' + response.price + ' = ' + 'akhir ' + cart.price)
+                  console.log('cart passed === ', cart)
+                }
+              } else {
+                return Promise.reject({
+                  status: 404,
+                  msg: 'product not found'
+                })
+              }
             })
-          })
+            .catch(err => {
+              return Promise.reject({
+                err
+              })
+            }) 
+        }
       }
     }
   })

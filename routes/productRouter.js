@@ -8,7 +8,7 @@ router.get('/', ProductController.fetchAll)
 router.get('/:id', ProductController.fetchOne)
 router.use(authentication)
 router.post('/', authorization, ProductController.createProduct)
-router.put('/:id', authorization, ProductController.updateProduct)
+router.put('/:id', ProductController.updateProduct)
 router.delete('/:id', authorization, ProductController.deleteProduct)
 
 module.exports = router
