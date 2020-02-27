@@ -18,15 +18,9 @@ class ProductController {
     static getProducts(req, res, next) {
         Product.findAll()
             .then(items => {
-                if (items.length > 0) {
-                    res.status(200).json({
-                        dataItems : items
-                    })
-                } else {
-                    next({
-                        name : "NotFound"
-                    })
-                }
+                res.status(200).json({
+                    dataItems : items
+                })
             })
             .catch(next)
     }

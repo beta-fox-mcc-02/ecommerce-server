@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 
   class Customer extends Model {
     static associate(models) {
-
+      Customer.hasOne(models.Cart)
     }
   }
 
