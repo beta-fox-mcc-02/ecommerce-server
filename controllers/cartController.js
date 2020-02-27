@@ -21,28 +21,74 @@ class Controller {
   static createCart (req, res, next) {
     const { id } = req.decoded
     const { ProductId, quantity } = req.body
+    let newQuantity
+    let findCartId
 
-    Cart.create({
-      UserId: id,
-      ProductId,
-      quantity,
-      status: false
+    Cart.findOne({
+      where: {
+        ProductId
+      }
     })
       .then(response => {
-        res.status(202).json({
-          msg: 'success create cart',
+        if (response) {
+          newQuantity = response.quantity + quantity
+          findCartId = response.id
+          return Product.findOne({
+            where: {
+              id: response.ProductId
+            }
+          })
+        } else {
+          return Cart.create({
+            UserId: id,
+            ProductId,
+            quantity,
+            status: false
+          })
+        }
+      })
+      .then(response => {
+        if (response.ProductId) {
+          res.status(201).json({
+            msg: 'success create cart',
+            response
+          })
+        } else {
+          if (response.stock >= newQuantity) {
+            const newPrice = response.price * newQuantity
+            return Cart.update(
+              {
+                quantity: newQuantity,
+                price: newPrice
+              },
+              {
+                where: {
+                  id: findCartId
+                },
+                returning: true
+              }
+            )
+          } else {
+            res.status(400).json({
+              msg: 'product quantity is not enough'
+            })
+          }
+        }
+      })
+      .then(response => {
+        res.status(200).json({
+          msg: 'success update cart',
           response
         })
       })
       .catch(err => {
         console.log(err)
-        next(err)
       })
   }
 
   static editCart (req, res, next) {
     const { id } = req.params
-    const { UserId, ProductId, quantity, status } = req.body
+    const { ProductId, quantity, status } = req.body
     const userId = req.decoded.id
 
     if (ProductId) {
@@ -135,6 +181,22 @@ class Controller {
       })
       .catch(err => {
         console.log(err)
+        next(err)
+      })
+  }
+
+  static findOneCart(req, res, next) {
+    const { id } = req.params
+
+    Cart.findOne({
+      where: {
+        id
+      }
+    })
+      .then(response => {
+        res.status(200).json(response)
+      })
+      .catch(err => {
         next(err)
       })
   }
