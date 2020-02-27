@@ -85,6 +85,7 @@ module.exports = (sequelize, DataTypes) => {
             where: {
               ProductId: cart.attributes.ProductId,
               PersonId: cart.attributes.PersonId,
+              paid: false,
             }
           })
             .then((response) => {
@@ -104,6 +105,7 @@ module.exports = (sequelize, DataTypes) => {
           where: {
             ProductId: cart.ProductId,
             PersonId: cart.PersonId,
+            paid: false,
           },
         })
           .then((response) => {

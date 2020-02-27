@@ -492,3 +492,390 @@
     "type": "Bad Request",
     "error": "Internal server error"
     }
+----
+
+**Cart Create**
+----
+  Return object new carts.
+
+* **URL**
+
+  http://localhost:3000/carts
+
+* **Headers**
+
+  `token`
+
+* **Method:**
+
+    `POST`
+  
+*  **URL Params**
+
+    None
+
+* **Data Params**
+
+    `PersonId=[Number]`\
+    `ProductId=[Number]`\
+    `quantity=[Number]`
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** 
+    ```json
+    {
+    "paid": false,
+    "PersonId": 1,
+    "ProductId": 5,
+    "quantity": 5,
+    "updatedAt": "2020-02-27T07:42:08.310Z",
+    "createdAt": "2020-02-27T07:42:08.310Z",
+    "price": 2250000,
+    "id": 75
+    }
+* **Error Response:**
+  * **Code:** 400 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Stock is not enough"
+    }
+  OR
+  * **Code:** 401 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Unauthorized"
+    }
+  OR
+  * **Code:** 404 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Product Not Found"
+    }
+  OR
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
+**Cart FindAll**
+----
+  Return array of object carts by productId & personId.
+
+* **URL**
+
+  http://localhost:3000/carts/:personId/:productId
+
+* **Headers**
+
+  None
+
+* **Method:**
+
+    `GET`
+  
+*  **URL Params**
+
+    `personId=[Number]`\
+    `productId=[Number]`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+    {
+        "PersonId": 1,
+        "ProductId": 3,
+        "price": 600000,
+        "quantity": 1,
+        "paid": true,
+        "createdAt": "2020-02-27T07:28:02.953Z",
+        "updatedAt": "2020-02-27T07:37:40.288Z"
+    },
+    {
+        "PersonId": 1,
+        "ProductId": 3,
+        "price": 600000,
+        "quantity": 1,
+        "paid": true,
+        "createdAt": "2020-02-27T07:37:30.700Z",
+        "updatedAt": "2020-02-27T07:37:40.288Z"
+    }
+    ]
+* **Error Response:**
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
+**Cart FindAll by Paid Status**
+----
+  Return array of object carts by productId & personId & paid(status).
+
+* **URL**
+
+  http://localhost:3000/carts/:personId/:productId/:paid
+
+* **Headers**
+
+  None
+
+* **Method:**
+
+    `GET`
+  
+*  **URL Params**
+
+    `personId=[Number]`\
+    `productId=[Number]`\
+    `paid=[Boolean]`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+    {
+        "PersonId": 1,
+        "ProductId": 5,
+        "price": 2250000,
+        "quantity": 5,
+        "paid": false,
+        "createdAt": "2020-02-27T07:42:08.310Z",
+        "updatedAt": "2020-02-27T07:42:08.310Z"
+    }
+    ]
+* **Error Response:**
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
+**Cart Edit**
+----
+  Return array of object edited cart.
+
+* **URL**
+
+  http://localhost:3000/carts/:personId/:productId
+
+* **Headers**
+
+  `token`
+
+* **Method:**
+
+    `PUT`
+  
+*  **URL Params**
+
+    `personId=[Number]`\
+    `productId=[Number]`
+
+* **Data Params**
+
+    `quantity:[Number]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+    {
+        "id": 75,
+        "PersonId": 1,
+        "ProductId": 5,
+        "price": 2250000,
+        "quantity": 5,
+        "paid": false,
+        "createdAt": "2020-02-27T07:42:08.310Z",
+        "updatedAt": "2020-02-27T07:58:07.959Z"
+    }
+    ]
+* **Error Response:**
+  * **Code:** 400 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Stock is not enough"
+    }
+  OR
+  * **Code:** 401 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Unauthorized"
+    }
+  OR
+  * **Code:** 404 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Product Not Found"
+    }
+  OR
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
+**Cart Delete**
+----
+  Return Number of deleted cart.
+
+* **URL**
+
+  http://localhost:3000/carts/:personId/:productId
+
+* **Headers**
+
+  `token`
+
+* **Method:**
+
+    `DELETE`
+  
+*  **URL Params**
+
+    `personId=[Number]`\
+    `productId=[Number]`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    1
+* **Error Response:**
+  * **Code:** 401 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Unauthorized"
+    }
+  OR
+  * **Code:** 404 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Cart not found"
+    }
+  OR
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }
+----
+
+**Cart Checkout**
+----
+  Return number of checkout cart.
+
+* **URL**
+
+  http://localhost:3000/carts/:personId/:productId/checkout
+
+* **Headers**
+
+  `token`
+
+* **Method:**
+
+    `PUT`
+  
+*  **URL Params**
+
+    `personId=[Number]`\
+    `productId=[Number]`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+    1
+    ]
+* **Error Response:**
+  * **Code:** 400 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Stock is not enough"
+    }
+  OR
+  * **Code:** 401 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Unauthorized"
+    }
+  OR
+  * **Code:** 404 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Cart not found"
+    }
+  OR
+  * **Code:** 500 <br />
+    **Content:**
+    ```json
+    {
+    "type": "Bad Request",
+    "error": "Internal server error"
+    }

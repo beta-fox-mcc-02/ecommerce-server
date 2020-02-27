@@ -3,6 +3,7 @@ const CartController = require('../controllers/carts');
 const authentication = require('../middlewares/authentication');
 
 router.get('/:personId/:productId', CartController.findCart);
+router.get('/:personId/:productId/:paid', CartController.findCartByPaid);
 router.use(authentication);
 router.post('/', CartController.createCart);
 router.put('/:personId/:productId', CartController.editCart);
