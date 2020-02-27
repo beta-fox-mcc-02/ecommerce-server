@@ -56,7 +56,7 @@ Database name: db_ecommerce
 
 
 ***
-## 2. Logged in already existed user.
+## 2. Logged in user.
 
 * **URL**
 
@@ -136,7 +136,7 @@ Database name: db_ecommerce
 
 
 ***
-## 4. Add New Product. // 
+## 4. Add New Product.
 
 * **URL**
 
@@ -368,7 +368,7 @@ Database name: db_ecommerce
     * **Content:** `{ msg : "jwt malformed" }`
 
 ***
-## 8. Fetch all registered admins .
+## 8. Fetch all admins .
 
 * **URL**
 
@@ -401,4 +401,137 @@ Database name: db_ecommerce
         "message": 'jwt malformed'
     }
     ```
+
+***
+## 9. Fetch all Banners .
+
+* **URL**
+
+    http://localhost:3000/banners
+
+* **Method:**
+
+    `GET`
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+    * **Content:**
+    ```javascript
+    [
+        {banner1, banner2, ...}
+    ]
+    ```
+
+* **Error Response:**
+
+    * **Code:** 500 Internal Server Error <br />
     
+***
+## 10. Post new banner .
+
+* **URL**
+
+    http://localhost:3000/banners
+
+* **Request Header:**
+
+    ```javascript
+    { 
+        "Content-Type": "application/json",
+        "token": "admin_token"
+    }
+    ```
+
+* **Request Body:** 
+
+    ```javascript
+        {
+            name: 'Bag',
+            imageUrl: 'bit.ly/image.jpg',
+            price: 10000,
+            stock: 10,
+            category: `Electronics`
+        }
+    ```
+
+* **Success Response:**
+
+    * **Code:** 201 <br />
+    * **Content:** 
+    ```javascript
+    {
+        message: 'successfully added Bag to database'
+    }
+    ```
+* **Error Response:**
+
+    * **Code:** 500 Internal Server Error <br />
+
+    OR
+
+    * **Code:** 400 Bad Request <br />
+    **Content:** 
+    ```javascript
+    {
+        "message": "sequelizeValidationError",
+        "details": ['length has to be 7 characters', ...]
+    }
+    ```
+    
+    OR
+    
+    * **Code:** 401 Unauthorized <br />
+    **Content:** 
+    ```javascript
+    {
+        "message": 'jwt malformed'
+    }
+    ```
+
+***
+## 11. Getting details of one item.
+
+* **URL**
+
+    http://localhost:3000/item/:id
+
+* **Method:**
+
+    `GET`
+
+* **URL Params**
+
+    **Required:** <br>
+    `id=[integer]`
+    "selected task ID"
+
+* **Success Response:**
+
+    * **Code:** 200 <br />
+    * **Content:** 
+    ```javascript
+    {
+        "products": {
+            name: 'Bag',
+            imageUrl: 'bit.ly/image.jpg',
+            price: 100,
+            stock: 5,
+            category: 'Fashions'
+        }
+    }
+
+    ```
+* **Error Response:**
+
+    * **Code:** 500 Internal Server Error <br />
+
+    OR
+
+    * **Code:** 401 Unauthorized <br />
+    **Content:** 
+    ```javascript
+    {
+        "message": 'jwt malformed'
+    }
+    ```
