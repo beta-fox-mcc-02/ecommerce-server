@@ -2,6 +2,7 @@ const router = require('express').Router()
 const userRoutes = require('./user')
 const ProductController = require('../controllers/productController')
 const productRoutes = require('./product')
+const cartRoutes = require('./cart')
 const categoryRoutes = require('./category')
 const authentication = require('../middlewares/authentication')
 
@@ -12,6 +13,7 @@ router.use('/category', categoryRoutes)
 router.use(userRoutes)
 
 router.use(authentication)
+router.use('/cart', cartRoutes)
 router.use('/product', productRoutes)
 
 module.exports = router

@@ -28,7 +28,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: 'running',
+        name: 'sport',
         bg_img: 'https://images.pexels.com/photos/2526878/pexels-photo-2526878.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
         createdAt: new Date(),
         updatedAt: new Date()

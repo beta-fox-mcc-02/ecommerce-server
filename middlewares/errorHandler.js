@@ -11,7 +11,12 @@ module.exports = (err, req, res, next) => {
         res.status(401).json({
             msg: err.msg
         })
-    } else if(err.name = 'NotFound') {
+    } else if (err.name == 'Forbidden') {
+        console.log('masuk error')
+        res.status(403).json({
+            msg: err.msg
+        })
+    } else if(err.name == 'NotFound') {
         res.status(404).json({
             msg: err.msg
         })

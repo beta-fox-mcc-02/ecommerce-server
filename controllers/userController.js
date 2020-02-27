@@ -69,6 +69,7 @@ class UserController {
                         res.status(200).json({
                             msg: 'login success',
                             data: {
+                                id: user.id,
                                 name: user.name,
                                 email: user.email,
                                 role: user.role,

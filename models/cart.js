@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   class Cart extends sequelize.Sequelize.Model {
     static associate(models) {
-      
+      Cart.belongsTo(models.Product)
+      Cart.belongsTo(models.User)
     }
   }
 
@@ -12,9 +13,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     ProductId: {
       type: DataTypes.INTEGER
+    },
+    quantity: {
+      type: DataTypes.INTEGER
+    },
+    status: {
+      type: DataTypes.BOOLEAN
     }
   }, {
-    sequelize
+    sequelize,
+    hooks: {
+      beforeCreate: (value, options) => {
+        value.quantity = 1
+        value.status = false
+      }
+    }
   })
   
   return Cart;

@@ -137,6 +137,7 @@ describe('User Router Test', () => {
                     .end((err, response) => {
                         expect(response.status).toBe(200)
                         expect(response.body).toHaveProperty('msg', "login success")
+                        expect(response.body).toHaveProperty('data.id', expect.any(Number))
                         expect(response.body).toHaveProperty('data.name', 'dimas')
                         expect(response.body).toHaveProperty('data.email', 'dimas@day.com')
                         expect(response.body).toHaveProperty('data.email', expect.stringMatching(/[@.com|co]/))

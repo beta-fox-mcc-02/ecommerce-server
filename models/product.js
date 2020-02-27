@@ -65,6 +65,9 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
+    },
+    sold: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
@@ -73,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
         if(!product.image_url) {
           product.image_url = 'https://thumbs.gfycat.com/AgileDelayedIndianjackal-small.gif'
         }
+        product.sold = 0
       }
     }
   })
