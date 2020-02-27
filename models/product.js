@@ -62,8 +62,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Stock must be a number'
         },
         min: {
-          args: 10,
-          msg: 'Stock minimal is 10'
+          args: -1,
+          msg: 'Stock minimal is 0'
         }
       }
     },
@@ -76,3 +76,5 @@ module.exports = (sequelize, DataTypes) => {
 
   return Product;
 };
+
+//  custom hooks create boleh nol update ga boleh nol
