@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.BOOLEAN
   }, {});
   Transaction.associate = function(models) {
-    // associations can be defined here
+    Transaction.belongsTo(models.Customer)
+    Transaction.belongsTo(models.Product)
   };
   return Transaction;
 };

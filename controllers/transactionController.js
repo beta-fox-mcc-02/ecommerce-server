@@ -42,8 +42,8 @@ class TransactionController {
         id: req.currentUserId
       },
       include: {
-        model: Product,
-        through: [Transaction]
+        model: Transaction,
+        include: [Product]
       },
       attributes: ['id', 'username']
     })
@@ -54,16 +54,44 @@ class TransactionController {
   }
 
   static payment ({ params, body }, res, next) {
-    console.log(params.id, body.productId)
     Transaction.update({
       status: true
     }, {
       where: {
-        [Op.and] : [{CustomerId: params.id}, {ProductId: body.productId}]
+        [Op.and] : [{id: params.id }, {CustomerId: body.customerId}, {ProductId: body.productId}]
       }
     })
       .then((data) => {
         res.status(200).json(data)
+      })
+      .catch((err) => next(err))
+  }
+
+  static cancel ({ params, body }, res, next) {
+    Product.findOne({
+      where: {
+        id: body.productId
+      }
+    })
+      .then((data) => {
+        let returnStock = data.stock + (body.purchasePrice / data.price)
+        return Product.update({
+          stock: returnStock
+        }, {
+          where: {
+            id: data.id
+          }
+        })
+      })
+      .then((data) => {
+        Transaction.destroy({
+          where: {
+            id: params.id
+          }
+        })
+      })
+      .then((data) => {
+        res.status(200).json('cancel success')
       })
       .catch((err) => next(err))
   }
