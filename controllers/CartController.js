@@ -1,4 +1,4 @@
-const { Cart } = require('../models')
+const { Cart, Product } = require('../models')
 
 class CartController {
     static addToCart (req, res, next) {
@@ -14,7 +14,9 @@ class CartController {
     static viewCart (req, res, next) {
         const CustomerId = req.currentUserId
         Cart.findAll({
-            where: { CustomerId }
+            where: { CustomerId, status: false },
+            include: [Product],
+            order: [['createdAt', 'ASC']]
         })
             .then(data => {
                 res.status(200).json(data)
