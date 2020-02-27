@@ -1,9 +1,13 @@
 'use strict';
+const { hashingPassword } = require('../helpers/bcrypt')
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
   class Costumer extends Model {
     static associate(models){
-
+      Costumer.belongsToMany(models.Product, {
+        through: models.Cart
+      })
     }
   }
   Costumer.init({

@@ -21,7 +21,7 @@ class CostumerController {
     static login(req, res, next) {
         let { email, password } = req.body
         let loginCostumer = { email, password }
-        console.log(loginCostumer)
+        console.log(loginCostumer, 'LOGIN COSTUMERSSSS')
         Costumer
             .findOne({
                 where: {
@@ -29,11 +29,27 @@ class CostumerController {
                 }
             })
             .then( costumer => {
-                let { id, email } = costumer
-                let access_token = generateToken({ id, email })
-                res.status(201).json({
-                    access_token: access_token
-                })
+                if(costumer){
+                    if(checkingPassword(loginCostumer.password, costumer.password) === true) {
+                        let { id, email } = costumer
+                        let access_token = generateToken({ id, email })
+                        // req.currentUserId = costumer.id
+                        // console.log(req.currentUserId, 'ini custumer idnya LOOOOOOHHHH')
+                        res.status(200).json({
+                            id: costumer.id,
+                            access_token: access_token
+                        })
+                    } else {
+                        console.log(costumer)
+                        next({
+                            name : `Invalid password / email!`
+                        })
+                    }
+                } else {
+                    next({
+                        name : `Invalid password / email!`
+                    })
+                }
             })
             .catch(next)
     }

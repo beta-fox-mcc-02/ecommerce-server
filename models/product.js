@@ -3,7 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
   class Product extends Model{
     static associate(models){
-      
+      Product.belongsToMany(models.Costumer, {
+        through: models.Cart
+      })
     }
   }
   Product.init({
