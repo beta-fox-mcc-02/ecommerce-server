@@ -13,5 +13,6 @@ router.use('/products', productRouter)
 router.use('/cart', cartRouter)
 
 router.get('/categories', CategoryController.getAll)
+router.get('/categories/:id', CategoryController.findProduct)
 
 module.exports = router
