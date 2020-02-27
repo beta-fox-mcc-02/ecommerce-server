@@ -96,10 +96,54 @@ describe('Product Routes', () => {
             .end((err, response) => {
                expect(err).toBe(null)
                expect(response.body).toHaveProperty('data', expect.any(Object))
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'success create product')
                expect(response.status).toBe(201)
                done()
             })
+      })
+
+      test('minimal price is zero', done => {
+        request(app)
+           .post('/products')
+           .set('access_token', access_token)
+           .send({
+              name : 'Warcraft',
+              image_url : 'http://google.com',
+              price : -5,
+              stock : 10,
+              genre : 'Adventure',
+              CategoryId : 1
+           })
+           .end((err, response) => {
+             //  console.log(response.body ,'|| ==|| == ||')
+              expect(err).toBe(null)
+              expect(response.body).toHaveProperty('msg', expect.any(Array))
+              expect(response.body.msg[0]).toHaveProperty('message', 'price cant be lower than zero')
+              expect(response.status).toBe(400)
+              done()
+           })
+     })
+
+     test('minimal stock is zero', done => {
+      request(app)
+         .post('/products')
+         .set('access_token', access_token)
+         .send({
+            name : 'Warcraft',
+            image_url : 'http://google.com',
+            price : 1000000,
+            stock : -5,
+            genre : 'Adventure',
+            CategoryId : 1
+         })
+         .end((err, response) => {
+           //  console.log(response.body ,'|| ==|| == ||')
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('msg', expect.any(Array))
+            expect(response.body.msg[0]).toHaveProperty('message', 'stock cant be lower than zero')
+            expect(response.status).toBe(400)
+            done()
+         })
       })
 
       test('minimal stock and price are zero', done => {
@@ -115,8 +159,11 @@ describe('Product Routes', () => {
                CategoryId : 1
             })
             .end((err, response) => {
+              //  console.log(response.body ,'|| ==|| == ||')
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'price cant be lower than zero')
+               expect(response.body.msg[1]).toHaveProperty('message', 'stock cant be lower than zero')
                expect(response.status).toBe(400)
                done()
             })
@@ -134,8 +181,9 @@ describe('Product Routes', () => {
                CategoryId : 1
             })
             .end((err, response) => {
+               console.log(response ,'====')
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'please log in first')
                expect(response.status).toBe(400)
                done()
             })
@@ -172,7 +220,7 @@ describe('Product Routes', () => {
             .end((err, response) => {
                expect(err).toBe(null)
                expect(response.body).toHaveProperty('data', expect.any(Array))
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'success get all product')
                expect(response.status).toBe(200)
                done()
             })
@@ -211,7 +259,7 @@ describe('Product Routes', () => {
             .end((err, response) => {
                expect(err).toBe(null)
                expect(response.body).toHaveProperty('data', expect.any(Object))
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'success get one product')
                expect(response.status).toBe(200)
                done()
             })
@@ -234,7 +282,7 @@ describe('Product Routes', () => {
             .get(`/products/${id}`)
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'please log in first')
                expect(response.status).toBe(400)
                done()
             })
@@ -271,7 +319,7 @@ describe('Product Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'success update product')
                expect(response.status).toBe(200)
                done()
             })
@@ -291,7 +339,9 @@ describe('Product Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'price cant be lower than zero')
+               expect(response.body.msg[1]).toHaveProperty('message', 'stock cant be lower than zero')
                expect(response.status).toBe(400)
                done()
             })
@@ -330,7 +380,7 @@ describe('Product Routes', () => {
             })
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'please log in first')
                expect(response.status).toBe(400)
                done()
             })
@@ -367,7 +417,7 @@ describe('Product Routes', () => {
             .set('access_token', access_token)
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'success delete product')
                expect(response.status).toBe(200)
                done()
             })
@@ -390,7 +440,7 @@ describe('Product Routes', () => {
             .delete('/products/1')
             .end((err, response) => {
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'please log in first')
                expect(response.status).toBe(400)
                done()
             })

@@ -50,13 +50,7 @@ class ProductController {
       })
       .catch(err => {
         // console.log(err)
-        next({
-          error: {
-            name : 'fail'
-          },
-          status: 400,
-          msg: 'fail get one product'
-        })
+        next(err)
       })
    }
 
@@ -77,10 +71,7 @@ class ProductController {
          })
          .catch(err => {
             // console.log(err, 'create error')
-            next({
-              error : err,
-              msg: 'fail create product'
-            })
+            next(err)
          })
    }
 
@@ -98,9 +89,7 @@ class ProductController {
                 // console.log(data, '=====================2222')
                 res.status(200).json({ msg: 'success update product' })
               })
-              .catch(err => {
-                next({error: err, msg: 'fail update product'})  
-              })
+              .catch(next)
           } else {
             next({ error: { name : 'not found' }, status: 400, msg: 'product not found' })  
           }

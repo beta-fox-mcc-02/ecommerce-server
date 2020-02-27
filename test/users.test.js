@@ -60,8 +60,10 @@ describe('Users Routes', () => {
                RoleId : 2
             })
             .end((err, response) => {
+                // console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'email must be unique')
 
                expect(response.status).toBe(400)
                done()
@@ -78,13 +80,94 @@ describe('Users Routes', () => {
                RoleId : 2
             })
             .end((err, response) => {
-               // console.log(response)
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
-
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'password length must be between 6 and 12')
                expect(response.status).toBe(400)
                done()
             })
+      })
+
+      test('name cant be empty', done => {
+        request(app)
+           .post('/users/register')
+           .send({
+              name : '',
+              email : 'acbdefg@mail.com',
+              password : 'qwerty',
+              RoleId : 2
+           })
+           .end((err, response) => {
+              // console.log(response.body)
+              expect(err).toBe(null)
+              expect(response.body).toHaveProperty('msg', expect.any(Array))
+              expect(response.body.msg[0]).toHaveProperty('message', 'name cant be empty')
+              expect(response.body.msg[1]).toHaveProperty('message', 'name must contain character only')
+              expect(response.status).toBe(400)
+              done()
+           })
+     })
+
+     test('email cant be empty', done => {
+      request(app)
+         .post('/users/register')
+         .send({
+            name : 'abcdef',
+            email : '',
+            password : 'qwerty',
+            RoleId : 2
+         })
+         .end((err, response) => {
+            // console.log(response.body)
+            expect(err).toBe(null)
+            expect(response.body).toHaveProperty('msg', expect.any(Array))
+            expect(response.body.msg[0]).toHaveProperty('message', 'please use email format')
+            expect(response.body.msg[1]).toHaveProperty('message', 'email cant be empty')
+            expect(response.status).toBe(400)
+            done()
+         })
+      })
+
+      test('password cant be empty', done => {
+        request(app)
+           .post('/users/register')
+           .send({
+              name : 'abcdef',
+              email : 'acbdefg@mail.com',
+              password : '',
+              RoleId : 2
+           })
+           .end((err, response) => {
+              // console.log(response.body)
+              expect(err).toBe(null)
+              expect(response.body).toHaveProperty('msg', expect.any(Array))
+              expect(response.body.msg[0]).toHaveProperty('message', 'password length must be between 6 and 12')
+              expect(response.body.msg[1]).toHaveProperty('message', 'password must only contain alpha and numeric')
+              expect(response.body.msg[2]).toHaveProperty('message', 'password cant be empty')
+              expect(response.status).toBe(400)
+              done()
+           })
+      })
+
+      test('Role cant be empty', done => {
+        request(app)
+           .post('/users/register')
+           .send({
+              name : 'abcdef',
+              email : 'acbdefg@mail.com',
+              password : 'qwerty',
+              RoleId : ''
+           })
+           .end((err, response) => {
+              // console.log(response.body)
+              expect(err).toBe(null)
+              expect(response.body).toHaveProperty('msg', expect.any(Array))
+              expect(response.body.msg[0]).toHaveProperty('message', 'role must only contain number')
+              expect(response.body.msg[1]).toHaveProperty('message', 'role cant be empty')
+              expect(response.status).toBe(400)
+              done()
+           })
       })
 
       test('input cant be empty', done => {
@@ -97,12 +180,60 @@ describe('Users Routes', () => {
                RoleId : ''
             })
             .end((err, response) => {
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
-
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'name cant be empty')
+               expect(response.body.msg[1]).toHaveProperty('message', 'name must contain character only')
+               expect(response.body.msg[2]).toHaveProperty('message', 'please use email format')
+               expect(response.body.msg[3]).toHaveProperty('message', 'email cant be empty')
+               expect(response.body.msg[4]).toHaveProperty('message', 'password length must be between 6 and 12')
+               expect(response.body.msg[5]).toHaveProperty('message', 'password must only contain alpha and numeric')
+               expect(response.body.msg[6]).toHaveProperty('message', 'password cant be empty')
+               expect(response.body.msg[7]).toHaveProperty('message', 'role must only contain number')
+               expect(response.body.msg[8]).toHaveProperty('message', 'role cant be empty')
+               expect(response.status).toBe(400)
                expect(response.status).toBe(400)
                done()
             })
+      })
+
+      test('name cant be null', done => {
+        request(app)
+           .post('/users/register')
+           .send({
+              name : null,
+              email : 'abcd@mail.com',
+              password : '98765',
+              RoleId : 2
+           })
+           .end((err, response) => {
+              // console.log(response.body)
+              expect(err).toBe(null)
+              expect(response.body).toHaveProperty('msg', expect.any(Array))
+              expect(response.body.msg[0]).toHaveProperty('message', 'name cant be null')
+              expect(response.status).toBe(400)
+              done()
+           })
+      })
+
+      test('email cant be null', done => {
+        request(app)
+           .post('/users/register')
+           .send({
+              name : 'abcdef',
+              email : null,
+              password : '98765',
+              RoleId : 2
+           })
+           .end((err, response) => {
+              // console.log(response.body)
+              expect(err).toBe(null)
+              expect(response.body).toHaveProperty('msg', expect.any(Array))
+              expect(response.body.msg[0]).toHaveProperty('message', 'email cant be null')
+              expect(response.status).toBe(400)
+              done()
+           })
       })
 
       test('input cant be null', done => {
@@ -115,9 +246,13 @@ describe('Users Routes', () => {
                RoleId : null
             })
             .end((err, response) => {
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
-
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'name cant be null')
+               expect(response.body.msg[1]).toHaveProperty('message', 'email cant be null')
+               expect(response.body.msg[2]).toHaveProperty('message', 'password cant be null')
+               expect(response.body.msg[3]).toHaveProperty('message', 'role cant be null')
                expect(response.status).toBe(400)
                done()
             })
@@ -133,8 +268,10 @@ describe('Users Routes', () => {
                RoleId : 2
             })
             .end((err, response) => {
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', expect.any(Array))
+               expect(response.body.msg[0]).toHaveProperty('message', 'please use email format')
                expect(response.status).toBe(400)
                done()
             })
@@ -167,8 +304,9 @@ describe('Users Routes', () => {
                password : 'qwertyqwewu'
             })
             .end((err, response) => {
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'wrong username/password')
                expect(response.status).toBe(400)
                done()
             })
@@ -182,8 +320,9 @@ describe('Users Routes', () => {
                password : ''
             })
             .end((err, response) => {
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'wrong username/password')
                expect(response.status).toBe(400)
                done()
             })
@@ -197,8 +336,9 @@ describe('Users Routes', () => {
                password : 'qwerty'
             })
             .end((err, response) => {
+              //  console.log(response.body)
                expect(err).toBe(null)
-               expect(response.body).toHaveProperty('msg', expect.any(String))
+               expect(response.body).toHaveProperty('msg', 'msg', 'wrong username/password')
                expect(response.status).toBe(400)
                done()
             })

@@ -127,10 +127,6 @@ class CartDetailController {
 
   static checkOut (req, res, next) {
     let carts
-    // console.log('masuk sini')
-    // console.log(req.body)
-    // console.log(req.params)
-    // console.log('end of cart detail')
     CartDetail.findAll({
       where: {
         [Op.or] : [{ id: req.body.id}]
@@ -164,7 +160,7 @@ class CartDetailController {
         return Promise.all(promises)
       })
       .then(result => {
-        console.log(carts)
+        // console.log(carts)
         return Cart.update({ status: true }, {
           where: { id: carts[0].CartId }
         })
@@ -175,7 +171,7 @@ class CartDetailController {
         })
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
         next({ error: err })
       })
   }
@@ -185,13 +181,13 @@ class CartDetailController {
     console.log('masuk delete', id)
     CartDetail.destroy({ where: { id } })
       .then(data => {
-        console.log(data, '===')
+        // console.log(data, '===')
         res.status(200).json({
           msg: 'success delete'
         })
       })
       .catch(err => {
-        console.log('testing delete =======')
+        // console.log('testing delete =======')
         next({error: { name : err }})
       })
   }

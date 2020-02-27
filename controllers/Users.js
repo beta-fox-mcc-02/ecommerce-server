@@ -14,19 +14,14 @@ class UserController {
                msg : 'success register'
             })
          })
-         .catch(err => {
-          //  console.log(err)
-            next({ error : err })
-         })
+         .catch(next)
    }
 
    static login (req, res, next) {
       let { email, password } = req.body
-      User.findOne({
-         where : { email }
-      })
+      User.findOne({ where : { email } })
          .then(user => {
-           console.log('masuk sini ============')
+          //  console.log('masuk sini ============')
             if(user) {
               //  console.log('then login user')
                let valid = BcryptHelper.decryptPass(password, user.password)
@@ -41,22 +36,20 @@ class UserController {
                   })
                } else {
                   next({
-                     error : { name : 'Bad request' },
+                     name : 'BadRequestAuthentication',
                      status : 400,
                      msg : 'wrong username/password'
                   })
                }
             } else {
                next({
-                  error : { name : 'Bad request' },
+                  name : 'BadRequestAuthentication',
                   status : 400,
                   msg : 'wrong username/password'
                })
             }
          })
-         .catch(err => {
-            next({ error: err })
-         })
+         .catch(next)
    }
 
    static findAll (req, res, next) {

@@ -4,7 +4,7 @@ const { JwtHelper } = require('../helpers/index')
 module.exports = (req, res, next) => {
    let token = req.headers.access_token
    let userToken = req.headers.access_token_user
-   console.log(token, '===')
+  //  console.log(token, '===')
   //  console.log(userToken, '====')
    if(token) {
       try {
@@ -20,9 +20,8 @@ module.exports = (req, res, next) => {
                   req.RoleId = payload.RoleId
                   next()
                } else {
-                  next({error : {
-                     name : 'User not found'
-                    },
+                  next({
+                     name: 'User not found',
                      status: 400,    
                      msg: 'please log in first'
                   })
@@ -30,7 +29,7 @@ module.exports = (req, res, next) => {
             })
             .catch(err => {
                next({
-                  error : err,
+                  err,
                   status: 400,
                   msg : 'please log in first'
                })
@@ -38,16 +37,14 @@ module.exports = (req, res, next) => {
       }
       catch(err) {
          next({
-            error : err,
+            err,
             status: 400,
             msg : 'please log in first'
          })
       }
    } else {
       next({
-         error : {
-          name : 'you are not authenticate'
-         },
+         name : 'you are not authenticate',
          status: 400,    
          msg: 'please log in first'
       })

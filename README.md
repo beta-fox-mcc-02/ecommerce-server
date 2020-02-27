@@ -599,3 +599,253 @@ Base url : http://localhost:3000/
     ```json
     { "msg" : "you are not authorize" }
     ```
+
+
+# Carts Router
+
+**Create Cart**
+----
+  Create json for cart data.
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   None
+
+* **Data Params**
+   
+   `UserId=[INTEGER]` \
+   `status=[BOOLEAN]` \
+   `invoice=[STRING]` \
+   `date=[DATE]`
+
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** 
+    ```json
+      {
+        "data": {
+          "id": 1,
+          "UserId": 1,
+          "status": false,
+          "invoice": "",
+          "date": null
+        }
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    { "msg" : "fail create carts" }
+    ```
+
+  * **Code:** 401 <br />
+    **Content:** 
+    ```json
+    { "msg" : "you are not authorize" }
+    ```
+
+**Find all Carts**
+----
+  Find all json carts data.
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   None
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+      {
+        "data": [
+        {
+          "id": 1,
+          "UserId": 1,
+          "status": false,
+          "invoice": "",
+          "date": null
+        },
+        {
+          "id": 2,
+          "UserId": 1,
+          "status": false,
+          "invoice": "",
+          "date": null
+        }]
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    { "msg" : "please log in first" }
+    ```
+  * **Code:** 401 <br />
+    **Content:** 
+    ```json
+    { "msg" : "you are not authorize" }
+    ```
+
+**Update quantity from Carts**
+----
+  Update quantity in cart data.
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+      {
+        "id": 2,
+        "UserId": 1,
+        "status": false,
+        "invoice": "",
+        "date": null
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    { "msg" : "please log in first" }
+    ```
+  * **Code:** 401 <br />
+    **Content:** 
+    ```json
+    { "msg" : "you are not authorize" }
+    ```
+
+**Delete Carts**
+----
+  Delete json cart data.
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Data Params**
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+      { "msg" : "success delete" }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    { "msg" : "carts not found" }
+    ```
+  * **Code:** 401 <br />
+    **Content:** 
+    ```json
+    { "msg" : "you are not authorize" }
+    ```
+
+**Checkout from Carts**
+----
+  Checkout carts by update json cart data.
+
+* **URL**
+
+  /carts/:cartId/checkout
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `cartId=[integer]`
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+      {
+        "msg": "success checkout items" 
+      }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ```json
+    { "msg" : "please log in first" }
+    ```
+  * **Code:** 401 <br />
+    **Content:** 
+    ```json
+    { "msg" : "you are not authorize" }
+    ```
