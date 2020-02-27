@@ -85,6 +85,10 @@ class CartController {
           transactionDetails.push(item)
           totalPrice += el.Product.price
         })
+
+        let newProduct = cartItems.map(el => {
+          return { id: el.Product.id, stock: el.Product.stock - el.quantity }
+        })
         let trans = { UserId: req.jwtPayload.id, totalPrice }
 
         return sequelize
@@ -100,11 +104,15 @@ class CartController {
               return TransactionDetail.bulkCreate(transactionDetails, {
                 transaction: t
               }).then(resCreate => {
-                return ShoppingCart.destroy({
-                  where: { id: ShoppingCartId },
-                  transaction: t
-                }).then(resdel => {
-                  return CartItem.destroy({ where: { ShoppingCartId } })
+                return Product.bulkCreate(newProduct, {
+                  updateOnDuplicate: ['stock']
+                }).then(newProductresult => {
+                  return ShoppingCart.destroy({
+                    where: { id: ShoppingCartId },
+                    transaction: t
+                  }).then(resdel => {
+                    return CartItem.destroy({ where: { ShoppingCartId } })
+                  })
                 })
               })
             })
@@ -112,7 +120,10 @@ class CartController {
           .then(endResult => {
             res.status(200).json(endResult)
           })
-          .catch(next)
+          .catch(err => {
+            console.log(err)
+            next(err)
+          })
       })
       .catch(next)
   }
