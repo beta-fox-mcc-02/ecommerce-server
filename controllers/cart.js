@@ -10,6 +10,9 @@ class CartController {
         model: CartDetail,
         include:[Product]
       }],
+      order: [
+        ['id', 'DESC']
+      ],
       where: {
         [Op.and]:[
           {
