@@ -56,6 +56,13 @@ const errorHandler = (err, req, res, next) => {
       name: 'UNAUTHORIZED',
       message: 'Please login first'
     })
+  } else if (err.name === 'NOT_ENOUGH_STOCK') {
+    status = 400
+    res.status(status).json({
+      name:'NOT_ENOUGH_STOCK',
+      message: 'Not enough stock',
+      errors: err.errors
+    })
   }
 }
 

@@ -5,7 +5,10 @@ const { isAuthenticated, isCartAuthorized, isCustomerAuthorized } = require('../
 router.use(isAuthenticated)
 router.use(isCustomerAuthorized)
 router.post('/', CartController.createCart)
+router.get('/', CartController.fetchCarts)
 
 router.use('/:id', isCartAuthorized)
 router.put('/:id', CartController.updateCart)
+router.get('/:id', CartController.findOneCart)
+router.post('/:id/checkout', CartController.checkout)
 module.exports = router

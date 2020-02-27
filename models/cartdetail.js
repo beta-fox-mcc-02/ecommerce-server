@@ -38,7 +38,33 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    price: DataTypes.INTEGER,
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Price is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Price is required'
+        },
+        isNumeric: {
+          args: true,
+          msg: 'Only accept number'
+        },
+        isInt: {
+          args: true,
+          msg: 'Only accept integer number'
+        },
+        isGreatherThanZero (value) {
+          if (value <=0) {
+            throw new Error('Price must be greather than zero')
+          }
+        }
+      }
+    },
     total: DataTypes.INTEGER
   }, {
         sequelize,
