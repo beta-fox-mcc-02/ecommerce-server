@@ -25,12 +25,14 @@ class AdminController {
     }
 
     static login(req, res, next) {
+        console.log(req.body.email, " < login")
         Admin.findOne({
                 where: {
                     email: req.body.email
                 }
             })
             .then(data => {
+                console.log(data)
                 if (data) {
                     let checkPassword = bcrypt.check(req.body.password, data.password)
                     if (checkPassword) {

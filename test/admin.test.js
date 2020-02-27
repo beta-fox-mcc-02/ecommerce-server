@@ -78,42 +78,42 @@ describe("User register", () => {
         });
     });
   });
-});
-
-describe("Admin Login", () => {
-  describe("Admin login success", () => {
-    test("it should return email, token and status 200", done => {
-      request(app)
-        .post("/admin/login")
-        .send({
-          email: "admin@mail.com",
-          password: "admin"
-        })
-        .end((err, response) => {
-          expect(err).toBe(null);
-          // console.log(response.body);
-          expect(response.body).toHaveProperty("email");
-          expect(response.body).toHaveProperty("token");
-          expect(response.status).toBe(200);
-          done();
-        });
+  
+  describe("Admin Login", () => {
+    describe("Admin login success", () => {
+      test("it should return email, token and status 200", done => {
+        request(app)
+          .post("/admin/login")
+          .send({
+            email: "admin@mail.com",
+            password: "admin"
+          })
+          .end((err, response) => {
+            expect(err).toBe(null);
+            // console.log(response.body);
+            expect(response.body).toHaveProperty("email");
+            expect(response.body).toHaveProperty("token");
+            expect(response.status).toBe(200);
+            done();
+          });
+      });
     });
-  });
-
-  describe("User login failed", () => {
-    test("it should return status 404", done => {
-      request(app)
-        .post("/admin/login")
-        .send({
-          email: "yup@mail.com",
-          password: "yui"
-        })
-        .end((err, response) => {
-          expect(response.body).toHaveProperty("err");
-          expect(response.body).toHaveProperty("msg");
-          expect(response.status).toBe(404);
-          done();
-        });
+  
+    describe("User login failed", () => {
+      test("it should return status 404", done => {
+        request(app)
+          .post("/admin/login")
+          .send({
+            email: "yup@mail.com",
+            password: "yui"
+          })
+          .end((err, response) => {
+            expect(response.body).toHaveProperty("err");
+            expect(response.body).toHaveProperty("msg");
+            expect(response.status).toBe(404);
+            done();
+          });
+      });
     });
   });
 });

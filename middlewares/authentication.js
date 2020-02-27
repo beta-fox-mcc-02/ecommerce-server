@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const {
-  Admin
+  User
 } = require("../models");
 const private_key = "secret";
 
@@ -9,20 +9,21 @@ module.exports = {
     try {
       const token = req.headers.access_token;
       let decoded = jwt.verify(token, private_key);
-      Admin.findOne({
+      // console.log(decoded.payload, "decoded authentication")
+      User.findOne({
           where: {
-            id: decoded.data.id
+            id: decoded.payload.id
           }
         })
         .then(data => {
           if (data) {
-            req.AdminId = data.id;
-            // req.Role = data.role
+            req.UserId = data.id;
+            // console.log(req.UserId, 'req.userid dari authentication')
             next();
           } else {
             let errorMsg = {
               err: "Not exist",
-              msg: "Admin does not exist"
+              msg: "User does not exist"
             };
             res.status(404).json(errorMsg);
           }

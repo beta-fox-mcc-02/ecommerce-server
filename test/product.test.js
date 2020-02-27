@@ -10,17 +10,37 @@ const {
     queryInterface
 } = sequelize;
 
-describe("Product test", () => {
-    afterAll(done => {
-        queryInterface
-          .bulkDelete("Products", {})
-          .then(data => {
-            done()
-          })
-          .catch(err => {
-            done(err)
-          })
+afterAll(done => {
+    queryInterface
+      .bulkDelete("Products", {})
+      .then(data => {
+        done()
       })
+      .catch(err => {
+        done(err)
+      })
+  })
+
+let idFindOne = ''
+
+beforeAll(done => {
+    Product.create({
+        name: "Teh",
+        image_url: "https://static.republika.co.id/uploads/images/inpicture_slide/secangkir-teh-_190524103045-721.jpg",
+        price: 6000,
+        stocks: 108
+    })
+      .then(data => {
+        idFindOne = data.id
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
+  })
+
+
+describe("Product test", () => {
 
     describe("Read/Get all product", () => {
         test("it should return product list  and status 200", done => {
@@ -72,7 +92,7 @@ describe("Product test", () => {
                     expect(err).toBe(null);
                     // console.log(response.body.err, 'error create product')
                     // expect(response.body).toHaveProperty("err");
-                    expect(response.status).toBe(201);
+                    expect(response.status).toBe(400);
                     done();
                 });
         });
@@ -81,7 +101,7 @@ describe("Product test", () => {
     describe("Read/Get specific product by id", () => {
         test("it should return product list and status 200", done => {
             request(app)
-                .get("/admin/product/14/update")
+                .get(`/admin/product/${idFindOne}/update`)
                 .end((err, response) => {
                     expect(err).toBe(null);
                     // console.log(response.body)
@@ -113,7 +133,7 @@ describe("Product test", () => {
     describe("Update product by id", () => {
         test("it should return new product value and status 201", done => {
             request(app)
-                .put("/admin/product/11/update")
+                .put(`/admin/product/${idFindOne}/update`)
                 .send({
                     name: "kopi luwak",
                     image_url: "http://www.imageurl.com",
@@ -134,7 +154,7 @@ describe("Product test", () => {
     });
 
     describe("Failed to update product by id", () => {
-        test("should return status 404", done => {
+        test("should return status 400", done => {
             request(app)
                 .put("/admin/product/1/update")
                 .send({
@@ -147,7 +167,7 @@ describe("Product test", () => {
                     expect(err).toBe(null);
                     // console.log(response.body.err, 'error create product')
                     expect(response.body).toHaveProperty("err");
-                    expect(response.status).toBe(404);
+                    expect(response.status).toBe(400);
                     done();
                 });
         });
@@ -156,7 +176,7 @@ describe("Product test", () => {
     describe("Delete product by id", () => {
         test("it should return status 200", done => {
             request(app)
-                .delete("/admin/product/1/delete")
+                .delete(`/admin/product/${idFindOne}/delete`)
                 .end((err, response) => {
                     expect(err).toBe(null);
                     // console.log(response.body)
@@ -170,7 +190,7 @@ describe("Product test", () => {
     describe("Failed to Delete product by id", () => {
         test("it should return status 200", done => {
             request(app)
-                .delete("/admin/product/100/delete")
+                .delete("/admin/product/3920/delete")
                 .end((err, response) => {
                     expect(err).toBe(null);
                     // console.log(response.body)

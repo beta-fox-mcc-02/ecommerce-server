@@ -7,6 +7,8 @@ const cors = require('cors')
 // const PORT = 3000;
 const adminRoute = require("./routes/admin");
 const productRoute = require("./routes/product");
+const userRoute = require("./routes/user.js");
+const cartRoute = require('./routes/cart.js')
 const errorHandler = require("./middlewares/errorHandler");
 const {
   User
@@ -28,6 +30,10 @@ app.get("/", (req, res) => {
 app.use("/admin", adminRoute);
 
 app.use("/admin", productRoute);
+
+app.use(userRoute)
+
+app.use(cartRoute)
 
 app.use(errorHandler);
 
