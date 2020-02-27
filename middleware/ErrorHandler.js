@@ -1,5 +1,5 @@
 module.exports = (err,req,res,next) => {
-    console.log(err,'ini middleware')
+    console.log(err)
     let obj = {
         status : 500,
         message : 'internal sistem eror'
@@ -12,7 +12,6 @@ module.exports = (err,req,res,next) => {
             })
             obj.status = 400
             obj.message = arr
-            console.log(arr,'ini arr')
         }else{
             err.errors.forEach(el => {
                 obj.message = el.message
@@ -30,6 +29,12 @@ module.exports = (err,req,res,next) => {
         obj.status = 203
         obj.message = 'you must be provided'
         res.status(obj.status).json(obj)
+    }
+    else if (err.name === 'duplicate'){
+        console.log('c')
+        obj.status = 404
+        obj.message = err.message
+        res.status(obj.status).json(obj.message)
     }
     else{
         res.status(obj.status).json(obj)

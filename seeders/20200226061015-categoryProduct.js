@@ -12,8 +12,19 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-   return queryInterface.bulkInsert('Roles', [{role: 'Admin',createdAt : "now()",updatedAt:"now()"},{role:'User',createdAt : "now()",updatedAt:"now()"}], {});
-
+   return queryInterface.bulkInsert('categories',[
+   {
+     name: 'Costume',
+     createdAt : "now()",
+     updatedAt:"now()"
+   },
+   {
+    name: 'Figure',
+    createdAt : "now()",
+    updatedAt:"now()"
+  }],
+  {}
+   )
   },
 
   down: (queryInterface, Sequelize) => {
@@ -24,6 +35,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-   return queryInterface.bulkDelete('Roles', null, {});
+   return queryInterface.bulkDelete('categories',null,{})
   }
 };

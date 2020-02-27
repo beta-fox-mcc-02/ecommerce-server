@@ -46,7 +46,6 @@ describe('Check ',() => {
         })
             .then(response => {
                 id = response.id
-                console.log(id)
                 done()
             })
             .catch(err =>{
@@ -77,7 +76,6 @@ describe('Check ',() => {
             .end((err,response) => {
                 // console.log(token)
                 expect(err).toBe(null)
-                console.log(response.body,'INI CREATE')
                 expect(response.body).toHaveProperty("data",expect.any(Object))
                 // expect(response.body).toHaveProperty("data.name",expect.any(String))
                 // expect(response.body).toHaveProperty("data.description",expect.any(String))
@@ -99,7 +97,6 @@ describe('Check ',() => {
             .set('token',token)
             .end((err,response) => {
                 expect(err).toBe(null)
-                console.log(response.body,'INI BODY')
                 expect(response.body).toHaveProperty('message','please insert title')
                 expect(response.status).toBe(400)
                 done()
@@ -193,7 +190,6 @@ describe('Check ',() => {
             .set('token',token)
             .end((err,response) => {
                 expect(err).toBe(null)
-                console.log(response.body,'IIII')
                 expect(response.body).toHaveProperty('message')
                 expect(response.status).toBe(404)
                 done()
@@ -290,20 +286,20 @@ describe('Check ',() => {
             .set("token",token)
             .end((err,response) => {
                 expect(err).toBe(null)
-                expect(response.body).toHaveProperty('message')
+                expect(response.body).toHaveProperty("data",expect.any(Object))
                 expect(response.status).toBe(200)
                 done()
             })
         })
     })
     describe('readOne',() => {
-        test('findOne succes ',(done) => {
+        test.only('findOne succes ',(done) => {
             request(app)
             .get(`/${id}`)
             .set('token',token)
             .end((err,response) => {
                 expect(err).toBe(null)
-                expect(response.body).toHaveProperty('message')
+                expect(response.body).toHaveProperty("data",expect.any(Object))
                 expect(response.status).toBe(200)
                 done()
             })

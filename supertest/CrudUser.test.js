@@ -5,7 +5,7 @@ const { User , sequelize } = require('../models')
 const { queryInterface } = sequelize
 const  jwt = require('../helper/jwt')
 
-describe.skip("Check Register" , () => {
+describe("Check Register" , () => {
     afterEach((done) => {
         queryInterface.bulkDelete("Users", {})
             .then(response => {
@@ -63,9 +63,7 @@ describe.skip("Check Register" , () => {
                 .end((err,response) => {
                     if(response.name === 'SequelizeValidationError'){
                         expect(response.body).toHaveProperty('message')
-                        expect(response.status).toHaveLength(400)
-                    }else{
-                        expect(response.status).toBe(500)
+                        expect(response.status).toBe(400)
                     }
                     done()
                 })
@@ -101,9 +99,7 @@ describe.skip("Check Register" , () => {
                 .end((err,response) => {
                     if(response.name === 'SequelizeValidationError'){
                         expect(response.body).toHaveProperty('message')
-                        expect(response.status).toHaveLength(400)
-                    }else{
-                        expect(response.status).toBe(500)
+                        expect(response.status).toBe(400)
                     }
                     done()
                 })
@@ -121,9 +117,7 @@ describe.skip("Check Register" , () => {
                 .end((err,response) => {
                     if(response.name === 'SequelizeValidationError'){
                         expect(response.body).toHaveProperty('message')
-                        expect(response.status).toHaveLength(400)
-                    }else{
-                        expect(response.status).toBe(500)
+                        expect(response.status).toBe(400)
                     }
                     done()
                 })
@@ -141,16 +135,14 @@ describe.skip("Check Register" , () => {
                 .end((err,response) => {
                     if(response.name === 'SequelizeValidationError'){
                         expect(response.body).toHaveProperty('message')
-                        expect(response.status).toHaveLength(400)
-                    }else{
-                        expect(response.status).toBe(500)
+                        expect(response.status).toBe(400)
                     }
                     done()
                 })
         })
     })
 })
-describe.skip("Check Email" , () => {
+describe("Check Email" , () => {
     var token ;
     beforeAll((done) => {
         User.create({

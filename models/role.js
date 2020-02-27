@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   class Role extends sequelize.Sequelize.Model{
     static associate(models){
-      Role.belongsTo(models.User)
+      // Role.belongsTo(models.User)
     }
   }
     

@@ -35,7 +35,7 @@ class ControllerUser{
         let input = {
             email,
             password,
-            RoleId : 1
+            RoleId : +1
         }
         User.findOne({
             where : {
@@ -45,42 +45,47 @@ class ControllerUser{
             .then(data => {
                 if(!data){
                     return User.create(input)
+                }else{
+                    next({
+                        status : 400,
+                        msg: "email already exiest"
+                    })
                 }
             })
             .then(data => {
                 res.status(201).json(data)
             })
             .catch(err => {
-                // console.log(err)
-
                 next(err)
             })
     }
     static login(req,res,next){
         const { email , password,username,role, } = req.body
+        console.log(email)
         User.findOne({
             where : {
                 email
             }
         })
             .then(data => {
+                console.log(data)
                 if(data){
-
                     let input = {
-                        username,
+                        id : data.id,
                         email,
                         password,
-                        role
                     }
                     let validate = bcrypt.compare(password,data.password)
                     if(validate){
+                        console.log(input)
                         const token = jwt.generate(input)
+                        console.log(token)
                         res.status(200).json({token})
                         
                     }
                 }
                 else{
-                    res.status(404).json({
+                    res.status(400).json({
                         msg : "Email doesn't exist"
                     })
                 }

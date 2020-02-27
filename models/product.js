@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model{
     static associate(models){
-
+      Product.belongsToMany(models.User, { through: models.Cart })
+      Product.belongsTo(models.category)
     }
   }
   Product.init({
@@ -54,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    CategoryId : {
+    categoryId : {
       type : DataTypes.INTEGER
     }
   },{sequelize})

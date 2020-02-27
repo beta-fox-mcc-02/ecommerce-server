@@ -12,7 +12,7 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Roles', [{Role: 'Admin',createdAt : "now()",updatedAt:"now()"},{Role:'User',createdAt : "now()",updatedAt:"now()"}], {});
+    return queryInterface.bulkInsert('Roles', [{role: 'Admin',createdAt : "now()",updatedAt:"now()"},{role:'User',createdAt : "now()",updatedAt:"now()"}], {});
   },
 
   down: (queryInterface, Sequelize) => {

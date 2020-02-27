@@ -1,16 +1,17 @@
-const { Product } = require('../models')
+const { Product, category } = require('../models')
 const bcrypt = require('../helper/bcryptjs')
 const jwt = require('../helper/jwt')
 
 class ControllerProduct {
     static create (req,res,next){
-        const {name , description , price , stock , image_url} = req.body
+        const {name , description , price , stock , image_url, categoryId} = req.body
         const input = {
             name,
             description,
             price,
             stock,
-            image_url
+            image_url,
+            categoryId
         }
         Product.create(input)
         // console.log(input ,'ININ INPUTT')
@@ -18,15 +19,16 @@ class ControllerProduct {
                 res.status(200).json({data})
             })
             .catch(err =>{
-                // console.log(err.errors.message)
+                console.log(err)
                 next(err)
             })
     }
     static readAll (req,res,next){
-        Product.findAll()
+        Product.findAll(
+            {include: [category]}
+        )
             .then(data => {
-                console.log(data,'INI DATA')
-                res.status(200).json(data)
+                res.status(200).json({data})
             })
             .catch(err => {
                 next(err)
@@ -34,19 +36,18 @@ class ControllerProduct {
     }
     static findOne(req,res,next){
         const id = +req.params.id
-        Product.findOne({
+        console.log(id)
+        Product.findAll({
             where : {
-                id : id
-            }
+                categoryId : id
+            },
+            include: [category]
         })
             .then(data => {
                 if(data){
-                    res.status(200).json(data)
+                    res.status(200).json({data})
                 }else{
-                    next({
-                        status : 404,
-                        message : 'Data is undifiend'
-                    })
+                    res.status(404).json({message : "Data is not defiend"})
                 }
             })
             .catch(err => {
@@ -93,7 +94,7 @@ class ControllerProduct {
             stock,
             image_url
         }
- Product.update(input,
+        Product.update(input,
         {
             where : {
                 id 
@@ -101,8 +102,26 @@ class ControllerProduct {
             returning : true
         })
             .then(data => {
-                console.log(data, "INIIII")
                 res.status(200).json({message : 'Update berhasil'})
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
+    static findAllBycategory (req,res,next){
+        const { id } = req.params
+        Product.findAll(
+            {
+                where : 
+                {
+                    categoryId: id
+                },
+                include: [category]
+            }
+        )
+            .then(data => {
+                console.log(data)
+                res.status(200).json(data)
             })
             .catch(err => {
                 next(err)
