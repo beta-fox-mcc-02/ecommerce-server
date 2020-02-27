@@ -73,12 +73,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     hooks: {
       beforeValidate(cart, options) {
-        console.log(cart)
         const { id, ProductId, quantity } = cart
-        console.log('cartId=', id)
-        console.log('userId=', cart.UserId)
-        console.log('ProductId=', ProductId)
-        console.log('quantity=', quantity)
         if (ProductId) {
           return sequelize.models.Product.findOne({
             where: {
@@ -95,8 +90,6 @@ module.exports = (sequelize, DataTypes) => {
                 } else {
                   let calPrice = quantity * response.price
                   cart.price = calPrice
-                  console.log('quantity ' + quantity + ' X ' + 'price ' + response.price + ' = ' + 'akhir ' + cart.price)
-                  console.log('cart passed === ', cart)
                 }
               } else {
                 return Promise.reject({

@@ -6,6 +6,7 @@ class Controller {
       where: {
         UserId: req.decoded.id
       },
+      order: [['id', 'ASC']],
       include: [ Product ]
     })
       .then(response => {
@@ -41,33 +42,80 @@ class Controller {
   static editCart (req, res, next) {
     const { id } = req.params
     const { UserId, ProductId, quantity, status } = req.body
-    console.log('id=', id)
-    console.log('quantity=', quantity)
 
-    Cart.update(
-      {
-        UserId,
-        ProductId,
-        quantity,
-        status
-      },
-      {
+    if (ProductId) {
+      Product.findOne({
         where: {
-          id: Number(id)
-        },
-        individualHooks: true,
-        returning: true
-      }
-    )
-      .then(response => {
-        res.status(200).json({
-          msg: 'success update cart',
-          data: response
+          id: ProductId
+        }
+      })
+        .then(response => {
+          if (response) {
+            if (response.stock < quantity) {
+              res.status(400).json({
+                msg: 'product quantity is not enough'
+              })
+            } else {
+              let calPrice = quantity * response.price
+              return Cart.update(
+                {
+                  UserId,
+                  ProductId,
+                  quantity,
+                  status,
+                  price: calPrice
+                },
+                {
+                  where: {
+                    id: Number(id)
+                  },
+                  individualHooks: true,
+                  returning: true
+                }
+              )
+            }
+          } else {
+            res.status(404).json({
+              status: 404,
+              msg: 'product not found'
+            })
+          }
         })
-      })
-      .catch(err => {
-        next(err)
-      })
+        .then(response => {
+          res.status(200).json({
+            msg: 'success update cart',
+            data: response
+          })
+        })
+        .catch(err => {
+          next(err)
+        })
+    } else {
+      Cart.update(
+        {
+          UserId,
+          ProductId,
+          quantity,
+          status
+        },
+        {
+          where: {
+            id: Number(id)
+          },
+          individualHooks: true,
+          returning: true
+        }
+      )
+        .then(response => {
+          res.status(200).json({
+            msg: 'success update cart',
+            data: response
+          })
+        })
+        .catch(err => {
+          next(err)
+        })
+    }
   }
 
   static delete (req, res, next) {
@@ -84,6 +132,7 @@ class Controller {
         })
       })
       .catch(err => {
+        console.log(err)
         next(err)
       })
   }

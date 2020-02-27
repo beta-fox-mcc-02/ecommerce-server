@@ -22,7 +22,9 @@ class Controller {
     }
     
     static fetchAll(req, res, next) {
-        Product.findAll()
+        Product.findAll({
+            order: [['name', 'ASC']]
+        })
             .then(response => {
                 res.status(200).json({
                     msg: 'fetch all products success',
