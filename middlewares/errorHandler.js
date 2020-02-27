@@ -1,6 +1,6 @@
 module.exports = (err, req, res, next) => {
     const error = err
-    console.log(req.headers.token)
+    // console.log(req.headers.token)
     console.log(error, 'errrrrroooooooooor')
     if(error.name === 'SequelizeValidationError'){
         const messages = []
@@ -9,6 +9,11 @@ module.exports = (err, req, res, next) => {
         }
         res.status(400).json({
             err : messages
+        })
+    }
+    else if(error.name === 'transactionError'){
+        res.status(400).json({
+            err : error.message
         })
     }
     else if(error.name === 'loginError'){
