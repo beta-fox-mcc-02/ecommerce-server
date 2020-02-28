@@ -221,6 +221,7 @@ describe('Admin test section', () => {
                         password: "1234"
                     })
                     .end((err, response) => {
+                        console.log(response.body,'<==================3')
                         expect(err).toBe(null)
                         expect(response.status).toBe(400)
                         expect(response.body).toHaveProperty('message', 'invalid password / email')

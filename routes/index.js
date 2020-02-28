@@ -4,7 +4,7 @@ const user = require('./user')
 const { findAll } = require('../controllers/product')
 
 router.get('/', findAll)
-router.use('/', user)
 router.use('/admin', admin)
+router.use('/', user)
 
 module.exports = router
