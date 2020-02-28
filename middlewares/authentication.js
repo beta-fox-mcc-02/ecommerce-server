@@ -9,7 +9,6 @@ module.exports = (req, res, next) => {
             .then(data => {
                 if (data) {
                     req.decoded = data.dataValues
-                    console.log('lolos gan')
                     next()
                 } else {
                     next({
