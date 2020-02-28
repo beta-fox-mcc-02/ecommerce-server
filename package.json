@@ -1,0 +1,37 @@
+{
+  "name": "ecommerce-server",
+  "version": "1.0.0",
+  "description": "**Show User** ----   Returns json data about a single user.",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=testing jest --detectOpenHandles --runInBand",
+    "dev": "NODE_ENV=development nodemon ./bin/http.js",
+    "start": "node ./bin/http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hikmanisyariful/ecommerce-server.git"
+  },
+  "keywords": [],
+  "author": "Hikmani Syariful Fajar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hikmanisyariful/ecommerce-server/issues"
+  },
+  "homepage": "https://github.com/hikmanisyariful/ecommerce-server#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.18.1",
+    "sequelize": "^5.21.4",
+    "sequelize-cli": "^5.5.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "supertest": "^4.0.2"
+  }
+}
