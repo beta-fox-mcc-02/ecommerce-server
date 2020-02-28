@@ -1,0 +1,7 @@
+- dokumentasi jangan lupa!!!
+- belum remove cart
+- edit cart belom di handle (nilainya gede loh)
+- penamaan vue yang bener, 
+    ex: - ADD_LIST jadi SET_LIST
+        - fetchLogin jadi login aja
+        - 

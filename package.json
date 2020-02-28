@@ -1,0 +1,34 @@
+{
+  "name": "ecommerce-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jest": "^25.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.18.1",
+    "sequelize": "^5.21.4",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
+    "dev": "NODE_ENV=development nodemon ./bin/http.js",
+    "start": "node ./bin/http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukmanbayhaqi/ecommerce-server.git"
+  },
+  "keywords": [],
+  "author": "Lukman Bayhaqi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukmanbayhaqi/ecommerce-server/issues"
+  },
+  "homepage": "https://github.com/lukmanbayhaqi/ecommerce-server#readme"
+}
