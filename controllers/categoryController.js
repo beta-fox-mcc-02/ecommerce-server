@@ -9,7 +9,6 @@ class CategoryController {
                 })
             })
             .catch(err => {
-                console.log(err)
                 next(err)
             })
     }
@@ -22,13 +21,11 @@ class CategoryController {
             include: [Product]
         })
             .then(data => {
-                console.log(data)
                 res.status(200).json({
                     data
                 })
             })
             .catch(err => {
-                console.log(err)
                 next(err)
             })
     }

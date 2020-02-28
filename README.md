@@ -270,3 +270,253 @@
         "msg": "Internal Server Error"
     }
     ```
+
+**Add To Cart**
+----
+  Returns message and status http code.
+
+* **URL**
+
+  /cart
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+  none
+
+* **Data Params**
+
+  ProductId:integer,
+  UserId:integer
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "Success add product to cart"
+    }
+    ```
+ 
+* **Error Response:**
+
+    * **Code:** 400 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "[based on validation error sequelize]"
+    }
+    ```
+
+  * **Code:** 500 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "Internal Server Error"
+    }
+    ```
+
+
+
+**Read Fetch**
+----
+  Returns message and status http code.
+
+* **URL**
+
+  /cart
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+  none
+
+* **Data Params**
+
+  UserId:integer
+  status:false
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+        "msg": success fetch data
+        "data": <result fetch data>
+    }
+    ```
+ 
+* **Error Response:**
+
+    * **Code:** 400 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "[based on validation error sequelize]"
+    }
+    ```
+
+  * **Code:** 500 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "Internal Server Error"
+    }
+    ```
+
+
+**Delete Cart**
+----
+  Returns message and status http code.
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+
+  `DELETE`
+  
+*  **URL Params**
+
+  :id
+
+* **Data Params**
+
+  none
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+        "msg": success delete from cart
+    }
+    ```
+ 
+* **Error Response:**
+
+    * **Code:** 400 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "[based on validation error sequelize]"
+    }
+    ```
+
+  * **Code:** 500 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "Internal Server Error"
+    }
+    ```
+
+
+**Update Cart**
+----
+  Returns message and status http code.
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+  :id
+
+* **Data Params**
+
+  quantity:integer
+  price:false
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+        "msg": update success
+        "data": <result updated data>
+    }
+    ```
+ 
+* **Error Response:**
+
+    * **Code:** 400 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "[based on validation error sequelize]"
+    }
+    ```
+
+  * **Code:** 500 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "Internal Server Error"
+    }
+    ```
+
+**Payment Cart**
+----
+  Returns message and status http code.
+
+* **URL**
+
+  /cart/:id
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+  :id
+
+* **Data Params**
+
+  UserId:integer
+  status:false
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+        "data": <result data>
+    }
+    ```
+ 
+* **Error Response:**
+
+    * **Code:** 400 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "[based on validation error sequelize]"
+    }
+    ```
+
+  * **Code:** 500 <br />
+    **Content:** 
+    ```
+    {
+        "msg": "Internal Server Error"
+    }
+    ```

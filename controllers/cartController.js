@@ -1,9 +1,9 @@
-const { Cart, Product, User } = require('../models')
+const { Cart, Product, User, sequelize } = require('../models') 
 
 class CartController {
     static addToCart (req, res, next) {
-        console.log('DSINIIIII BANNGGG')
         const { ProductId, price, totalItem } = req.body
+        // Find one terlebih dahulu
         Cart.findOne({
             where: {
                 ProductId,
@@ -11,9 +11,9 @@ class CartController {
             }
         })
             .then(data => {
-                console.log(data, 'INIII DATAAAAAAAA')
+                // setelah data didapatkan
+                // jika data didatabase null, maka create cart baru
                 if (data === null) {
-                    console.log('DARI DATA NULL')
                     return Cart.create({
                         UserId: req.currentUserId,
                         ProductId,
@@ -21,44 +21,29 @@ class CartController {
                         price: totalItem * price
                     })
                 } else {
-                    console.log('BUKAN DARI DATA NULL')
-                    if (data.status === true) {
-                        return Cart.update({
-                            quantity: Number(totalItem),
-                            price: Number(totalItem) * price,
-                            status: false
-                        }, {
-                            where: {
-                                ProductId
-                            }
-                        })
-                    } else {
-                        return Cart.update({
-                            quantity: Number(totalItem) + data.quantity,
-                            price: (Number(totalItem) + data.quantity) * price
-                        }, {
-                            where: {
-                                ProductId
-                            }
-                        })
-                    }
+                    // jika data di database ada. tetapi statusnya false, 
+                    // maka data di update pirce dan quantitinya
+                    return Cart.update({
+                        quantity: Number(totalItem) + data.quantity,
+                        price: (Number(totalItem) + data.quantity) * price
+                    }, {
+                        where: {
+                            ProductId
+                        }
+                    })
                 }
             })
             .then(data => {
-                console.log('BERHASIILLLL')
-                console.log(data)
                 res.status(201).json({
                     msg: 'success add product to cart'
                 })
             })
             .catch(err => {
-                console.log(err)
-                next()
+                next(err)
             })
     }
 
     static fetchCart (req, res, next) {
-        console.log('masuk bang')
         Cart.findAll({
             where: {
                 UserId: req.currentUserId,
@@ -69,13 +54,11 @@ class CartController {
             order: [['id']]
         })
             .then(carts => {
-                console.log(carts)
                 res.status(200).json({
                     msg: carts
                 })
             })
             .catch(err => {
-                console.log(err)
                 next(err)
             })
     }
@@ -88,13 +71,11 @@ class CartController {
             }
         })
             .then(data => {
-                console.log(data)
                 res.status(200).json({
                     msg: 'success delete from cart'
                 })
             })
             .catch(err => {
-                console.log(err)
                 next(err)
             })
     }
@@ -110,66 +91,67 @@ class CartController {
             }
         })
             .then(data => {
-                console.log(data)
                 res.status(200).json({
                     data,
                     msg: 'update success'
                 })
             })
             .catch(err => {
-                console.log(err)
                 next(err)
             })
     }
 
     static payment (req, res, next) {
-        const { carts } = req.body
-        let err = []
-        const promises = []
-        console.log(carts[0].quantity > carts[0].Product.stock)
-        for (let i = 0; i < carts.length; i++) {
-            if (carts[i].quantity > carts[i].Product.stock) {
-                err.push(1)
-            } else {
-                promises.push(
-                    Cart.update({
-                        status: true
-                    }, {
-                        where: {
-                            id: carts[i].id
+        // pada table cart fin All terlebih dahulu dengan paramter UserId dan statusnya false
+        Cart.findAll({
+            where: {
+                UserId: req.params.id,
+                status: false
+            },
+            include: [Product],
+            attributes: ['id', 'quantity']
+        })
+            .then(data => {
+                // setelah data didapatkan, menggunakna sequelize transaction.
+                return sequelize.transaction(function (t) {
+                    const promises = []
+                    // pengecekan data yang mau dibeli user dan data stock tersedia
+                    // jika stock kurang throw new error
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].quantity > data[i].Product.stock) {
+                            throw new Error('Stock Unavailable')
+                        } else {
+                            // jika stock terpenuhi, maka akan melakukakn update pada dua table, Cart dan Product
+                            promises.push(
+                                Cart.destroy({
+                                    where: {
+                                        id: data[i].id
+                                    }
+                                }, {transaction: t}),
+                                Product.update({
+                                    name: data[i].Product.name,
+                                    image_url: data[i].Product.image_url,
+                                    price: data[i].Product.price,
+                                    stock: data[i].Product.stock - data[i].quantity
+                                }, {
+                                    where: {
+                                        id: data[i].Product.id
+                                    }
+                                }, {transaction: t})
+                            )
                         }
-                    }), 
-                    Product.update({
-                        name: carts[i].Product.name,
-                        image_url: carts[i].Product.image_url,
-                        price: carts[i].Product.price,
-                        stock: carts[i].Product.stock - carts[i].quantity
-                    }, {
-                        where: {
-                            id: carts[i].Product.id
-                        }
-                    })
-                )
-            }
-        }
-        if (err.length > 0) {
-            // belum dikirim kedepan
-            next({
-                name: 'Stock unavailable',
-                status: 404
+                    }
+                    return Promise.all(promises)
+                });
             })
-        } else {
-            Promise.all(promises)
-                .then(data => {
-                    console.log('berhasiill doonggsss')
-                    res.status(201).json({
-                        data
-                    })
+            .then(data => {
+                res.status(200).json({
+                    data
                 })
-                .catch(err => {
-                    next(err)
-                })
-        }
+            })
+            .catch(err => {
+                next(err)
+            })
 
     }
 }

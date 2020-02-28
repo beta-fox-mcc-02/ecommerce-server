@@ -111,7 +111,6 @@ class ProductController {
                 })
             })
             .catch(err => {
-                console.log(err)
                 next(err)
             })
     }
