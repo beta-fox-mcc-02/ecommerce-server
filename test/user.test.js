@@ -2,33 +2,33 @@ const request = require("supertest");
 const app = require("../app");
 const Sequelize = require("sequelize");
 const {
-  Admin,
+  User,
   sequelize
 } = require("../models");
 const {
   queryInterface
 } = sequelize;
 
-describe("Admin register", () => {
+describe("User register", () => {
 
-  afterAll(done => {
-    queryInterface
-      .bulkDelete("Admins", {})
-      .then(data => {
-        done()
-      })
-      .catch(err => {
-        done(err)
-      })
-  })
+//   afterAll(done => {
+//     queryInterface
+//       .bulkDelete("Users", {})
+//       .then(data => {
+//         done()
+//       })
+//       .catch(err => {
+//         done(err)
+//       })
+//   })
 
-  describe("Admin register success", () => {
+  describe("user register success", () => {
     test("should return status 201", done => {
       request(app)
-        .post("/admin/register")
+        .post("/register")
         .send({
-          email: "admin@mail.com",
-          password: "admin"
+          email: "user1@mail.com",
+          password: "user2"
         })
         .end((err, response) => {
           expect(err).toBe(null);
@@ -41,10 +41,10 @@ describe("Admin register", () => {
     });
   });
 
-  describe("Admin register email validation failed", () => {
+  describe("User register email validation failed", () => {
     test("should return status 400", done => {
       request(app)
-        .post("/admin/register")
+        .post("/register")
         .send({
           email: "yupinotmail.com",
           password: "yupi"
@@ -57,10 +57,10 @@ describe("Admin register", () => {
     });
   });
 
-  describe("Admin register password validation failed", () => {
+  describe("User register password validation failed", () => {
     test("should return status 400", done => {
       request(app)
-        .post("/admin/register")
+        .post("/register")
         .send({
           email: "yupi@mail.com",
           password: "yu"
@@ -73,10 +73,10 @@ describe("Admin register", () => {
     });
   });
 
-  describe("Admin register input failed", () => {
+  describe("User register input failed", () => {
     test("should return status 400", done => {
       request(app)
-        .post("/admin/register")
+        .post("/register")
         .send({
           email: "",
           password: "",
@@ -91,14 +91,14 @@ describe("Admin register", () => {
     });
   });
   
-  describe("Admin Login", () => {
-    describe("Admin login success", () => {
+  describe("User Login", () => {
+    describe("User login success", () => {
       test("it should return email, token and status 200", done => {
         request(app)
-          .post("/admin/login")
+          .post("/login")
           .send({
-            email: "admin@mail.com",
-            password: "admin"
+            email: "user1@mail.com",
+            password: "user2"
           })
           .end((err, response) => {
             expect(err).toBe(null);
@@ -114,7 +114,7 @@ describe("Admin register", () => {
     describe("User login failed", () => {
       test("it should return status 404", done => {
         request(app)
-          .post("/admin/login")
+          .post("/login")
           .send({
             email: "yup@mail.com",
             password: "yui"

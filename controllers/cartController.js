@@ -103,7 +103,7 @@ class CartController {
     }
 
     static delete(req, res, next) {
-        console.log('Masuk delete controller')
+        // console.log('Masuk delete controller')
         Cart.destroy({
             where: {
                 id: req.params.id
@@ -113,7 +113,7 @@ class CartController {
                 res.status(200).json(data)
             })
             .catch(err => {
-                console.log(err, 'error controller delete =================')
+                // console.log(err, 'error controller delete =================')
                 next(err)
             })
     }
@@ -158,11 +158,11 @@ class CartController {
                 }
             })
             .catch(err => {
-                let err = {
+                let error = {
                     error: 'Stocks not available',
                     msg: 'Stocks not available'
                 }
-                next(err)
+                next(error)
             })
     }
 }
