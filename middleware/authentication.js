@@ -26,6 +26,7 @@ module.exports = function(req, res, next) {
                 .then(customer => {
                     console.log('MASUK CUSTOMER AUTH')
                     if(customer) {
+                        console.log('MASUK LAGI')
                         req.currentCustomerId = decoded.id
                         req.nameCustomer = decoded.name
                         req.emailCustomer = decoded.email

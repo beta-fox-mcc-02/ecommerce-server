@@ -45,6 +45,11 @@ module.exports = function (err, req, res, next) {
             message : "BAD REQUEST",
             errors : [err.name]
         }
+    } else if (err.name === 'Maaf, barang sudah tidak tersedia') {
+        status = 400
+        err.obj = {
+            errors : [err.name]
+        }
     }
 
     res.status(status).json(errObj)

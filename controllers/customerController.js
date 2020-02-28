@@ -5,14 +5,25 @@ const { Cart, Product, CartProduct } = require('../models')
 
 class CustomerController {
   static register(req, res, next) {
+    let customer
     let payload = {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password
     }
     Customer.create(payload)
-      .then(customer => {
-        res.status(201).json(customer)
+      .then(data => {
+        customer = data
+        let payload = {
+          CustomerId : data.id
+        }
+        return Cart.create(payload)
+      })
+      .then(data => {
+        res.status(201).json({
+          customer : customer,
+          cartId : data.id
+        })
       })
       .catch(next)
   }
@@ -61,6 +72,7 @@ class CustomerController {
   static getCartCustomer (req, res, next) {
     const id = req.currentCustomerId
     let cartId
+    let productsCus
     Customer.findOne({
             where: {
                 id
@@ -81,11 +93,36 @@ class CustomerController {
             })
         })
         .then( products => {
+            productsCus = products
+            return Product.findAll({
+              order: [['id']]
+            })
+        })
+        .then( products => {
+          let data = []
+          for (let i = 0; i < productsCus.length; i++) {
+            for (let j = 0; j < products.length; j++) {
+              if (productsCus[i].ProductId === products[j].id) {
+                let raw = {
+                  product : {
+                    id: products[j].id,
+                    name: products[j].name,
+                    image_url: products[j].image_url,
+                    price: products[j].price,
+                    stock: products[j].stock
+                  },
+                  qty: productsCus[i].quantity,
+                  isCheckout: productsCus[i].isCheckout
+                }
+                data.push(raw)
+              }
+            }
+          }
           res.status(200).json({
-            cartId: cartId,
-            products: products
+            cartId : cartId,
+            products : data
           })
-      })
+        })
         .catch(next)
   }
 
@@ -127,6 +164,23 @@ class CustomerController {
       })
       .catch(next)
   }
+
+  static deleteItem (req, res, next) {
+    let productId = req.params.productId
+    CartProduct.destroy({
+      where : {
+        ProductId : productId
+      }
+    })
+      .then( data => {
+        res.status(200).json({
+          msg: 'Delete Success'
+        })
+      })
+      .catch(next)
+  }
+
+  
 }
 
 module.exports = CustomerController
