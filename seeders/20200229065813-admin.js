@@ -12,7 +12,9 @@ module.exports = {
           username: 'admin',
           email: 'admin@gmail.com',
           password: '123456',
-          roles: 'admin'
+          roles: 'admin',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }], {});
   },
 
