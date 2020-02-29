@@ -6,13 +6,14 @@ class Controller {
         Transaction.findAll({
             where: {
                 UserId: id,
-                status: false
+                status: true
             },
-            include: [{ model: Product, attributes: ['name', 'price'] }]
+            include: [{ model: Product, attributes: ['name', 'price'] },
+                    { model: User}]
         })
             .then(result => {
                 if (result) {
-                    res.status(200).json(status);
+                    res.status(200).json(result);
                 } else {
                     const error = {
                         name: 'Not found',
@@ -22,6 +23,7 @@ class Controller {
                 }
             })
             .catch(err => {
+                console.log(err);
                 next(err);
             })
     }
@@ -71,6 +73,7 @@ class Controller {
               res.status(201).json({message: `Added ${ProductName} to card`});
           })
           .catch(err => {
+              console.log(err);
               next(err);
           })
     }

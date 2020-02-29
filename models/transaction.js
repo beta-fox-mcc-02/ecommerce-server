@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   })
   Transaction.associate = function(models) {
     // associations can be defined here
+    Transaction.belongsTo(models.Product, { foreignKey: 'ProductId'} );
+    Transaction.belongsTo(models.User, { foreignKey: 'UserId' });
   };
   return Transaction;
 };
