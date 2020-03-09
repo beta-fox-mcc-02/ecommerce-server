@@ -61,7 +61,8 @@ class CartController {
 
 
     static findOne(req, res, next) {
-        let id =  req.params.cartId
+        let id =  +req.params.cartId
+        console.log('ini ID NYAAAAAAAAAAAA', id)
         console.log(id)
         Cart
             .findByPk(id, {

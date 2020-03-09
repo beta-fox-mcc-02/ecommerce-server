@@ -72,6 +72,7 @@ class UserController{
                     } else {
                         console.log(user)
                         next({
+                            status: 404,
                             name : `Invalid password / email!`
                         })
                         // res.status(404).json({
@@ -81,6 +82,7 @@ class UserController{
                 } else {
                     // next(user)
                     next({
+                        status: 404,
                         name : `Invalid password / email!`
                     })
                     // res.status(404).json({

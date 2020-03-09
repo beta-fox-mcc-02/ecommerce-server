@@ -37,6 +37,7 @@ class CostumerController {
                         // console.log(req.currentUserId, 'ini custumer idnya LOOOOOOHHHH')
                         res.status(200).json({
                             id: costumer.id,
+                            email: costumer.email,
                             access_token: access_token
                         })
                     } else {

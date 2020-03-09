@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../app')
 const {User} = require('../models')
 
-describe('User Routes', () => {
+describe('Admin Routes', () => {
 
     afterAll((done) => {
         User.destroy({
@@ -13,10 +13,10 @@ describe('User Routes', () => {
         }).catch(err => done(err))
     })
 
-    describe('User Registration Test', () => {
-        test('it should return new object, status 201, and user data registered', (done) => {
+    describe('Admin Registration Test', () => {
+        test('it should return new object, status 201, and Admin data registered', (done) => {
             request(app)
-                .post('/register')
+                .post('/registerAdmin')
                 .send({
                     email: "mar@mmy.com",
                     password: "123456",
@@ -33,10 +33,10 @@ describe('User Routes', () => {
     })
 
 
-    describe('User Registration Wrong Format Email', () => {
+    describe('Admin Registration Wrong Format Email', () => {
         test('it should return object with status 400', (done) => {
             request(app)
-            .post('/register')
+            .post('/registerAdmin')
             .send({
                 email: "tamara@yahoomm",
                 password: "123456"
@@ -52,10 +52,10 @@ describe('User Routes', () => {
     })
 
 
-    describe('User registration less than 2 or more than 8 ', () => {
+    describe('Admin registration less than 2 or more than 8 ', () => {
         test('it should return object with status 400', (done) => {
             request(app)
-            .post('/register')
+            .post('/registerAdmin')
             .send({
                 email: "tamara@yaho.omm",
                 password: "1"
@@ -70,10 +70,10 @@ describe('User Routes', () => {
         })
     })
 
-    describe('User registration not input email', () => {
+    describe('Admin registration not input email', () => {
         test('it should return object with status 400 and erorr ', (done) => {
             request(app)
-            .post('/register')
+            .post('/registerAdmin')
             .send({
                 email: "",
                 password: "123456"
@@ -88,10 +88,10 @@ describe('User Routes', () => {
         })
     })
 
-    describe('User registration not input password', () => {
+    describe('Admin registration not input password', () => {
         test('it should return object with status 400 and erorr ', (done) => {
             request(app)
-            .post('/register')
+            .post('/registerAdmin')
             .send({
                 email: "taza@mail.dom",
                 password: ""
@@ -106,10 +106,10 @@ describe('User Routes', () => {
         })
     })
 
-    describe('User registration not input password', () => {
+    describe('Admin registration not input password', () => {
         test('it should return object with status 400 and erorr ', (done) => {
             request(app)
-            .post('/register')
+            .post('/registerAdmin')
             .send({
                 email: "",
                 password: ""
@@ -124,10 +124,10 @@ describe('User Routes', () => {
         })
     })    
     
-    describe('User registration less than 2 or more than 8 and wrong format email ', () => {
+    describe('Admin registration less than 2 or more than 8 and wrong format email ', () => {
         test('it should return object with status 400 and erorrs ', (done) => {
             request(app)
-            .post('/register')
+            .post('/registerAdmin')
             .send({
                 email: "tamara@yahomm",
                 password: "1"
@@ -142,10 +142,10 @@ describe('User Routes', () => {
         })
     })
 
-    describe('User Login Succeess', () => {
+    describe('Admin Login Succeess', () => {
         test('it should return new object and access_token in it', (done) => {
             request(app)
-                .post('/login')
+                .post('/loginAdmin')
                 .send({
                     email: 'mar@mmy.com',
                     password: '123456'
@@ -159,10 +159,10 @@ describe('User Routes', () => {
         })
     })
 
-    describe('User login failed because wrong password or wrong email', () => {
+    describe('Admin login failed because wrong password or wrong email', () => {
         test('it should return new object with status 404', (done) => {
             request(app)
-                .post('/login')
+                .post('/loginAdmin')
                 .send({
                     email: 'mara@mail.com',
                     password : '08786776'
@@ -176,10 +176,10 @@ describe('User Routes', () => {
         })
     })
 
-    describe('User login failed because sequelize error', () => {
+    describe('Admin login failed because sequelize error', () => {
         test('it should return new object with status 404 and error', (done) => {
             request(app)
-                .post('/login')
+                .post('/loginAdmin')
                 .send({
                 })
                 .end((err, response) => {
