@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "chibi-store-266316",
+  "private_key_id": "3196a4c39e55b5d75984f631debb93913a5ce499",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCopsMWwFN/tHvu\nYbJmPgjXZhnh6UziPfgUvTzbqREiJomdhMXd7vqV9IDum9X8C7Up4NJHKdUaDpiQ\nP5rVOvBurnlt64lDXkWZ0T6JNYSI2Xp7iZUUeQFd+6uW6fv7B1dtgh3sfHwlG6CP\nzL6QcMwwscczm1tBkGRRyIhSmrdU2UZkXWxXQivLWj3c0vZsdTdXNQs/OiRyCnPB\nACJRGiVcDA7pqti4cKNx3EEIyOfRtpO7Cfw/iqv+V34ribGTHkHY38SKWiBSI7Kh\nBUY9B8UdMl8b8cOuzUYTHXas4/I9c6qIOSVWA4pHKcmMSxxQJAFYnvBnOrMiB4IY\nQpiLjToNAgMBAAECggEAH1FoZO8uEkbnxKqrwETAy48QO11hg5nSWbeSd4/7uIXD\nhFbFj6LzMamHz8dsgzOBXtd69PAVvJL9Tbwh+nrJbyRDNGBKyxHUhu3OWRhxFiCc\nmBhCcNzPni4//PRScJk6aQGCoQm03Ac3V7zDnnrz0A8TWMf+uDwiBPXiKsTESqMJ\nN/SrrLtZl4OsglLhx9cdF7p//Fc0hGsCzFLlouGx5CbXc3EIpGk1BwS0QTyRnX9/\n70k880LavjCahLA9BXCrX3M0Mbw9X6w+iOOV2yoIGi3pMIq1LbgQ0T/V9JZn3TOq\n3aqEv7UpYk66mhZtpVHqic5HPfFDjo7hrFI8xGetGQKBgQDUw2EhbIUNi+wmDN04\n9zqmSmOj86MEBhfA+keGO7tcr87tVP+a/GIaKUzo2GzBewe8LvO8DeLfsKD1YPVP\n79IokLtuJ5m7HchhTvefymc1yX7P5RswvhFvx0ebXnzdSxiqro9SqF0EuoitILgb\n5okhqqtzUalIL8nTQikpCRjRvwKBgQDK7Iv4w/hYyr3RAekd3mL6FTLYXRESSzob\n1zggcURDWqX6yR7vCDU2BVYvjMWaXjt0PnEeUQtWUMF/+KxTYffQabPDihQXtlIv\nF9337EF+33W6lF0Jp6F9VMheY7mSqX+5xkggSz/DHCFH/P2oBwAkDNhqRiYl6Xsk\nsWpmEn7PMwKBgQC2hb4nzE8AZg76PYLywbUAv0RnfDVW2Fs8Y/lEAK4lP3VHSOnW\nbblDNDcUccYq3X6vQ6A4rbj5qS8MElegcd5ain8garyJN22VfQcVf6+3BtrRQnxm\n/kc7Gzwk35RCy4+nrQSrJmBWFCf4Td9joAv4Y8+dqGqO0OBVaaah23n9RQKBgQDG\ndlLvGbrqHF9I6vVzoOxsag8wTNVFbw2F7ReXoy+AMEfk3o7CeOSR0OZZ2vPn5gF/\nzxIS9HCCGrkkz7C6XDZiPv7xXzoHdukp5c3Ri98ClsotkKztpGTsjt7oceAs8Fla\n9/HSo8XYrMpf/a6Xh0E8ANQoHDNzIMavPFUzPyOGwQKBgCGB25Fq2IEm1IYVNJzd\n0kwBxbCE3H+VcgCp8FL1yantUT/95S/nCNhzM2dD4NHa8rm9UquK1j72Wh25SpHj\ntx1q/rBPTJbgX67DuT9m8KO/V4MnSaA0rH05JNzZDwudiSeNS5bk2GbW3yop9X1U\nuLBM9DEEfAif27m1bU5OuxXw\n-----END PRIVATE KEY-----\n",
+  "client_email": "chibi-store-storage@chibi-store-266316.iam.gserviceaccount.com",
+  "client_id": "112380015550092664849",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chibi-store-storage%40chibi-store-266316.iam.gserviceaccount.com"
+}
