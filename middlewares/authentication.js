@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
                if(user) {
                   req.currentUserId = payload.id
                   req.RoleId = payload.RoleId
-                  console.log(req.RoleId, req.currentUserId, '=Authentication=')
+                  // console.log(req.RoleId, req.currentUserId, '=Authentication=')
                   next()
                } else {
                   next({

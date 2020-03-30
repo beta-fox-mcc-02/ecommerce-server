@@ -16,7 +16,7 @@ class ProductController {
                })
             } else {
               res.status(200).json({
-                data: { name: '', genre: '', CategoryId: '', price: '', image_url: '', stock: '' },
+                data: [{ name: '', genre: '', CategoryId: '', price: '', image_url: '', stock: '' }],
                 msg: '' 
               })
             }

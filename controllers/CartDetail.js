@@ -178,7 +178,7 @@ class CartDetailController {
 
   static delete (req, res, next) {
     let id = +req.params.id
-    console.log('masuk delete', id)
+    // console.log('masuk delete', id)
     CartDetail.destroy({ where: { id } })
       .then(data => {
         // console.log(data, '===')

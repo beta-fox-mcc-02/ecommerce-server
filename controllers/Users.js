@@ -61,7 +61,7 @@ class UserController {
        order: [['id', 'asc']]
      }) 
        .then(users => {
-         console.log(users)
+        //  console.log(users)
          if(users.length === 0) {
            res.status(200).json({
              data: [{

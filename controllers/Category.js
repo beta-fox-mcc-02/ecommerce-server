@@ -33,12 +33,11 @@ class CategoryController {
             msg: 'success get categories'
           })
         } else {
-          next({
-            error: {
-              name: 'authentication fail'
-            },
-            status: 400,
-            msg: 'please log in first'
+          res.status(200).json({
+            data: [{
+              id: '',
+              name: ''
+            }]
           })
         }
       })
