@@ -13,14 +13,14 @@ router.get('/cart', cartController.findAll)
 
 router.get('/history', cartController.findHistory)
 
-router.post('/cart/add', cartController.create)
+router.post('/cart', cartController.create)
 
-router.get('/cart/update/:id', cartController.findOne)
+router.get('/cart/:id', cartController.findOne)
 
 router.put('/cart/update/:id', cartController.update)
 
 router.put('/cart/checkout/:id', cartController.checkout)
 
-router.delete('/cart/delete/:id', authorize, cartController.delete)
+router.delete('/cart/:id', authorize, cartController.delete)
 
 module.exports = router

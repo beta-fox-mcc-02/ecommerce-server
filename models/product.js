@@ -47,6 +47,16 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       allowNull: false
+    },
+    CategoryId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Category cannot be empty'
+        }
+      },
+      allowNull: false
     }
   }, {
     sequelize
@@ -55,6 +65,7 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = function (models) {
     // associations can be defined here
     Product.hasMany(models.Cart)
+    Product.belongsTo(models.Category)
   };
   return Product;
 };
