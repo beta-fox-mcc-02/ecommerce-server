@@ -1,0 +1,201 @@
+const request = require('supertest')
+const app = require('../app')
+const Sequelize = require('sequelize')
+const {Admin ,sequelize } = require('../models')
+const { queryInterface } = sequelize
+
+describe('Admin register test', () => {
+    afterAll((done) => {
+        queryInterface.bulkDelete('Admins', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+    })
+    test('it should return new admin object with status 201', (done) => {
+        request(app).post('/admin/register')
+            .send({
+                email: 'kiko@mail.com',
+                password : 'admin123'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body).toHaveProperty('token')
+                expect(response.status).toBe(201)
+                done()
+            })
+    })
+    test('it should return error validation "email is already used" with status 400', (done) => {
+        request(app).post('/admin/register')
+            .send({
+                email: 'kiko@mail.com',
+                password : 'admi'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body.err).toContain('email is already used')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+    test('it should return error validation "email cannot empty" with status 400', (done) => {
+        request(app).post('/admin/register')
+            .send({
+                email: '',
+                password : 'admi'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body.err).toContain('email cannot empty')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+    test('it should return error validation "format email is wrong" with status 400', (done) => {
+        request(app).post('/admin/register')
+            .send({
+                email: 'kikomail.com',
+                password : 'admi'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body.err).toContain('format email is wrong')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+    test('it should return error validation "password cannot empty" with status 400', (done) => {
+        request(app).post('/admin/register')
+            .send({
+                email: '',
+                password : ''
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body.err).toContain('password cannot empty')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+    test('it should return error validation "password must more than 5 characters" with status 400', (done) => {
+        request(app).post('/admin/register')
+            .send({
+                email: 'kiko@mail.com',
+                password : 'ad'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body.err).toContain('password must more than 5 characters')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+})
+
+describe('Admin login test', () => {
+    beforeAll((done) => {
+        Admin.create({
+            email : 'kiko@mail.com',
+            password : 'admin123'
+        })
+        .then(res => {
+            done()
+        })
+        .catch(done)
+    })
+    afterAll((done) => {
+        queryInterface.bulkDelete('Admins', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+    })
+    test('it should return token with status 200', (done) => {
+        request(app).post('/admin/login')
+            .send({
+                email : 'kiko@mail.com',
+                password : 'admin123'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body).toHaveProperty('token')
+                expect(response.status).toBe(200)
+                done()
+            })
+    })
+    test('it should return error validation "email / password is wrong" with status 400', (done) => {
+        request(app).post('/admin/login')
+            .send({
+                email : 'koko@mail.com',
+                password : 'admin123'
+            })
+            .end((err, response) => {
+                // console.log(response.body)
+                expect(err).toBe(null)
+                expect(response.body.err).toBe('email / password is wrong')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+    test('it should return error validation "email / password is wrong" with status 400', (done) => {
+        request(app).post('/admin/login')
+            .send({
+                email : 'kiko@mail.com',
+                password : 'admin124'
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                expect(response.body.err).toBe('email / password is wrong')
+                expect(response.status).toBe(400)
+                done()
+            })
+    })
+})
+describe('Token Error Test', () => {
+    beforeAll((done) => {
+        Admin.create({
+            email : 'kiko@mail.com',
+            password : 'admin123'
+        })
+        .then(res => {
+            done()
+        })
+        .catch(done)
+    })
+    afterAll((done) => {
+        queryInterface.bulkDelete('Admins', {})
+          .then(response => {
+            done()
+          }).catch(err => done(err))
+    })
+    test('it should return with error "jwt must be provided"', (done) => {
+        request(app).post('/products/list')
+            .set('token', '')
+            .send({
+                name : 'baju',
+                image_url : '',
+                price : 1000,
+                stock : 1
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                // console.log(response.body)
+                expect(response.body).toHaveProperty('err', 'jwt must be provided')
+                done()
+            })
+    })
+    test('it should return with error "jwt malformed"', (done) => {
+        request(app).post('/products/list')
+            .set('token', 'token')
+            .send({
+                name : 'baju',
+                image_url : '',
+                price : 1000,
+                stock : 1
+            })
+            .end((err, response) => {
+                expect(err).toBe(null)
+                // console.log(response.body)
+                expect(response.body).toHaveProperty('err', 'jwt malformed')
+                done()
+            })
+    })
+})
