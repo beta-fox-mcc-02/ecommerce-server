@@ -1,0 +1,36 @@
+{
+  "name": "ecommerce-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --runInBand",
+    "dev": "nodemon bin/http.js",
+    "start": "node ./bin/http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamjay041/ecommerce-server.git"
+  },
+  "keywords": [],
+  "author": "Adam Jay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamjay041/ecommerce-server/issues"
+  },
+  "homepage": "https://github.com/adamjay041/ecommerce-server#readme",
+  "devDependencies": {
+    "jest": "^25.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "buefy": "^0.8.11",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.18.1",
+    "sequelize": "^5.21.4",
+    "supertest": "^4.0.2"
+  }
+}
